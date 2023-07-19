@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7430779103724800017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2449945219972644136}
+  - component: {fileID: 6337374475854073736}
+  m_Layer: 0
+  m_Name: Maria
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2449945219972644136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430779103724800017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6337374475854073736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430779103724800017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff79dd4ddd8ec924a8929aa4a6beb4fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: Maria
+  Type: 0
+  Player: {fileID: 986910829248019727, guid: d91024de69f14c544a5df9879c468c93, type: 3}
+  weaponLevel: 1
+  maxWeaponLevel: 5
+  upgradeCost: 250
+  actionsPerRound: 6
+  baseAttackMax: 7
+  baseAttackMin: 5
+  attackMax: 7
+  attackMin: 5
+  baseCrit: 0
+  crit: 0
+  baseLifeSteal: 5
+  lifeSteal: 5
+  baseHealthCostPerSecond: 1
+  healthCostPerSecond: 1
+  enemyDamagePerSecond: 1

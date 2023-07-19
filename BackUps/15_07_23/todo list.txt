@@ -1,0 +1,52 @@
+ToDo:
+
+ADDON - BattleSystem:
+ > Overhaul Player character
+ > Add new Characters
+ > enemy drops
+ > Dual Mode
+ > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
+
+Bugs - BattleSystem:
+
+
+mini - BattleSystem:
+ > Nerv the hell out of wave 2 (jesus)
+ > Boss heals for x amount of shields broken or perfect blocks
+
+ > Mana Costs (Mana) AXE?
+ > Passive effects AXE?
+
+CORE - Menu:
+ > Weapon Upgrades(Simple)
+ > Skill Shop
+ > Skill List
+ > Armor Upgrades(Simple)
+ > Enemy Library
+ > Stage Checkpoints
+
+ADDON - Menu:
+ > Loadout Menu
+  > Skill Loadout
+
+Level 0 - Tutorial
+ > Tutorial Dialogue Script
+ > Tutorial Enemies
+ > Tutorial System
+  > Remove Heatbar
+
+Old:
+ > Add WaveCheck points
+	> add wavecheckpoint menu
+ > Add monster dropps
+ > Add crafting system
+ > Add more Weapon/Armor Upgrades!
+ > Add new characters
+ 	> Add character select
+ > Add Skill Menu
+ > Add missions
+ > Add story mode
+
+?
+ > Combo helper
+	> marks next attacks needed for combo in menu

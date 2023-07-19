@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5089848083425563483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1552983738176069890}
+  - component: {fileID: 517291685624304633}
+  m_Layer: 0
+  m_Name: TestDungeon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1552983738176069890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5089848083425563483}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &517291685624304633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5089848083425563483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b5ed4f67e82de448b9fc99759e5ee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonName: Hoovers First Dungeon
+  entryCost: 120
+  moveCost: 1
+  deathCost: 2000
+  waveSize: 5
+  mostWavesCleared: 0
+  EnemyPrefabs:
+  - {fileID: 8568323104610856096, guid: 2f37651b9771d2647bd966cdcf77d24a, type: 3}
+  - {fileID: 7917718249033940128, guid: bfe5c70936f24754b8147d76c8e93513, type: 3}
+  - {fileID: 7598463746847508916, guid: cb08aa966849b344c9018bec377eaf9d, type: 3}
+  useWaveScript: 0
+  waveScriptName: Tutorial
+  WaveScriptPrefab: {fileID: 9223035172483826294, guid: 8dde7c61c1b02af44a8a71779f73ae75, type: 3}
+  useDialogueScript: 0
+  dialogueScriptName: Tutorial
