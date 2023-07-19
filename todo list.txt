@@ -1,0 +1,48 @@
+ToDo:
+
+ADDON - BattleSystem:
+ > Add new Characters
+ > Dual Mode
+ > disable heat discharge if heat charge is disabled
+ > Make the tutorial
+ > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
+
+Bugs - BattleSystem:
+
+
+mini - BattleSystem:
+ > Boss heals for x amount of shields broken or perfect blocks
+
+CORE - Menu:
+ > Weapon Upgrades(Simple)
+ > Skill Shop
+ > Skill List
+ > Armor Upgrades(Simple)
+ > Enemy Library
+ > Stage Checkpoints
+
+ADDON - Menu:
+ > Loadout Menu
+  > Skill Loadout
+
+Level 0 - Tutorial
+ > Tutorial Dialogue Script
+ > Tutorial Enemies
+ > Tutorial System
+  > Remove Heatbar
+
+Old:
+ > Add WaveCheck points
+	> add wavecheckpoint menu
+ > Add monster dropps
+ > Add crafting system
+ > Add more Weapon/Armor Upgrades!
+ > Add new characters
+ 	> Add character select
+ > Add Skill Menu
+ > Add missions
+ > Add story mode
+
+?
+ > Combo helper
+	> marks next attacks needed for combo in menu
