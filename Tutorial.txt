@@ -1,0 +1,135 @@
+Hey! Welcome to Rock Monster Game Real Name TBA
+This is the tutorial I made for people to give an idea of how the mechanics in this game work.
+Let's start off very basic. 
+Press S to load the next text page.
+
+Very good! You're a natural.
+Now for the rest of the demo you will only need WASD to control your character.
+The only exception is that you can press ESC to pull out the menu.
+If I remembered to put it in...
+Anyways! Let's see you work those buttons!
+
+		    W
+		A	D
+		    S
+
+It seems you're ready to go. So let me tell you about what you're supposed to do here.
+
+Rock Monster Game Real Name TBA is a turn based combat game. 
+The combat is 1 v 1 so you and the enemy will be taking turns.
+Well, not really, but I'll get into that later.
+For now let's have a look at the game interface.
+
+Down here to the left we have a menu displaying all the actions you can take.
+With WASD you select the corresponding actions.
+For example: pressing S will select the Light attack.
+Try pressing it now:
+
+As you can see your action was saved down here in the action queue.
+It displays the current sequence of actions that you put in.
+For now your action queue has only one slot.
+
+That is because your Action Heat Level, which is the number up here,
+Shows that your Action Queue is level 1. During combat your level will gradually rise
+everytime you land a good hit on the enemy. A higher level means more actions you can take in a turn
+
+Now that your queue is full all the action buttons on the left have turned into Round end buttons
+Press any one of these to end your round. Otherwise you can press D to cancel your last action input.
+End your turn now and your character will execute the action(s).
+
+Yup, that's it! But wait, why didn't your attack deal any damage?
+That's because the enemy blocked it!
+
+See the grey bar right next to the enemy? It means that the enemy will always block
+one of your attacks, while the grey color indicates that the block will be used up by
+any kind of attack. Should the attack type not match the block, then the enemy will
+block the attack without using up it's block.
+
+But since you attack matched the color, you have gained enough heat to reach level 2.
+For now that will be your maximum.
+If you queue up 2 actions at once now you should be able to break the block
+with the first and hit the enemy with the second. Try it out!
+
+That's more like it! Now that the enemy has died a new one has taken it's place.
+It's front block right now is white. That indicates that it can only be broken by a light attack.
+
+The little black square next to the front block tells you that the Enemy actually blocks 2 attacks.
+The color black does not relate to any attack type. It means that you don't know what that block
+will be yet. You'll have to see it to find out. So until then the only thing you can do is guess.
+I will unlock the other two attacks you can do for that.
+
+Pressing A will queue a Heavy Attack and W will queue a Special Attack. Start your next attack 
+sequence with a light attack plus one more. Hint: I have it on good authority, that the second
+block does not match a light attack, so let's see if you hit the 50:50 chance.
+
+It looks like the second block is blue! This means it can be broken by a Heavy Attack.
+If it were red, then it would only be broken by a Special Attack.
+But Remember, normaly it also could be white for Light Attacks or grey for Any Attack.
+You can also see, that now that you know, what the second block is, the black square has turned blue.
+
+To hurt this enemy you will need atleast 3 attacks.
+So let me simply give Action Heat Level 3. 
+It might also be interesting to know that the 3 Attacktypes have different attributes.
+
+Special Attacks are faster and deal less Damage.
+Heavy Attacks are slower and deal more Damage.
+Light Attacks are a good middle ground.
+Now with these 3 Attacks try to defeat the enemy!
+
+Wait! 
+Do you see that your Special Attack Option has changed into Combo A?
+That's because the system has detected, that you have almost all actions
+for Combo A in your queue. 
+That means Combo A is executed by chaining Light > Heavy > Special.
+By pressing W now you will queue Combo A and all earlier actions
+will turn into Combo A.
+
+Combo Attacks are always far more powerfull then their individual attacks.
+But! If remember that the single attack parts still keep their attack type and
+still break and get blocked by the same blocks! Here it is important that atleast
+the last attack of the combo hits the enemy since it carries most of the damage.
+So for a combo to be effective, be sure, that at the end you get through all of 
+the blocks of the enemy.
+
+Lucky for you, right now this is the case! 
+Queue up Combo A and see the enemies health bar melt!
+Note: The system will only check for combos at the END of your attack sequence.
+Light>Heavy>Special>Light will NOT make Combo A>Light
+But Light>Light>Heavy>Special will make Light>Combo A
+
+See that? Huge damage! And it will only grow more damaging the longer the combo is.
+Of course to execute longer combos you will need enough slots in your Action Queue.
+Also know, that the shortest combos are 3 Actions long, there are no 2 Action Combos.
+Now let's see you defeat the next enemy!
+
+But we're not quite done yet!
+Of course, now that you have attacked the enemy it's their turn to attack you!
+
+See the letter up here? That is the sequence with which the enemy is going to attack.
+One slot means there is one attack that you'll have to block to avoid taking damage.
+The letter inside the box right now is just a random letter, which means you don't know
+what attack the enemy is going to do. Which again means, you're going to have to guess.
+
+Now let's see what options you have.
+Your 3 Attacks have turned into 3 different Blocks.
+Low Block, Mid Block and High Block.
+Once you have discovered what the Letters in the enemies Attack sequence above them
+stand for they will be replaced and can be matched by the equivalent Block.
+Lo > Low Block, Mi > Mid Block, Hi > High Block.
+
+Now go on and try and block the enemies attack!
+Hint: It's not High or Low Block...
+
+ATTACK HITS
+
+What? I could've sworn I made it a Mid Attack...
+Well whatever! Even if you don't block the attack it's letter will be uncovered
+the next time the enemy uses the same attack.
+Now that's actually everything. Defeat the last enemy to finish the tutorial.
+
+Oh and one last thing! While you're picking on what attacks or blocks to use...
+Your life total on the top left will constantly deplete.
+No I am not kidding. That is pretty much the hook on which I designed the whole
+Battle System! So try not to panic and lose your head! 
+
+Good Luck and Have Fun!
