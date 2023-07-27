@@ -9,3 +9,6 @@ git commit -m "Commit message"
 git push origin main
 
 ~ to push new additions
+
+git branch name // new branch
+git checkout name // switch branch
