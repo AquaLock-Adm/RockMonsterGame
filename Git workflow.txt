@@ -1,8 +1,10 @@
-git fetch
+git git fetch
 git pull origin main
 
 ~ to get new updates
 
+gi fetch // new updates?
+git pull origin main // pull new updates
 git status	// checks for status of git repository
 git add .        // or name of specific file
 git commit -m "Commit message"
@@ -12,3 +14,9 @@ git push origin main
 
 git branch name // new branch
 git checkout name // switch branch
+
+~ start working
+
+git checkout oskar // switch to own branch
+git merge main // merge with main branch
+	
