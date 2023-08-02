@@ -9,9 +9,9 @@ public enum PlayerState {WAITING, START, PLAYERTURN, QUEUE, ATTACKRUSH, DEAD}
 
 public class PlayerCharacter : Unit
 {
-    private PlayerBattleResourceHandler ResourceHandler;
-    private PlayerControl Controls;
-    private PlayerActionHandler ActionHandler;
+    protected PlayerBattleResourceHandler ResourceHandler;
+    protected PlayerControl Controls;
+    protected PlayerActionHandler ActionHandler;
 
     public PlayerState state = PlayerState.WAITING;
     public bool defendModeActive = false;
@@ -19,8 +19,8 @@ public class PlayerCharacter : Unit
 
     [Header("HUD")]
     private GameObject ActionHUD;
-    private List<TextMeshProUGUI> MenuTexts = new List<TextMeshProUGUI>();
-    private List<GameObject> ReferencesForActionHandler = new List<GameObject>();
+    protected List<TextMeshProUGUI> MenuTexts = new List<TextMeshProUGUI>();
+    protected List<GameObject> ReferencesForActionHandler = new List<GameObject>();
 
     [Header("Player Stats:")]
 
@@ -111,7 +111,7 @@ public class PlayerCharacter : Unit
         this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Attack Rush Bar/Decrease Box").gameObject );
     }
 
-    private void SetupBattleComponents(){
+    protected virtual void SetupBattleComponents(){
         // Reminder: Setup Actionshandler before Player control so the start menu knows that the heatcharge is done on apr < 5
         this.ActionHandler = this.gameObject.AddComponent<PlayerActionHandler>();
         this.ActionHandler.Setup(this, this.ReferencesForActionHandler);
@@ -121,7 +121,7 @@ public class PlayerCharacter : Unit
 
         this.Controls = this.gameObject.AddComponent<PlayerControl>();
         this.Controls.Setup(this, BattleSystem.InputDarkFilter, this.MenuTexts);
-    }
+    } // Changed in: Player_Tutorial.cs
 
     public void CopyFrom(PlayerCharacter P_IN){
         

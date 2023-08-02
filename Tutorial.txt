@@ -1,7 +1,8 @@
+ > Load Text Box 1
 Hey! Welcome to Rock Monster Game Real Name TBA
 This is the tutorial I made for people to give an idea of how the mechanics in this game work.
 Press S to load the next text page.
-
+ > Load Text Box 2
 For the rest of the demo you will only need WASD to control your character.
 Press all 4 to continue:
 
@@ -13,25 +14,32 @@ Rock Monster Game Real Name TBA is a turn based combat game.
 The combat is 1 v 1 so you and the enemy will be taking turns.
 Now let's have a look at the game interface.
 
+ > Load Text Box 3
 Down here to the left we have a menu displaying all the actions you can take.
 With WASD you select the corresponding actions.
 For example: pressing S will select the Light attack.
+ > Queue Light Attack
 
+ > Load Text Box 4
 As you can see your action was saved down here in the action queue.
 It displays the current sequence of actions that you put in.
 For now your action queue has only one slot.
 
+ > Load Text box 5
 That is because your Action Heat Level, which is the number up here,
 Shows that your Action Queue is level 1. During combat your level will gradually rise
 everytime you land a good hit on the enemy. A higher level means more actions you can take in a turn
 
+ > Load Text Box 3
 Now that your queue is full all the action buttons on the left have turned into Round end buttons
 Press any one of these to end your round. Otherwise you can press D to cancel your last action input.
 End your turn now and your character will execute the action(s).
 
+ > Load Text box 1
 You're actions were executed but they didn't deal any damage.
 That's because the enemy blocked it!
-
+ 
+ > Load Text box 6
 See the grey bar right next to the enemy? It means that the enemy will always block
 one of your attacks, while the grey color indicates that the block will be used up by
 any kind of attack. Should the attack type not match the block, then the enemy will
@@ -50,9 +58,11 @@ The color black does not relate to any attack type. It means that you don't know
 will be yet. You'll have to see it to find out. So until then the only thing you can do is guess.
 I will unlock the other two attacks you can do for that.
 
+ > Load Text box 3
 Pressing A will queue a Heavy Attack and W will queue a Special Attack. Start your next attack 
 sequence with a light attack plus one more.
 
+ > Load Text box 6
 It looks like the second block is blue! This means it can be broken by a Heavy Attack.
 If it were red, then it would only be broken by a Special Attack.
 But Remember, normaly it also could be white for Light Attacks or grey for Any Attack.
@@ -62,11 +72,13 @@ To hurt this enemy you will need atleast 3 attacks.
 So let me simply give Action Heat Level 3. 
 It might also be interesting to know that the 3 Attacktypes have different attributes.
 
+ > Load Text box 1
 Special Attacks are faster and deal less Damage.
 Heavy Attacks are slower and deal more Damage.
 Light Attacks are a good middle ground.
 Now with these 3 Attacks try to defeat the enemy!
 
+ > Load Text box 3
 Do you see that your Special Attack Option has changed into Combo A?
 That's because the system has detected, that you have almost all actions
 for Combo A in your queue. 
@@ -87,6 +99,7 @@ Note: The system will only check for combos at the END of your attack sequence.
 Light>Heavy>Special>Light will NOT make Combo A>Light
 But Light>Light>Heavy>Special will make Light>Combo A
 
+ > Load Text box 1
 See? That did a lot of damage! And it will only grow more damaging the longer the combo is.
 Of course to execute longer combos you will need enough slots in your Action Queue.
 Also know, that the shortest combos are 3 Actions long, there are no 2 Action Combos.
@@ -95,14 +108,18 @@ Now defeat the next enemy!
 But we're not quite done.
 Of course, now that you have attacked the enemy it's their turn to attack you!
 
+ > load text box 7
 See the letter up here? That is the sequence with which the enemy is going to attack.
 One slot means there is one attack that you'll have to block to avoid taking damage.
+
 The letter inside the box right now is just a random letter, which means you don't know
 what attack the enemy is going to do. Which again means, you're going to have to guess.
 
+ > load text box 3
 Now let's see what options you have.
 Your 3 Attacks have turned into 3 different Blocks.
 Low Block, Mid Block and High Block.
+
 Once you have discovered what the Letters in the enemies Attack sequence above them
 stand for they will be replaced and can be matched by the equivalent Block.
 Lo > Low Block, Mi > Mid Block, Hi > High Block.
@@ -112,6 +129,7 @@ Hint: It's not High or Low Block...
 
 ATTACK HITS
 
+ > load Text box 1
 What? I could've sworn I made it a Mid Attack...
 Well whatever! Even if you don't block the attack it's letter will be uncovered
 the next time the enemy uses the same attack.

@@ -10,11 +10,6 @@ public abstract class WaveScript : MonoBehaviour
 
     public abstract void Setup(int waveIndex);
 
-    public virtual EnemySettings GetFirstEnemyOfWave(){
-        Debug.Log("TODO: Not implemented yet!");
-        return new EnemySettings();
-    }
-
     public List<EnemySettings> GetEnemySettingsList(){
         return this.EnemySettingsList;
     }

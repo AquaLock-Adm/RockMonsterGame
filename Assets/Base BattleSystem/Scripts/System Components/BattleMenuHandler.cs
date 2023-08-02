@@ -7,23 +7,26 @@ using UnityEngine.UI;
 public class BattleMenuHandler : MonoBehaviour
 {
 	// mhvg2
-	private BattleSystem BattleSystem;
+	[SerializeField] protected BattleSystem BattleSystem;
 	// public ActionQueue ActionQueue;
 	public PauseMenu PauseMenu;
 	// mhvg2
 
-	public GameObject InputDarkFilter;
+	[SerializeField] protected GameObject InputDarkFilter;
 
 	// mhvg3
-	private bool stopInputs = false;
+	[SerializeField] private bool stopInputs = false;
 
 #region Unity functions
 
 	// mhf2
 	private void Update(){
 		this.stopInputs = (this.BattleSystem == null);
+
+		this.InputDarkFilter.SetActive(this.stopInputs);
+
 		if(!this.stopInputs) CheckInputs();
-		else this.InputDarkFilter.SetActive(true);
+
 	}
 
 #endregion
@@ -36,7 +39,7 @@ public class BattleMenuHandler : MonoBehaviour
 	}
 
 	// mhf3
-	public virtual void CheckInputs(){ // Changed in: NBS
+	protected virtual void CheckInputs(){
 		switch(this.BattleSystem.state){
 
 			case BattleState.RESULT: // <<----- KEEP
@@ -64,7 +67,7 @@ public class BattleMenuHandler : MonoBehaviour
 				this.InputDarkFilter.SetActive(true);
 			break;
 		}
-	}
+	} // Changed in: NBS, BattleMenuHandler_Tutorial.cs
 
 #endregion 
 
@@ -77,7 +80,7 @@ public class BattleMenuHandler : MonoBehaviour
 		else if(Input.GetKeyDown(KeyCode.D)) this.PauseMenu.StartButtonTest('D');
 	}
 	// mhf11
-	private void WaveOverInputs(){
+	protected void WaveOverInputs(){
 		if(Input.GetKeyDown(KeyCode.A) && this.PauseMenu.ContinueButton.activeSelf) {
 			this.PauseMenu.ContinueGame();
 		}else if(Input.GetKeyDown(KeyCode.D) && this.PauseMenu.LeaveButton.activeSelf) this.PauseMenu.LeaveGame();

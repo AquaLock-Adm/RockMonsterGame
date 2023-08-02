@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1636312507869965802}
-  - component: {fileID: 5161787698060870284}
+  - component: {fileID: 5478048593559467960}
   m_Layer: 0
-  m_Name: Hoover
+  m_Name: Hoover_Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5161787698060870284
+--- !u!114 &5478048593559467960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1636312507869965803}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8aac111ead3eb4f86e60856d6bab68, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ab2eebddad3ef44cbead101b3e7bf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   depletionTime: 500

@@ -63,11 +63,11 @@ public class PauseMenu : MonoBehaviour
     [TextArea(5,8)]
     public string gameOverText;
 
-    public void Setup(BattleSystem BS){
+    public virtual void Setup(BattleSystem BS){
         this.BattleSystem = BS;
         this.StartButtonBaseColor = this.StartButtonW.color;
         ShowPauseMenu(true);
-    }
+    }   // Changed in: PauseMenu_Tutorial.cs
     
     public void ShowPauseMenu(bool turnOn){
         if(!Application.isPlaying) return;

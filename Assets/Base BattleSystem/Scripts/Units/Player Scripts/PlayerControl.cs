@@ -15,7 +15,7 @@ public class PlayerControl : MonoBehaviour
 
     private List<Action> CurrentMenuAttacks = new List<Action>();
 
-    private bool stopInputs = false;
+    [SerializeField] private bool stopInputs = false;
     private int basicAbilitiesCount = 0;
 
     private List<string> MainMenuTexts = new List<string>();
@@ -81,7 +81,9 @@ public class PlayerControl : MonoBehaviour
     private async void BattleUpdateLoop(){
         while(!Player.deathTriggered && Application.isPlaying){
             if(!this.stopInputs) CheckInputs();
-            else this.InputDarkFilter.SetActive(true);
+
+            this.InputDarkFilter.SetActive(this.stopInputs);
+            
             await Task.Yield();
         }
     }

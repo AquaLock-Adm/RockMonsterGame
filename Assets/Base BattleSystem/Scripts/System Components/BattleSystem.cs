@@ -58,10 +58,17 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] public PlayerCharacter Player;
     [SerializeField] public Enemy Enemy;
 
-    public List<List<EnemySettings>> EnemyLibrary = new List<List<EnemySettings>>(); // Lib[0] => Stage 1 Enemies
+    public List<List<EnemySettings>> EnemyLibrary = new List<List<EnemySettings>>(); // Lib[0] => Stage 1 Enemies       EnemyLibrary.Add(List);
+
+    /*
+        EnemySettings Enemy1 = EnemyLibrary[0][0];
+
+        string enemyName = Enemy1.name;
+        int enemyHP = Enemy1.hp;
+        2dSprite sprite = Enemy1.fantaTM;
+    */
 
     [Header("System Counters")]
-    
     public int earnedCredits = 0;
     // bsvg8
 
@@ -91,9 +98,7 @@ public class BattleSystem : MonoBehaviour
     [Header("Screen References")]
 
     public GameObject MainMenu;
-    public GameObject DescriptionScreen;
     public GameObject ResultScreen;
-    public GameObject DialogueScreen;
     public GameObject InputDarkFilter;
     public GameObject PauseScreen;
 
@@ -141,19 +146,17 @@ public class BattleSystem : MonoBehaviour
     }
 
     private void CheckDisplays(){
-        this.DescriptionScreen.SetActive(false);
         this.ResultScreen.SetActive(false);
-        this.DialogueScreen.SetActive(false);
         this.InputDarkFilter.SetActive(false);
 
         this.MainMenu.SetActive(true);
         this.PauseScreen.SetActive(true);
     }
 
-    public virtual void PreStartActions(){ // Changed in: NBS
+    protected virtual void PreStartActions(){ // Changed in: NBS
         RunTests();
         // this.PauseMenu.ShowPauseMenu(true);
-    }
+    } // Changed in: BattleSystem_Tutorial.cs
 
     public virtual void RunTests(){
         /*

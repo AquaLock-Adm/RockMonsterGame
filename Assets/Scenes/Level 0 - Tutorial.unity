@@ -1154,18 +1154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cfe489d38021247bc8228f68c9c0c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActionQueue: {fileID: 0}
   PauseMenu: {fileID: 0}
   InputDarkFilter: {fileID: 1450450443}
-  stopInputs: 0
-  basicAbilitiesCount: 0
-  ButtonTexts:
-  - {fileID: 144695276}
-  - {fileID: 195453986}
-  - {fileID: 857077568}
-  - {fileID: 640979514}
-  MainMenuTexts: []
-  CurrentMenu: 0
 --- !u!4 &156320513
 Transform:
   m_ObjectHideFlags: 0
@@ -2496,9 +2486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d638f8b2c40478a43b796421c02a4c97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentEnemiesToBeSpawned: []
-  CurrentEnemyLevels: 
-  CurrentEnemyTimes: 
   waveCount: 0
   Enemy1Prefab: {fileID: 2981670243160545827, guid: a84a6cdef419aef46be5af916086e715, type: 3}
   Enemy2Prefab: {fileID: 2981670243160545827, guid: 6a44d4c4a3c98a64f8ba0853a09525bb, type: 3}
@@ -3098,6 +3085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -7734,7 +7722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1464322959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8027,9 +8015,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65778650ce392c48bdf3cfb0a7bb596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemiesToBeSpawned: []
   EnemyLevels: 
-  EnemySpawnTimes: 
+  BaseEnemyPrefab: {fileID: 0}
   waveSize: 0
 --- !u!4 &1562653036
 Transform:
@@ -8684,15 +8671,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159621f5b49af5146bb0d932d80b1a53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMonsterWaveSize: 0
   enemyDefeatCount: 0
   wavesClearedCount: 0
   runWithoutGameHandler: 1
   WaveScript: {fileID: 483581056}
   useWaveScript: 1
-  finalWaveReached: 0
+  inBossWave: 0
+  finalStageReached: 0
+  afterFinalWave: 0
+  stagesClearedBefore: 0000000000
+  stageFirstClearRewards: 8813000000000000000000000000000000000000
+  waveClearedHeal_p: 15
   state: 0
-  EnemyPrefabs: []
   standartTimeBetweenSpawnes: 2000
   TestRunPlayerPrefab: {fileID: 1636312507869965803, guid: d91024de69f14c544a5df9879c468c93, type: 3}
   TestRunWeaponPrefab: {fileID: 832467527653069677, guid: e78c2ba872d8ddb47ab0a34a8880178d, type: 3}
@@ -8700,18 +8690,19 @@ MonoBehaviour:
   Player: {fileID: 0}
   Enemy: {fileID: 0}
   earnedCredits: 0
-  PlayerNameText: {fileID: 28281427}
+  PlayerNameText: {fileID: 0}
   PlayerHpSlider: {fileID: 1302301184}
-  PlayerShieldSlider: {fileID: 0}
   PlayerManaSlider: {fileID: 114229032}
+  ActionHUD: {fileID: 0}
+  ActionBoxPrefab: {fileID: 0}
   KillCountText: {fileID: 569021792}
   WaveCountText: {fileID: 2139890505}
   GameHandler: {fileID: 0}
   EnemySpawner: {fileID: 0}
   BattleMenuHandler: {fileID: 0}
-  ActionQueue: {fileID: 0}
   PauseMenu: {fileID: 0}
   ResultHandler: {fileID: 0}
+  WaveRandomizer: {fileID: 0}
   MainMenu: {fileID: 1288078296}
   DescriptionScreen: {fileID: 1708231325}
   ResultScreen: {fileID: 357053835}
@@ -8997,19 +8988,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737349206b8298446a06a24e863b3f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxComboLv: 3
-  stopQueue: 0
-  pauseQueue: 0
-  heatLimits: 0000000096000000dc0500004c1d000030750000905f010020bf0200407e050080fc0a0000000000
-  comboLevel: 1
-  currentHeat: 0
-  AvailableComboActionsAsStrings: []
-  ActionBoxPrefab: {fileID: 5191158711230300220, guid: eb3d3fe8988a41345a2153425ef3e1c6, type: 3}
-  ComboLevelText: {fileID: 483985279}
-  HeatProgressSlider: {fileID: 562680325}
-  ActionBoxes: {fileID: 1280193635}
-  ActionBoxList: []
-  ActionText: {fileID: 644490066}
 --- !u!4 &1836640273
 Transform:
   m_ObjectHideFlags: 0
@@ -9956,26 +9934,29 @@ MonoBehaviour:
   StartMenuScreen: {fileID: 479796129}
   DarkFilter: {fileID: 339720934}
   MainText: {fileID: 707017696}
-  WeaponStatusText: {fileID: 2098064860}
-  WeaponDurabilityText: {fileID: 813326208}
-  ItemsLeftText: {fileID: 1680556509}
   StartButtonW: {fileID: 821862194}
   StartButtonA: {fileID: 779436116}
   StartButtonS: {fileID: 1785575576}
   StartButtonD: {fileID: 1440190479}
+  NextWaveInfo: {fileID: 0}
+  NextWaveText: {fileID: 0}
+  PauseHpSlider: {fileID: 0}
+  PauseHpText: {fileID: 0}
   StartButtonPressedColor: {r: 0.7372549, g: 0.69803923, b: 0.5529412, a: 0}
+  ContinueButton: {fileID: 1200588442}
+  LeaveButton: {fileID: 272733225}
+  NextStageButton: {fileID: 0}
+  showContinueButton: 1
+  showLeaveButton: 0
+  showNextStageButton: 0
   startingText: Not needed apparantly
   pauseText: Not needed
   bailOutText: Not needed
   waveOverText: Not needed?
-  allWavesClearedText: Tutorial over
+  stageOverText: 
+  afterBossWaveText: 
+  gameWonText: 
   gameOverText: Not needed
-  ContinueButton: {fileID: 1200588442}
-  LeaveButton: {fileID: 272733225}
-  RepairButton: {fileID: 122476499}
-  showContinueButton: 1
-  showLeaveButton: 0
-  showRepairButton: 0
   DialogueHandler: {fileID: 1605481730}
 --- !u!1 &1966724378
 GameObject:
