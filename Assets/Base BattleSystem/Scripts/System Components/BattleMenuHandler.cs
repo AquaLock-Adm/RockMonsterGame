@@ -22,11 +22,8 @@ public class BattleMenuHandler : MonoBehaviour
 	// mhf2
 	private void Update(){
 		this.stopInputs = (this.BattleSystem == null);
-
-		this.InputDarkFilter.SetActive(this.stopInputs);
-
 		if(!this.stopInputs) CheckInputs();
-
+		else this.InputDarkFilter.SetActive(true);
 	}
 
 #endregion

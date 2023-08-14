@@ -28,6 +28,7 @@ public class PlayerCharacter : Unit
     [SerializeField] public Armor Armor;
 
     public bool deathTriggered = false;
+    private bool heatChargeAvailable = false;
 
 
 
@@ -55,6 +56,8 @@ public class PlayerCharacter : Unit
             this.Weapon = Weapon_GO.GetComponent<Weapon>();
             this.Weapon.Init(this);
             if(weaponStartLevel > 1) Weapon.GetUpgrade(weaponStartLevel);
+            if(Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
+            
         }else Debug.Log("Weapon is not set");
         if(this.Armor != null) {
             GameObject Armor_GO = Instantiate(this.Armor.gameObject);
@@ -70,7 +73,6 @@ public class PlayerCharacter : Unit
 
         SetupHUDReferences();
         SetupBattleComponents();
-        BattleUpdateLoop();
     }
 
     private void SetupHUDReferences(){
@@ -161,12 +163,6 @@ public class PlayerCharacter : Unit
             } 
         }
         Debug.Log(s);
-    }
-
-    private async void BattleUpdateLoop(){
-        // while(!this.deathTriggered){
-            await Task.Yield();
-        // }
     }
 
     public void NextWave(){
@@ -273,8 +269,11 @@ public class PlayerCharacter : Unit
     public void EnableAttackRushInputs(bool on){
         this.Controls.EnableAttackRushInputs(on);
     }
-    public void BlockInputsFor(int time_ms){
-        this.Controls.BlockInputsFor(time_ms);
+    public void BlockAllInputsFor(int time_ms){
+        this.Controls.BlockAllInputsFor(time_ms);
+    }
+    public void BlockPlayerInputs(List<bool> playerInputBlockList){
+        this.Controls.BlockPlayerInputs(playerInputBlockList);
     }
     public void LoadMainMenu(){
         this.Controls.LoadMainMenu();
@@ -312,6 +311,10 @@ public class PlayerCharacter : Unit
 
     public Enemy GetCurrentEnemy(){
         return BattleSystem.Enemy;
+    }
+
+    public bool IsHeatChargeAvailable(){
+        return this.heatChargeAvailable;
     }
 
     public void SetWeapon(Weapon W){

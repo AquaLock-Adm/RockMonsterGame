@@ -12,8 +12,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-// bsvg1
-// public enum BattleState {SETUP, START, PLAYERTURN, QUEUE,  DIALOGUE, WAVEOVER, ATTACKRUSH, PLAYERDIED, ENEMYDIED, RESULT} // bsvg1
 public enum BattleState {SETUP, RUNNING, DIALOGUE, WAVEOVER, PLAYERDIED, ENEMYDIED, RESULT} // bsvg1
 
 
@@ -70,6 +68,9 @@ public class BattleSystem : MonoBehaviour
 
     [Header("System Counters")]
     public int earnedCredits = 0;
+
+    private BattleState stateBeforeDialogueSwitch;
+    private PlayerState playerStateBeforeDialogueSwitch;
     // bsvg8
 
     [Header("Former BattleHUD")]
@@ -212,13 +213,13 @@ public class BattleSystem : MonoBehaviour
         }else this.Player.BattleSetup(this, this.ActionHUD);
     }
 
-    private GameObject CreatePlayerGO(){
+    protected virtual GameObject CreatePlayerGO(){
         GameObject P_GO = new GameObject();
         P_GO.AddComponent<PlayerCharacter>();
         P_GO.GetComponent<PlayerCharacter>().CopyFrom(this.Player);
         P_GO.name = this.Player.unitName;
         return P_GO;
-    }
+    } // changed in: BattleSystem_Tutorial.cs
 #endregion
 
 
@@ -325,6 +326,10 @@ public class BattleSystem : MonoBehaviour
 
         if(this.useWaveScript) {
             EnemySettingsList = this.WaveScript.GetEnemySettingsList();
+            foreach(EnemySettings E in EnemySettingsList){
+                if(this.EnemyLibrary.Count < E.level) this.EnemyLibrary.Add(new List<EnemySettings>());
+                this.EnemyLibrary[E.level-1].Add(E);
+            }
         }else {
             EnemySettingsList = this.WaveRandomizer.GetEnemySettingsList();
         }
@@ -336,7 +341,8 @@ public class BattleSystem : MonoBehaviour
 
 #region Round Start Functions
     public void NextWave(){
-        this.Player.BlockInputsFor(100);
+        // Debug.Log("NextWave() called");
+        this.Player.BlockAllInputsFor(100);
         this.Player.NextWave();
 
         SetupEnemySpawner();
@@ -382,7 +388,7 @@ public class BattleSystem : MonoBehaviour
         this.ResultHandler.ScoreText.text = this.ResultHandler.FormatIntegerCount(this.earnedCredits) + " Cd";
     }
 
-    private void UpdateStageClearRewards(){
+    protected virtual void UpdateStageClearRewards(){
         if(!this.useWaveScript){
             if(!this.stagesClearedBefore[this.WaveRandomizer.stageIndex]){
                 this.earnedCredits += this.stageFirstClearRewards[this.WaveRandomizer.stageIndex];
@@ -390,7 +396,7 @@ public class BattleSystem : MonoBehaviour
                 this.stagesClearedBefore[this.WaveRandomizer.stageIndex] = true;
             }
         }else Debug.Log("Not implemented yet!");
-    }
+    } // Changed in: BattleSystem_Tutorial.cs
 
     private void CheckEnemyItemDrop(Enemy E){
         int ran = Random.Range(1, 101);
@@ -418,6 +424,26 @@ public class BattleSystem : MonoBehaviour
 #endregion
 
 
+
+    public void SwitchDialogueState(bool on){
+        // Debug.Log("SwitchDialogueState() called");
+        if(on){
+            if(this.state != BattleState.DIALOGUE){
+                this.stateBeforeDialogueSwitch = this.state;
+                this.playerStateBeforeDialogueSwitch = this.Player.state;
+            }
+            this.state = BattleState.DIALOGUE;
+            this.Player.state = PlayerState.WAITING;
+        }else{
+            this.state = this.stateBeforeDialogueSwitch;
+            this.Player.state = this.playerStateBeforeDialogueSwitch;
+        }
+    }
+
+    // list bools in order WASD
+    public void BlockPlayerInputs(List<bool> playerInputBlockList){
+        this.Player.BlockPlayerInputs(playerInputBlockList);
+    }
 
     public async void PlayerDies(){
         this.state = BattleState.PLAYERDIED;

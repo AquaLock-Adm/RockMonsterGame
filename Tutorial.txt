@@ -47,9 +47,12 @@ block the attack without using up it's block.
 
 But since you attack matched the color, you have gained enough heat to reach level 2.
 For now that will be your maximum.
+
+ > Load Text Box 3
 If you queue up 2 actions at once now you should be able to break the block
 with the first and hit the enemy with the second. Try it out!
 
+ > Load Text Box 6
 That's more like it! Now that the enemy has died a new one has taken it's place.
 It's front block right now is white. That indicates that it can only be broken by a light attack.
 
@@ -68,11 +71,11 @@ If it were red, then it would only be broken by a Special Attack.
 But Remember, normaly it also could be white for Light Attacks or grey for Any Attack.
 You can also see, that now that you know, what the second block is, the black square has turned blue.
 
+ > Load Text Box 3
 To hurt this enemy you will need atleast 3 attacks.
-So let me simply give Action Heat Level 3. 
+So let me simply give you Action Heat Level 3. 
 It might also be interesting to know that the 3 Attacktypes have different attributes.
 
- > Load Text box 1
 Special Attacks are faster and deal less Damage.
 Heavy Attacks are slower and deal more Damage.
 Light Attacks are a good middle ground.

@@ -7,10 +7,10 @@ using TMPro;
 
 public class PlayerBattleResourceHandler : MonoBehaviour
 {
-    private PlayerCharacter Player;
+    protected PlayerCharacter Player;
 
-    [SerializeField] private TextMeshProUGUI NameText;
-    [SerializeField] private Slider HpSlider;
+    [SerializeField] protected TextMeshProUGUI NameText;
+    [SerializeField] protected Slider HpSlider;
 
     private const int TICK_TIME_MS = 50;
 
@@ -24,7 +24,7 @@ public class PlayerBattleResourceHandler : MonoBehaviour
 
 
 
-    public void Setup(PlayerCharacter Player, TextMeshProUGUI NameText, Slider HpSlider){
+    public virtual void Setup(PlayerCharacter Player, TextMeshProUGUI NameText, Slider HpSlider){
         this.Player = Player;
 
         this.NameText = NameText;
@@ -35,9 +35,9 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         StartHealthDepleteLoop();
         if(Player.GetWeapon().actionsPerRound > 5) StartEnemyDOTLoop();
         BattleUpdateLoop();
-    }
+    } // changed in: PlayerResource_Tutorial.cs
 
-    private async void BattleUpdateLoop(){
+    protected async void BattleUpdateLoop(){
         while(!Player.deathTriggered && Application.isPlaying){
             UpdateHUDElements();
             UpdateArmorStats();

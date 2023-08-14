@@ -7,14 +7,14 @@ using TMPro;
 
 public class PlayerActionHandler : MonoBehaviour
 {
-	private PlayerCharacter Player;
+	protected PlayerCharacter Player;
 
 	const int TICK_TIME_MS = 50;
 
 	[Header("HUD References")]
 
     [SerializeField] private GameObject ActionBoxPrefab;
-	[SerializeField] private TextMeshProUGUI ComboLevelText;
+	[SerializeField] protected TextMeshProUGUI ComboLevelText;
 
 	[SerializeField] private Slider HeatProgressSlider;
 
@@ -31,8 +31,8 @@ public class PlayerActionHandler : MonoBehaviour
 
 	[Header("Action Parameters")]
 	public int comboLevel = 1;
-	private int maxComboLv = 1;
-	private int currentMaxAttackLength = 1;
+	protected int maxComboLv = 1;
+	protected int currentMaxAttackLength = 1;
 
 	public List<Action> Actions = new List<Action>();
 	private List<string> AvailableComboActionsAsStrings = new List<string>();
@@ -205,7 +205,7 @@ public class PlayerActionHandler : MonoBehaviour
 		}
 	}
 
-	private void UpdateActionBoxList(){
+	protected void UpdateActionBoxList(){
 		ClearActionBoxes();
 		this.ActionBoxList = new List<GameObject>();
 		for(int i = 0; i < this.comboLevel; i++){
@@ -314,7 +314,7 @@ public class PlayerActionHandler : MonoBehaviour
 		}
 	}
 
-	private void ActionQueueEnd(){
+	protected virtual void ActionQueueEnd(){
 		ClearActionQueue();
 		UpdateActionBoxList();
 
@@ -322,7 +322,7 @@ public class PlayerActionHandler : MonoBehaviour
 			Player.state = PlayerState.PLAYERTURN;
 			Player.SwitchBattleModes();
 		}
-	}
+	} // Changed in: PlayerAction_Tutorial.cs
 
 	public void StopQueue(){
         this.stopQueue = true;
@@ -379,7 +379,7 @@ public class PlayerActionHandler : MonoBehaviour
 		UpdateVisualizer();
 	}
 
-	private void UpdateHeatBar(){
+	protected void UpdateHeatBar(){
 		if(this.comboLevel < this.maxComboLv){
 			this.HeatProgressSlider.value = this.currentHeat;
 			this.HeatProgressSlider.maxValue = this.heatLimits[this.comboLevel];
@@ -441,7 +441,7 @@ public class PlayerActionHandler : MonoBehaviour
 		return Rem;
 	}
 
-	private void ClearActionQueue(){
+	protected void ClearActionQueue(){
 		while(this.Actions.Count > 0){
 			RemoveLastAction();
 		}

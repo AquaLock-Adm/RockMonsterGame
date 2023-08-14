@@ -41,8 +41,6 @@ public class EnemySpawner : MonoBehaviour
 
         Settings = BattleSystem.GetEnemySettingsByName(this.EnemySettingsList[this.enemyIndex].name, this.EnemySettingsList[this.enemyIndex].level-1);
         
-
-        // CurrentEnemy.CopyFromEnemySettings(this.EnemySettingsList[this.enemyIndex]);
         CurrentEnemy.CopyFromEnemySettings(Settings);
 
         Enemy_GO.name = CurrentEnemy.unitName;

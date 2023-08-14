@@ -778,7 +778,7 @@ RectTransform:
   - {fileID: 1895266884}
   - {fileID: 256145055}
   m_Father: {fileID: 1477026000}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6834,8 +6834,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cfe489d38021247bc8228f68c9c0c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BattleSystem: {fileID: 0}
   PauseMenu: {fileID: 0}
   InputDarkFilter: {fileID: 1536168137}
+  stopInputs: 0
 --- !u!4 &1282877113
 Transform:
   m_ObjectHideFlags: 0
@@ -7386,9 +7388,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1666975167}
-  - {fileID: 321100281}
   - {fileID: 184173006}
+  - {fileID: 321100281}
+  - {fileID: 1666975167}
   - {fileID: 1584836143}
   m_Father: {fileID: 96047624}
   m_RootOrder: 0
@@ -8141,9 +8143,7 @@ MonoBehaviour:
   ResultHandler: {fileID: 0}
   WaveRandomizer: {fileID: 0}
   MainMenu: {fileID: 1782838884}
-  DescriptionScreen: {fileID: 1014767959}
   ResultScreen: {fileID: 261414850}
-  DialogueScreen: {fileID: 891849991}
   InputDarkFilter: {fileID: 1536168137}
   PauseScreen: {fileID: 1038482426}
   log1: 
@@ -8579,7 +8579,7 @@ RectTransform:
   - {fileID: 1168250575}
   - {fileID: 1581216487}
   m_Father: {fileID: 1477026000}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
