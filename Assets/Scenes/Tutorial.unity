@@ -8027,6 +8027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9e08388e8d16c5409df2ff6eb7596e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialInstanceIndex: 0
+  dialogueIndex: 0
   DialogueBoxes: {fileID: 1267939076}
   DialogueBoxList: []
   BasicInputTestButtonsList: []

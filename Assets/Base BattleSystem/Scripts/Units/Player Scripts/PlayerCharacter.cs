@@ -171,13 +171,13 @@ public class PlayerCharacter : Unit
         this.Controls.LoadMainMenu();
     }
 
-    public void SwitchBattleModes(){
+    public virtual void SwitchBattleModes(){
         this.defendModeActive = !this.defendModeActive;
 
         BattleSystem.Enemy.SwitchModes(this.defendModeActive);
         this.ActionHandler.SwitchModes(this.defendModeActive);
         this.Controls.LoadMainMenu();
-    }
+    } // Changed in: Player_Tutorial.cs
 
     public int GetAbilityIndexByString(string givenActionName){
         Action ActionFromPlayerAbilityList = this.Weapon.Abilities.Find(action => action.name == givenActionName);

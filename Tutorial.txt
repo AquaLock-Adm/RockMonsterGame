@@ -127,20 +127,51 @@ Once you have discovered what the Letters in the enemies Attack sequence above t
 stand for they will be replaced and can be matched by the equivalent Block.
 Lo > Low Block, Mi > Mid Block, Hi > High Block.
 
-Now go on and try and block the enemies attack!
-Hint: It's not High or Low Block...
+Now go on and try your hand at blocking the enemies attack!
 
-ATTACK HITS
+ > Load text Box 1
+Did you manage to block it?
+Right now the visualization is quite lackluster
+but you can tell by your healthbar at the top right corner
+wether you received damage or not.
 
- > load Text box 1
-What? I could've sworn I made it a Mid Attack...
-Well whatever! Even if you don't block the attack it's letter will be uncovered
-the next time the enemy uses the same attack.
+Should your Healthbar reach zero
+that would mean the end of your run.
 
-One last thing! While you're picking out what attacks or blocks to use...
-Your life total on the top left will constantly deplete.
-So you better hurry when deciding. Maybe you have a tactic on hand to deal
-with uncovered Enemy Attacks and hidden Enemy blocks?
+But now that you have survived the enemies attack
+it is your turn once again to attack it.
 
-Defeat the last enemy to finish the tutorial.
-Good Luck and Have Fun!
+ > Load Text Box 3
+As you can see your input interface has changed back to attack mode
+Should you not magage to kill the enemy with your attack
+it will change back to defense mode, then back to attack etc.
+
+ > Load Text Box 1
+Every time the enemy attacks there is a chance that it's
+Attack Sequence gets longer.
+
+Of course every enemy has it's maximum number of attacks
+but all attacks will usually be random.
+So it will be important to figure out which Attack Code(letter)
+stands for which attack.
+
+Some stronger Enemies will have multiple Attack Codes for the same
+attack and Some Enemies will have multiple Defensive stances
+which means, that their sequence of blocks may vary.
+
+One last thing:
+To make things more interesting, while you have control over
+your Inputs, your Life total will be depleting.
+Right now in the Tutorial I have disabled that mechanic but later
+you'll have to be more carefull and quick.
+
+This could make your gameplay quite stressfull
+but try to stay calm and concentrate on the hints the enemy is giving you.
+
+And don't worry, by dealing damage to the enemy you will regain
+some life based on how much damage you dealt.
+
+So act fast and try to deal as much damage as possible.
+You got this! 
+Defeat this last enemy to finish the tutorial!
+Good Luck and Have Fun.

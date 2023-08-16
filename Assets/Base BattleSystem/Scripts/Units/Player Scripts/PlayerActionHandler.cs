@@ -23,16 +23,16 @@ public class PlayerActionHandler : MonoBehaviour
 	[SerializeField] private GameObject AttackRushDecreaseBox;
 
 	[SerializeField] private GameObject ActionBoxes;
-	[SerializeField] private TextMeshProUGUI ActionText;
+	[SerializeField] protected TextMeshProUGUI ActionText;
 	[SerializeField] private List<GameObject> ActionBoxList = new List<GameObject>();
 
 	private float standartActionBoxHeight = 58f;
 	private float standartActionBoxWidth = 100f;
 
 	[Header("Action Parameters")]
-	public int comboLevel = 1;
-	protected int maxComboLv = 1;
-	protected int currentMaxAttackLength = 1;
+	[SerializeField] public int comboLevel = 1;
+	[SerializeField] protected int maxComboLv = 1;
+	[SerializeField] protected int currentMaxAttackLength = 1;
 
 	public List<Action> Actions = new List<Action>();
 	private List<string> AvailableComboActionsAsStrings = new List<string>();
@@ -60,7 +60,7 @@ public class PlayerActionHandler : MonoBehaviour
 	private int attackRushLevel = -1;
 	private int attackRushQueueIndex = -1;
 
-	private bool inAttackRushPreLoop = false;
+	protected bool inAttackRushPreLoop = false;
 	private bool attackRushActive = false;
 	public bool attackRushUsed = false;
 
@@ -155,14 +155,14 @@ public class PlayerActionHandler : MonoBehaviour
         }
     }
 
-    public async void PassRound(){
+    public virtual async void PassRound(){
         this.inAttackRushPreLoop = false;
         if(Player.state == PlayerState.START) {
             this.heatChargeDone = true;
         }
         Player.state = PlayerState.QUEUE;
         await ExecuteAllActions();
-    }
+    } // Changed in: PlayerAction_Tutorial.cs
 #endregion
 
 
@@ -251,7 +251,7 @@ public class PlayerActionHandler : MonoBehaviour
 
 
 #region Executing Actions
-	private async Task ExecuteAllActions(){
+	protected async Task ExecuteAllActions(){
 		this.stopQueue = false;
 		Enemy TargetEnemy = Player.GetCurrentEnemy();
 		TargetEnemy.SetHeldByCombo(true);
@@ -411,7 +411,7 @@ public class PlayerActionHandler : MonoBehaviour
 
 
 #region Adding/Removing New Actions
-	public void AddAction(Action A){
+	public virtual void AddAction(Action A){
 		this.ActionText.text = A.name;
 
 		this.Actions.Add(A);
@@ -425,7 +425,7 @@ public class PlayerActionHandler : MonoBehaviour
 		}else{
 			Player.LoadMainMenu();
 		}
-	}
+	} // Changed in: PlayerAction_Tutorial.cs
 
 	public Action RemoveLastAction() {
 		this.ActionText.text = "";
@@ -447,7 +447,7 @@ public class PlayerActionHandler : MonoBehaviour
 		}
 	}
 
-	private int PositionsLeftInActionQueue(){
+	protected int PositionsLeftInActionQueue(){
 		if(this.attackRushQueueIndex >= 0){
 			return 0;
 		}

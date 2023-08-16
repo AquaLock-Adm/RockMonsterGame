@@ -77,7 +77,8 @@ public class WaveScript_Tutorial : WaveScript
         EnemySettings Enemy3 = new EnemySettings();
         Enemy3.level = 1;
         Enemy3.name = "Enemy C";
-        Enemy3.hp = 1;
+        Enemy3.damage = 2;
+        Enemy3.hp = 100;
 
         Enemy3 = InitDefensiveMode(Enemy3);
 
@@ -88,25 +89,8 @@ public class WaveScript_Tutorial : WaveScript
 
         InitDiscoveredShieldsList(Enemy3, shields.Count);
 
-        Enemy3.AttackLibrary = new Dictionary<AbilityType, EnemyAttack>(); 
-
-        Enemy3.minAttackSequenceLength = 0;
-        Enemy3.maxAttackSequenceLength = 0;
+        Enemy3 = InitAttackLibrary(Enemy3, 1, 2, 1);
 
         this.EnemySettingsList.Add(Enemy3);
-    }
-
-    private EnemySettings InitDefensiveMode(EnemySettings Settings){
-        Settings.DefensiveModes[0] = new List<List<ShieldMode>>();
-        Settings.DefensiveModes[1] = new List<List<ShieldMode>>();
-
-        return Settings;
-    }
-
-    private EnemySettings InitDiscoveredShieldsList(EnemySettings Settings,int listCount){
-        for(int i=0;i<listCount;i++){
-            Settings.DefensiveModes[1].Add(new List<ShieldMode>());
-        }
-        return Settings;
     }
 }

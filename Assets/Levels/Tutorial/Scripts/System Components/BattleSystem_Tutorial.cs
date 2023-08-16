@@ -22,10 +22,28 @@ public class BattleSystem_Tutorial : BattleSystem
         return P_GO;
     }
 
-    public void SetPlayerMaxActionLevel(int level){
-        Player_Tutorial P_t = this.Player.GetComponent<Player_Tutorial>();
+    public void BlockPlayerBattleModeSwitch(bool blockOn){
+        this.Player.GetComponent<Player_Tutorial>().blockBattleModeSwitch = blockOn;
+    }
 
-        P_t.SetPlayerMaxActionLevel(level);
+    public void SetPlayerMaxActionLevel(int level){
+        this.Player.GetComponent<Player_Tutorial>().SetPlayerMaxActionLevel(level);
+    }
+
+    public void SetPlayerComboLevel(int level){
+        this.Player.GetComponent<Player_Tutorial>().SetPlayerComboLevel(level);
+    }
+
+    public void WaitForExecutedActions(bool on){
+        this.Player.GetComponent<Player_Tutorial>().WaitForExecutedActions(on);
+    }
+
+    public void UpdateAwaitedActions(List<Action> ActionsList){
+        TutorialHandler.UpdateAwaitedActions(ActionsList);
+    }
+
+    public void WaitForQueuedActions(bool on){
+        this.Player.GetComponent<Player_Tutorial>().WaitForQueuedActions(on);
     }
 
     protected override void UpdateStageClearRewards(){
