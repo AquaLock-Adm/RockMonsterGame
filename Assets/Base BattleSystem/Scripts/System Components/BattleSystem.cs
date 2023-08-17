@@ -396,7 +396,7 @@ public class BattleSystem : MonoBehaviour
                 this.stagesClearedBefore[this.WaveRandomizer.stageIndex] = true;
             }
         }else Debug.Log("Not implemented yet!");
-    } // Changed in: BattleSystem_Tutorial.cs
+    } // Changed in: 
 
     private void CheckEnemyItemDrop(Enemy E){
         int ran = Random.Range(1, 101);
@@ -418,7 +418,7 @@ public class BattleSystem : MonoBehaviour
         await Task.Delay(2000);
 
         this.Player.ResetHeatLevel();
-
+        
         PauseMenu.ShowPauseMenu(true);
     }
 #endregion

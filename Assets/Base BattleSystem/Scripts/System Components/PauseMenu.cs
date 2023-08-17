@@ -124,8 +124,13 @@ public class PauseMenu : MonoBehaviour
             this.LeaveButton.SetActive(this.showLeaveButton); 
             this.NextStageButton.SetActive(this.showNextStageButton);
             if(BattleSystem.state == BattleState.WAVEOVER){
-                SetupNextWaveText();
-                SetupPauseHealthBar(); 
+                if(!BattleSystem.finalStageReached){
+                    SetupNextWaveText();
+                    SetupPauseHealthBar();
+                }else {
+                    this.NextWaveInfo.SetActive(false);
+                    this.PauseHpSlider.gameObject.SetActive(false); 
+                }
             }else{
                 this.NextWaveInfo.SetActive(false);
                 this.PauseHpSlider.gameObject.SetActive(false);

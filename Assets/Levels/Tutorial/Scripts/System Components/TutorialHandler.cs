@@ -525,6 +525,7 @@ public class TutorialHandler : MonoBehaviour
         else {
             NextInstance(); // <-- Important because it was skipped in LoadDialogueBox
             await WaitForPlayerContinueInput();
+            BattleSystem.finalStageReached = true;
             this.DialogueBoxList[this.lastDialogueBoxIndex].SetActive(false);
 
             BattleSystem.SwitchDialogueState(false);
