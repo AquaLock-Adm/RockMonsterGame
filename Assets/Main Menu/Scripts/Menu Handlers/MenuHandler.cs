@@ -7,7 +7,7 @@ using TMPro;
 
 public class MenuHandler : MonoBehaviour
 {
-
+    /*
     public GameHandler GameHandler;
 
     [SerializeField] private int creditCrawlTime = 1000; // ms 
@@ -275,4 +275,5 @@ public class MenuHandler : MonoBehaviour
         Application.Quit();
     }
 #endregion
+*/
 }

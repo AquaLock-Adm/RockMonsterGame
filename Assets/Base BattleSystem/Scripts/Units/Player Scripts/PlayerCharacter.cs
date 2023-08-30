@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum PlayerState {WAITING, START, PLAYERTURN, QUEUE, ATTACKRUSH, DEAD} 
+public enum PlayerState { WAITING, START, PLAYERTURN, QUEUE, ATTACKRUSH, DEAD }
 
 public class PlayerCharacter : Unit
 {
@@ -25,16 +25,17 @@ public class PlayerCharacter : Unit
     [Header("Player Stats:")]
 
     [SerializeField] private Weapon Weapon;
-    [SerializeField] public Armor Armor;
+    [SerializeField] private Armor Armor;
 
     public bool deathTriggered = false;
     private bool heatChargeAvailable = false;
 
 
 
-#region overrides
-    public async override Task Death(){
-        if(!this.deathTriggered) return;
+    #region overrides
+    public async override Task Death()
+    {
+        if (!this.deathTriggered) return;
         this.healthPoints = 0;
         this.ResourceHandler.UpdateHUDElements();
 
@@ -45,27 +46,33 @@ public class PlayerCharacter : Unit
         BattleSystem.PlayerDies();
         await Task.Yield();
     }
-#endregion
+    #endregion
 
 
 
-    public void BattleSetup(BattleSystem BS, GameObject ActionHUD, int weaponStartLevel = 1){
-        if(this.Weapon != null) {
+    #region BattleSetup
+    public void BattleSetup(BattleSystem BS, GameObject ActionHUD, int weaponStartLevel = 1)
+    {
+        if (this.Weapon != null)
+        {
             GameObject Weapon_GO = Instantiate(this.Weapon.gameObject);
             Weapon_GO.GetComponent<Weapon>().CopyFrom(this.Weapon);
             this.Weapon = Weapon_GO.GetComponent<Weapon>();
             this.Weapon.Init(this);
-            if(weaponStartLevel > 1) Weapon.GetUpgrade(weaponStartLevel);
-            if(Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
-            
-        }else Debug.Log("Weapon is not set");
-        if(this.Armor != null) {
+            if (weaponStartLevel > 1) Weapon.GetUpgrade(weaponStartLevel);
+            if (Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
+
+        }
+        else Debug.Log("Weapon is not set");
+        if (this.Armor != null)
+        {
             GameObject Armor_GO = Instantiate(this.Armor.gameObject);
             Armor_GO.GetComponent<Armor>().CopyFrom(this.Armor);
             this.Armor = Armor_GO.GetComponent<Armor>();
 
             this.Armor.Init(this);
-        }else Debug.Log("Armor is not set");
+        }
+        else Debug.Log("Armor is not set");
 
         this.BattleSystem = BS;
         this.ActionHUD = ActionHUD;
@@ -75,45 +82,53 @@ public class PlayerCharacter : Unit
         SetupBattleComponents();
     }
 
-    private void SetupHUDReferences(){
+    private void SetupHUDReferences()
+    {
         SetupMenuTexts();
         SetupReferencesForActionHandler();
     }
 
-    private void SetupMenuTexts(){
+    private void SetupMenuTexts()
+    {
         this.MenuTexts = new List<TextMeshProUGUI>();
         int textsFound = 0;
 
-        foreach( Transform Button_T in  this.ActionHUD.transform.Find("MainMenu") ){
+        foreach (Transform Button_T in this.ActionHUD.transform.Find("MainMenu"))
+        {
             TextMeshProUGUI t = Button_T.Find("Button Text").gameObject.GetComponent<TextMeshProUGUI>();
-            if(t != null) textsFound++;
+            if (t != null) textsFound++;
 
-            MenuTexts.Add( Button_T.Find("Button Text").gameObject.GetComponent<TextMeshProUGUI>() );
+            MenuTexts.Add(Button_T.Find("Button Text").gameObject.GetComponent<TextMeshProUGUI>());
         }
 
-        if(textsFound < 4){
-            Debug.LogError("Not enough Button Texts found! "+ textsFound.ToString()+"/4");
+        if (textsFound < 4)
+        {
+            Debug.LogError("Not enough Button Texts found! " + textsFound.ToString() + "/4");
         }
     }
 
-    private void SetupReferencesForActionHandler(){
+    private void SetupReferencesForActionHandler()
+    {
         this.ReferencesForActionHandler = new List<GameObject>();
 
         // NOTE: The order of these GO's is important! Ref: PlayerActionHandler.SetupHUDReferences()
-        if(BattleSystem.ActionBoxPrefab != null){
+        if (BattleSystem.ActionBoxPrefab != null)
+        {
             this.ReferencesForActionHandler.Add(BattleSystem.ActionBoxPrefab);
-        }else Debug.LogError("ActionBoxPrefab Missing!");
-        
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Combo Level Text").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Action Text").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Heat Progress Bar").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Action Boxes").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Attack Rush Bar").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Attack Rush Bar/Remain Box").gameObject );
-        this.ReferencesForActionHandler.Add( this.ActionHUD.transform.Find("Attack Rush Bar/Decrease Box").gameObject );
+        }
+        else Debug.LogError("ActionBoxPrefab Missing!");
+
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Combo Level Text").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Action Text").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Heat Progress Bar").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Action Boxes").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar/Remain Box").gameObject);
+        this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar/Decrease Box").gameObject);
     }
 
-    protected virtual void SetupBattleComponents(){
+    protected virtual void SetupBattleComponents()
+    {
         // Reminder: Setup Actionshandler before Player control so the start menu knows that the heatcharge is done on apr < 5
         this.ActionHandler = this.gameObject.AddComponent<PlayerActionHandler>();
         this.ActionHandler.Setup(this, this.ReferencesForActionHandler);
@@ -124,54 +139,77 @@ public class PlayerCharacter : Unit
         this.Controls = this.gameObject.AddComponent<PlayerControl>();
         this.Controls.Setup(this, BattleSystem.InputDarkFilter, this.MenuTexts);
     } // Changed in: Player_Tutorial.cs
+    #endregion
 
-    public void CopyFrom(PlayerCharacter P_IN){
-        
+
+
+    #region MenuSetup
+    public void MenuSetup(Weapon PlayerWeapon, Armor PlayerArmor)
+    {
+        this.Weapon = PlayerWeapon;
+        this.Armor = PlayerArmor;
+        this.healthPoints = PlayerArmor.healthPoints;
+        this.maxHealthPoints = PlayerArmor.maxHealthPoints;
+        this.Weapon.GetUpgrade(1);
+    }
+    #endregion
+
+    public void CopyFrom(PlayerCharacter P_IN)
+    {
+
         this.unitName = P_IN.unitName;
-        
+
         this.healthPoints = P_IN.healthPoints;
         this.maxHealthPoints = P_IN.maxHealthPoints;
-        
+
         this.Weapon = P_IN.Weapon;
         this.Armor = P_IN.Armor;
     }
 
-    public void PrintStatus(){
-        Debug.Log("Status Player "+ this.unitName+":");
+    public void PrintStatus()
+    {
+        Debug.Log("Status Player " + this.unitName + ":");
         string s = "\nHUD References:\n"
-                +  "BattleSystem Set: " + (this.BattleSystem != null).ToString()+"\n\n"
+                + "BattleSystem Set: " + (this.BattleSystem != null).ToString() + "\n\n"
 
-                +  "Player Stats:\n"
-                +  "Weapon: " + this.Weapon.weaponName+"\n"
-                +  "Armor: " + this.Armor.armorName+"\n\n"
+                + "Player Stats:\n"
+                + "Weapon: " + this.Weapon.weaponName + "\n"
+                + "Armor: " + this.Armor.armorName + "\n\n"
 
-                +  "Health: " + this.Armor.healthPoints.ToString()+"/"+this.Armor.maxHealthPoints.ToString()+"\n\n"
+                + "Health: " + this.Armor.healthPoints.ToString() + "/" + this.Armor.maxHealthPoints.ToString() + "\n\n"
 
-                +  "MaxAtk: " + this.Weapon.attackMax.ToString()+"\n"
-                +  "MinAtk: " + this.Weapon.attackMin.ToString()+"\n";
+                + "MaxAtk: " + this.Weapon.attackMax.ToString() + "\n"
+                + "MinAtk: " + this.Weapon.attackMin.ToString() + "\n";
         Debug.Log(s);
         PrintAbilities();
     }
 
-    public void PrintAbilities(){
+    public void PrintAbilities()
+    {
         string s = "\nAbilities:\n\n";
-        if(this.Weapon.Abilities.Count == 0){
+        if (this.Weapon.Abilities.Count == 0)
+        {
             s += "EMPTY";
-        } else {
-            foreach(Action A in this.Weapon.Abilities){
-                s += A.ToString()+"\n";
-            } 
+        }
+        else
+        {
+            foreach (Action A in this.Weapon.Abilities)
+            {
+                s += A.ToString() + "\n";
+            }
         }
         Debug.Log(s);
     }
 
-    public void NextWave(){
+    public void NextWave()
+    {
         this.ActionHandler.CheckHeatChargeAvailability();
         this.ActionHandler.attackRushUsed = false;
         this.Controls.LoadMainMenu();
     }
 
-    public virtual void SwitchBattleModes(){
+    public virtual void SwitchBattleModes()
+    {
         this.defendModeActive = !this.defendModeActive;
 
         BattleSystem.Enemy.SwitchModes(this.defendModeActive);
@@ -179,164 +217,251 @@ public class PlayerCharacter : Unit
         this.Controls.LoadMainMenu();
     } // Changed in: Player_Tutorial.cs
 
-    public int GetAbilityIndexByString(string givenActionName){
+    public int GetAbilityIndexByString(string givenActionName)
+    {
         Action ActionFromPlayerAbilityList = this.Weapon.Abilities.Find(action => action.name == givenActionName);
 
-        if(ActionFromPlayerAbilityList != null) return ActionFromPlayerAbilityList.abilityIndex;
-        else {
-            Debug.LogError("Ability Name not found in Player Abilities: "+givenActionName);
+        if (ActionFromPlayerAbilityList != null) return ActionFromPlayerAbilityList.abilityIndex;
+        else
+        {
+            Debug.LogError("Ability Name not found in Player Abilities: " + givenActionName);
             return -1;
         }
     }
 
 
 
-#region Resource Handler Functions
-    public void DealDamage(int damage){
+    #region Resource Handler Functions
+    public void DealDamage(int damage)
+    {
         this.ResourceHandler.DealDamage(damage);
     }
-    public void Heal(int heal){
+    public void Heal(int heal)
+    {
         this.ResourceHandler.Heal(heal);
     }
-#endregion
+    #endregion
 
 
 
-#region Action Handler Functions
-    public void CastBlock(int abilityIndex){
+    #region Action Handler Functions
+    public void CastBlock(int abilityIndex)
+    {
         this.ActionHandler.CastBlock(abilityIndex);
     }
-    public void CastAttack(int abilityIndex){
+    public void CastAttack(int abilityIndex)
+    {
         this.ActionHandler.CastAttack(abilityIndex);
     }
-    public void CancelLastAction(){
+    public void CancelLastAction()
+    {
         this.ActionHandler.CancelLastAction();
     }
-    public void PassRound(){
+    public void PassRound()
+    {
         this.ActionHandler.PassRound();
     }
-    public void StopAttackRushQueue(){
+    public void StopAttackRushQueue()
+    {
         this.ActionHandler.StopAttackRushQueue();
     }
-    public void StartAttackRushQueue(){
+    public void StartAttackRushQueue()
+    {
         this.ActionHandler.StartAttackRushQueue();
     }
-    public void StartAttackRushHeatDrain(){
+    public void StartAttackRushHeatDrain()
+    {
         this.ActionHandler.StartAttackRushHeatDrain();
     }
-    public void CancelAttackRush(){
+    public void CancelAttackRush()
+    {
         this.ActionHandler.CancelAttackRush();
     }
-    public Action PredictComboAbilityWith(Action ActionToAdd){
+    public Action PredictComboAbilityWith(Action ActionToAdd)
+    {
         return this.ActionHandler.PredictComboAbilityWith(ActionToAdd);
     }
-    public void StartHeatChargeLoop(){
+    public void StartHeatChargeLoop()
+    {
         this.ActionHandler.StartHeatChargeLoop();
     }
-    public void StopHeatChargeLoop(){
+    public void StopHeatChargeLoop()
+    {
         this.ActionHandler.StopHeatChargeLoop();
     }
-    public void StartHeatDischargeLoop(){
+    public void StartHeatDischargeLoop()
+    {
         this.ActionHandler.StartHeatDischargeLoop();
     }
-    public void StopHeatDischargeLoop(){
+    public void StopHeatDischargeLoop()
+    {
         this.ActionHandler.StopHeatDischargeLoop();
     }
-    public bool HeatChargeIsDone(){
+    public bool HeatChargeIsDone()
+    {
         return this.ActionHandler.heatChargeDone;
     }
-    public bool IsInHeatCharge(){
+    public bool IsInHeatCharge()
+    {
         return this.ActionHandler.inHeatCharge;
     }
-    public bool IsInHeatDischarge(){
+    public bool IsInHeatDischarge()
+    {
         return this.ActionHandler.inHeatDischarge;
     }
-    public int GetCurrentActionCount(){
+    public int GetCurrentActionCount()
+    {
         return this.ActionHandler.Actions.Count;
     }
-    public int GetCurrentComboLevel(){
+    public int GetCurrentComboLevel()
+    {
         return this.ActionHandler.comboLevel;
     }
-    public void StopQueue(){
+    public void StopQueue()
+    {
         this.ActionHandler.StopQueue();
     }
-    public void ResetHeatLevel(){
+    public void ResetHeatLevel()
+    {
         this.ActionHandler.ResetHeatLevel();
     }
-#endregion
+    #endregion
 
-#region Player Control Functions
-    public void EnableAttackRushInputs(bool on){
+    #region Player Control Functions
+    public void EnableAttackRushInputs(bool on)
+    {
         this.Controls.EnableAttackRushInputs(on);
     }
-    public void BlockAllInputsFor(int time_ms){
+    public void BlockAllInputsFor(int time_ms)
+    {
         this.Controls.BlockAllInputsFor(time_ms);
     }
-    public void BlockPlayerInputs(List<bool> playerInputBlockList){
+    public void BlockPlayerInputs(List<bool> playerInputBlockList)
+    {
         this.Controls.BlockPlayerInputs(playerInputBlockList);
     }
-    public void LoadMainMenu(){
+    public void LoadMainMenu()
+    {
         this.Controls.LoadMainMenu();
     }
-    public void LoadRoundOverMenu(){
+    public void LoadRoundOverMenu()
+    {
         this.Controls.LoadRoundOverMenu();
     }
-    public void LoadComboAbilityMenu(){
+    public void LoadComboAbilityMenu()
+    {
         this.Controls.LoadComboAbilityMenu();
     }
-#endregion
+    #endregion
 
 
 
-#region Getter - Setter
-    public int GetAttackMin(){
+    #region Getter - Setter
+    public int GetWeaponLevel()
+    {
+        return this.Weapon.weaponLevel;
+    }
+    
+    public int GetAttackMin()
+    {
         return this.Weapon.attackMin;
     }
 
-    public int GetAttackMax(){
+    public int GetAttackMax()
+    {
         return this.Weapon.attackMax;
     }
 
-    public int GetLifeSteal(){
-        return this.Weapon.lifeSteal;
+    public float GetLifeDrain()
+    {
+        return this.Weapon.healthCostPerSecond;
     }
 
-    public int GetActionsPerRound(){
+    public int GetLifeSteal() 
+    {
+        return this.Weapon.lifeSteal;
+    }
+    
+    public float GetEnemyDOT()
+    {
+        return this.Weapon.enemyDamagePerSecond;
+    }
+
+    public int GetWeaponUpgradeCost()
+    {
+        return this.Weapon.upgradeCost;
+    }
+
+    public int GetActionsPerRound()
+    {
         return this.Weapon.actionsPerRound;
     }
 
-    public Weapon GetWeapon(){
+    public Weapon GetWeapon()
+    {
         return this.Weapon;
     }
 
-    public Enemy GetCurrentEnemy(){
+    public Enemy GetCurrentEnemy()
+    {
         return BattleSystem.Enemy;
     }
 
-    public bool IsHeatChargeAvailable(){
+    public bool IsHeatChargeAvailable()
+    {
         return this.heatChargeAvailable;
     }
 
-    public void SetWeapon(Weapon W){
+    public void SetWeapon(Weapon W)
+    {
         this.Weapon = W;
     }
-
-    public Armor GetArmor(){
+    
+    public Armor GetArmor()
+    {
         return this.Armor;
     }
+    
+    public int GetArmorLevel()
+    {
+        return this.Armor.armorLevel;
+    }
 
-    public void SetArmor(Armor A){
+    public int GetArmorHealth()
+    {
+        return this.Armor.maxHealthPoints;
+    }
+
+    public int GetArmorMana()
+    {
+        return this.Armor.maxMana;
+    }
+
+    public int GetArmorManaRegen()
+    {
+        return this.Armor.manaRegen_s;
+    }
+
+    public int GetArmorUpgradeCost()
+    {
+        return this.Armor.upgradeCost;
+    }
+
+    public void SetArmor(Armor A)
+    {
         this.Armor = A;
         this.healthPoints = A.healthPoints;
         this.maxHealthPoints = A.maxHealthPoints;
     }
 
-    public List<Action> GetAbilityList(){
+    public List<Action> GetAbilityList()
+    {
         return this.Weapon.Abilities;
     }
 
-    public List<Action> GetBlockAbilities(){
+    public List<Action> GetBlockAbilities()
+    {
         return this.Weapon.Blocks;
     }
-#endregion
+    #endregion
 }

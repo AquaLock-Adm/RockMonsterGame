@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MenuInputHandler : MonoBehaviour
 {
+    /*
     [SerializeField] public MenuHandler MenuHandler;
     [SerializeField] public List<GameObject> ButtonRims;
     [SerializeField] private int currentButtonIndex = 0;
@@ -42,4 +43,5 @@ public class MenuInputHandler : MonoBehaviour
             this.MenuHandler.ClickOption(currentButtonIndex);
         }
     }
+*/
 }

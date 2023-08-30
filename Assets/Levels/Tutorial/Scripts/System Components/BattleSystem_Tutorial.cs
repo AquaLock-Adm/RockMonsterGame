@@ -8,7 +8,7 @@ public class BattleSystem_Tutorial : BattleSystem
     [Header("Tutorial References")]
     [SerializeField] private TutorialHandler TutorialHandler;
 
-    protected override void PreStartActions(){ // Changed in: NBS
+    protected override void PreStartActions(){
         RunTests();
         TutorialHandler.Setup(this);
         TutorialHandler.Continue();
