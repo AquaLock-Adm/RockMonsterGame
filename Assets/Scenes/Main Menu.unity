@@ -1536,6 +1536,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b776fa1d4ade74fa1d4d31f6a19965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
+  PlayerPrefab: {fileID: 1636312507869965803, guid: d91024de69f14c544a5df9879c468c93, type: 3}
+  WeaponPrefab: {fileID: 7430779103724800017, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
+  ArmorPrefab: {fileID: 1825134985689378487, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
   PlayerNameText: {fileID: 538428258}
   CreditsText: {fileID: 1298868364}
   HealthText: {fileID: 1562888591}
@@ -1848,58 +1852,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 759554797}
   m_CullTransparentMesh: 1
---- !u!1 &806953214
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 806953216}
-  - component: {fileID: 806953215}
-  m_Layer: 0
-  m_Name: GameHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &806953215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806953214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9442ce4dab8807a42b2c3d7f8c6ac1d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  PlayerWeapon: {fileID: 0}
-  PlayerArmor: {fileID: 0}
-  PlayerPrefab: {fileID: 1636312507869965803, guid: d91024de69f14c544a5df9879c468c93, type: 3}
-  WeaponPrefab: {fileID: 7430779103724800017, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
-  ArmorPrefab: {fileID: 1825134985689378487, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
-  BattleSystem: {fileID: 0}
-  earnedCredits: 0
---- !u!4 &806953216
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806953214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &814160751
 GameObject:
   m_ObjectHideFlags: 0

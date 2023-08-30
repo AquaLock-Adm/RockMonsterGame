@@ -10,26 +10,27 @@ public class GameHandler : MonoBehaviour
     [HideInInspector] public Weapon PlayerWeapon;
     [HideInInspector] public Armor PlayerArmor;
 
-    public GameObject PlayerPrefab;
-    public GameObject WeaponPrefab;
-    public GameObject ArmorPrefab;
-
     [HideInInspector] public BattleSystem BattleSystem;
 
     public int earnedCredits;
 
-    private void Awake()
-    {
-        if(Player == null)
-        {
-            CreateNewPlayer();
-        }
+    private void OnSceneLoad(){
+        SceneSetups();
     }
-    private void CreateNewPlayer() 
-    {
-        Player = Instantiate(PlayerPrefab).GetComponent<PlayerCharacter>();
-        PlayerWeapon = Instantiate(WeaponPrefab).GetComponent<Weapon>();
-        PlayerArmor = Instantiate(ArmorPrefab).GetComponent<Armor>();
-        Player.MenuSetup(PlayerWeapon, PlayerArmor);
+
+    private void SceneSetups(){
+        switch(SceneManager.GetActiveScene().name){
+            case "Start Menu":
+                GameObject.Find("StartMenuHandler").GetComponent<StartMenuHandler>().StartSetup(this);
+            break;
+
+            case "Main Menu":
+                GameObject.Find("MenuHandler").GetComponent<NewMenuHandler>().StartSetup(this);
+            break;
+
+            default:
+                Debug.LogError("Setup called in unexpected Scene: "+ SceneManager.GetActiveScene().name);
+            break;
+        }
     }
 }

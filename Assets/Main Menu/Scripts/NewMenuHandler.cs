@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
@@ -8,11 +8,16 @@ using UnityEngine;
 
 public class NewMenuHandler : MonoBehaviour
 {
+    [SerializeField] private GameObject GameHandlerPrefab; 
     private GameHandler GameHandler;
     private PlayerCharacter Player;
 
     private int currentButtonIndex = 0;
     private int currentMenuIndex = 0;
+
+    [SerializeField] GameObject PlayerPrefab;
+    [SerializeField] GameObject WeaponPrefab;
+    [SerializeField] GameObject ArmorPrefab;
 
     [SerializeField] private TextMeshProUGUI PlayerNameText, CreditsText, HealthText;
     [SerializeField] private TextMeshProUGUI WeaponLvlText, AtkText, APRText, LifeDrainText, EnemyDotText, WeaponUpgradeCostText;
@@ -23,34 +28,83 @@ public class NewMenuHandler : MonoBehaviour
     [SerializeField] private List<GameObject> ButtonList = new List<GameObject>();
     [SerializeField] private List<GameObject> MenuList = new List<GameObject>();
 
-    private void Start()
-    {
-        StartSetup();
-    }
-    private void Update()
-    {
-        CheckPlayerInput();
+    void Awake(){
+        GameObject GHGO = GameObject.Find("GameHandler");
+
+        if(GHGO == null){
+            if(this.GameHandlerPrefab == null){
+                Debug.LogError("No Game Handler Prefab Set!");
+                return;
+            }
+
+            GHGO = Instantiate(this.GameHandlerPrefab);
+            GHGO.name = "GameHandler";
+            GameHandler GH = GHGO.GetComponent<GameHandler>();
+            StartSetup(GH);
+        }
     }
     
-    private void StartSetup()
+    public void StartSetup(GameHandler GH)
     {
-        currentButtonIndex = 0;
-        currentMenuIndex = 0;
+        this.GameHandler = GH;
+        if(this.GameHandler.Player == null){
+            CreateNewPlayer();
+        }else{
+            Player = GameHandler.Player;
+        }
+
         CreateButtonList();
         SelectOption(1);
 
-        GameHandler = GameObject.Find("GameHandler").GetComponent<GameHandler>();
-        Player = GameHandler.Player;
         UpdatePlayerTexts();
         UpdateWeaponTexts();
         UpdateArmorTexts();
+        MainMenuUpdateLoop();
     }
+
+    private async void MainMenuUpdateLoop(){
+        while(Application.isPlaying){
+            CheckPlayerInput();
+            await Task.Yield();
+        }
+    }
+
+
+    private void CreateNewPlayer() 
+    {
+        Player = Instantiate(PlayerPrefab).GetComponent<PlayerCharacter>();
+
+        Weapon PlayerWeapon = Instantiate(WeaponPrefab).GetComponent<Weapon>();
+        this.GameHandler.PlayerWeapon = PlayerWeapon;
+        Armor PlayerArmor = Instantiate(ArmorPrefab).GetComponent<Armor>();
+        this.GameHandler.PlayerArmor = PlayerArmor;
+
+        Player.MenuSetup(PlayerWeapon, PlayerArmor);
+        this.GameHandler.Player = Player;
+    }
+
+    private void CreateButtonList()
+    {
+        currentButtonIndex = 0;
+        currentMenuIndex = 0;
+
+        ButtonList.Clear();
+        
+        GameObject MenuButtons = MenuList[currentMenuIndex].transform.Find("MenuButtons").gameObject;
+        
+        foreach(Transform Button in MenuButtons.transform)
+        {
+            ButtonList.Add(Button.gameObject);
+        }
+    }
+
     private void UpdatePlayerTexts()
     {
         PlayerNameText.text = GameHandler.Player.unitName;
         CreditsText.text = GameHandler.earnedCredits.ToString() + " Cd";
         HealthText.text = GameHandler.Player.healthPoints.ToString();
     }
+
     private void UpdateWeaponTexts()
     {
         WeaponLvlText.text = "Level: " + Player.GetWeaponLevel().ToString();
@@ -60,6 +114,7 @@ public class NewMenuHandler : MonoBehaviour
         EnemyDotText.text = "Enemy DOT: " + Player.GetEnemyDOT().ToString();
         WeaponUpgradeCostText.text ="Upgrade Cost: " + Player.GetWeaponUpgradeCost().ToString();
     }
+
     private void UpdateNextWeaponTexts()
     {
         NextWeaponLvlText.text = Player.GetWeaponLevel().ToString();
@@ -68,6 +123,7 @@ public class NewMenuHandler : MonoBehaviour
         NextLifeDrainText.text = Player.GetLifeDrain().ToString();
         NextEnemyDotText.text = Player.GetEnemyDOT().ToString();
     }
+
     private void UpdateArmorTexts()
     {
         ArmorLvlText.text = "Level: " + Player.GetArmorLevel().ToString();
@@ -76,6 +132,7 @@ public class NewMenuHandler : MonoBehaviour
         ManaRegText.text = "Mana Regen: " + Player.GetArmorManaRegen().ToString();
         ArmorUpgradeCostText.text = "Upgrade Cost: " + Player.GetArmorUpgradeCost().ToString();
     }
+
     private void UpdateNextArmorTexts()
     {
         NextArmorLvlText.text = Player.GetArmorLevel().ToString();
@@ -83,6 +140,7 @@ public class NewMenuHandler : MonoBehaviour
         NextManaText.text = Player.GetArmorMana().ToString();
         NextManaRegText.text = Player.GetArmorManaRegen().ToString();
     }
+
     private void CheckPlayerInput()
     {
         if (Input.GetKeyDown(KeyCode.S))
@@ -106,23 +164,7 @@ public class NewMenuHandler : MonoBehaviour
             SubmitOption();
         }
     }
-    private void CreateButtonList()
-    {
-        ButtonList.Clear();
-        
-        GameObject MenuButtons = MenuList[currentMenuIndex].transform.Find("MenuButtons").gameObject;
-        
-        foreach(Transform Button in MenuButtons.transform)
-        {
-            ButtonList.Add(Button.gameObject);
-        }
 
-        //List<int> MyIntegerList = new List<int> { 1, 2, 3, 4, 5, 6 };
-        //foreach(int currentInteger in MyIntegerList)
-        //{
-        //    Debug.Log(currentInteger);
-        //}
-    }
     private void SelectOption(int lastButtonIndex)
     {
         Animator CurrentAnimator = ButtonList[currentButtonIndex].GetComponent<Animator>();
@@ -148,6 +190,7 @@ public class NewMenuHandler : MonoBehaviour
             UnhoverArmorUpgrade();
         }
     }
+
     private void HoverWeaponUpgrade()
     {
         
@@ -161,6 +204,7 @@ public class NewMenuHandler : MonoBehaviour
             SelectOption(lastButtonIndex);
         }
     }
+
     private void HoverArmorUpgrade()
     {
         Armor A = GameHandler.PlayerArmor;
@@ -173,6 +217,7 @@ public class NewMenuHandler : MonoBehaviour
             SelectOption(lastButtonIndex);
         }
     }
+
     private void UnhoverWeaponUpgrade()
     {
         NextWeaponLvlText.text = "";
@@ -181,6 +226,7 @@ public class NewMenuHandler : MonoBehaviour
         NextLifeDrainText.text = "";
         NextEnemyDotText.text = "";
     }
+
     private void UnhoverArmorUpgrade()
     {
         NextArmorLvlText.text = "";
@@ -188,6 +234,7 @@ public class NewMenuHandler : MonoBehaviour
         NextManaText.text = "";
         NextManaRegText.text = "";
     }
+
     private void SubmitOption()
     {
         switch (currentButtonIndex)
@@ -209,6 +256,7 @@ public class NewMenuHandler : MonoBehaviour
                 break;
         }
     }
+
     private void SubmitStageSelect()
     {
         MenuList[currentMenuIndex].SetActive(false);
@@ -217,6 +265,7 @@ public class NewMenuHandler : MonoBehaviour
         MenuList[currentMenuIndex].SetActive(true);
         CreateButtonList();
     }
+
     private void SubmitWeaponUpgrade()
     {
         Weapon W = GameHandler.PlayerWeapon;
@@ -236,6 +285,7 @@ public class NewMenuHandler : MonoBehaviour
             }
         }
     }
+
     private void SubmitArmorUpgrade()
     {
         Armor A = GameHandler.PlayerArmor;
@@ -255,6 +305,7 @@ public class NewMenuHandler : MonoBehaviour
             }
         }
     }
+
     private void SubmitExitGame()
     {
         Application.Quit();

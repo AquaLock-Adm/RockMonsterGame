@@ -1,24 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class StartMenuHandler : MonoBehaviour
 {
+    [SerializeField] private GameObject GameHandlerPrefab;
+
+    private GameHandler GameHandler;
     [SerializeField] private int buttonIndex;
 
     [SerializeField] private List<StartMenuButton> buttonList = new List<StartMenuButton>();
 
-    void Start(){
+    void Awake(){
+        GameObject GHGO = GameObject.Find("GameHandler");
+
+        if(GHGO == null){
+            if(this.GameHandlerPrefab == null){
+                Debug.LogError("No Game Handler Prefab Set!");
+                return;
+            }
+
+            GHGO = Instantiate(this.GameHandlerPrefab);
+            GHGO.name = "GameHandler";
+            GameHandler GH = GHGO.GetComponent<GameHandler>();
+            StartSetup(GH);
+        }
+    }
+
+    public void StartSetup(GameHandler GH){
+        this.GameHandler = GH;
+
         foreach(StartMenuButton B in this.buttonList){
             B.UnHoverMenuButton();
         }
 
         this.buttonIndex = 0;
         this.buttonList[this.buttonIndex].HoverMenuButton();
+
+        CheckPlayerInputLoop();
     }
 
-    void Update(){
-        CheckPlayerInput();
+    private async void CheckPlayerInputLoop(){
+        while(Application.isPlaying){
+            CheckPlayerInput();
+            await Task.Yield();
+        }
     }
 
     private void CheckPlayerInput(){
