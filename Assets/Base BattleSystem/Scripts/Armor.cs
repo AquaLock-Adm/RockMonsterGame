@@ -35,10 +35,18 @@ public class Armor : MonoBehaviour
     private void SetBaseStats(){
         int[,] upgradeTable = this.GetUpgradeTable();
         this.maxArmorLevel = upgradeTable.GetLength(0);
-        GetUpgrade(1);
+        UpgradeArmorToLevel(1);
     }
 
-    public void GetUpgrade(int level){
+    public void UpgradeArmor(){
+        UpgradeArmorToLevel(this.armorLevel+1);
+    }
+
+    public void DowngradeArmor(){
+        UpgradeArmorToLevel(this.armorLevel-1);
+    }
+
+    public void UpgradeArmorToLevel(int level){
         if(level > this.maxArmorLevel || level <= 0) return;
 
         this.armorLevel = level;

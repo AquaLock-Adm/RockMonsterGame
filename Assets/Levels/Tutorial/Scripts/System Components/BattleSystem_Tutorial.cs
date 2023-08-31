@@ -14,14 +14,6 @@ public class BattleSystem_Tutorial : BattleSystem
         TutorialHandler.Continue();
     }
 
-    protected override GameObject CreatePlayerGO(){
-        GameObject P_GO = new GameObject();
-        P_GO.AddComponent<Player_Tutorial>();
-        P_GO.GetComponent<PlayerCharacter>().CopyFrom(this.Player);
-        P_GO.name = this.Player.unitName;
-        return P_GO;
-    }
-
     public void BlockPlayerBattleModeSwitch(bool blockOn){
         this.Player.GetComponent<Player_Tutorial>().blockBattleModeSwitch = blockOn;
     }

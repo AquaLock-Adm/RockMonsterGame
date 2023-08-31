@@ -55,24 +55,12 @@ public class PlayerCharacter : Unit
     {
         if (this.Weapon != null)
         {
-            GameObject Weapon_GO = Instantiate(this.Weapon.gameObject);
-            Weapon_GO.GetComponent<Weapon>().CopyFrom(this.Weapon);
-            this.Weapon = Weapon_GO.GetComponent<Weapon>();
-            this.Weapon.Init(this);
-            if (weaponStartLevel > 1) Weapon.GetUpgrade(weaponStartLevel);
+            if (weaponStartLevel > 1) Weapon.UpgradeWeaponToLevel(weaponStartLevel);
             if (Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
-
         }
-        else Debug.Log("Weapon is not set");
-        if (this.Armor != null)
-        {
-            GameObject Armor_GO = Instantiate(this.Armor.gameObject);
-            Armor_GO.GetComponent<Armor>().CopyFrom(this.Armor);
-            this.Armor = Armor_GO.GetComponent<Armor>();
+        else Debug.LogError("Weapon is not set");
 
-            this.Armor.Init(this);
-        }
-        else Debug.Log("Armor is not set");
+        if (this.Armor == null) Debug.LogError("Armor is not set");
 
         this.BattleSystem = BS;
         this.ActionHUD = ActionHUD;
@@ -148,9 +136,8 @@ public class PlayerCharacter : Unit
     {
         this.Weapon = PlayerWeapon;
         this.Armor = PlayerArmor;
-        this.healthPoints = PlayerArmor.healthPoints;
-        this.maxHealthPoints = PlayerArmor.maxHealthPoints;
-        this.Weapon.GetUpgrade(1);
+        PlayerWeapon.Init(this);
+        PlayerArmor.Init(this);
     }
     #endregion
 

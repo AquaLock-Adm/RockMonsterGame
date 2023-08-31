@@ -17,10 +17,10 @@ public enum BattleState {SETUP, RUNNING, DIALOGUE, WAVEOVER, PLAYERDIED, ENEMYDI
 
 public class BattleSystem : MonoBehaviour
 {
+    [SerializeField] private GameObject GameHandlerPrefab;
     [Header("Dungeon Run Variables")]
     public int enemyDefeatCount = 0;
     public int wavesClearedCount = 0;
-    public bool runWithoutGameHandler = false;
 
     public WaveScript WaveScript;
     public bool useWaveScript = false;
@@ -118,7 +118,19 @@ public class BattleSystem : MonoBehaviour
 
 #region Unity Functions
     private void Awake(){
-        GameStart();
+        GameObject GHGO = GameObject.Find("GameHandler");
+
+        if(GHGO == null){
+            if(this.GameHandlerPrefab == null){
+                Debug.LogError("No Game Handler Prefab Set!");
+                return;
+            }
+
+            GHGO = Instantiate(this.GameHandlerPrefab);
+            GHGO.name = "GameHandler";
+            GameHandler GH = GHGO.GetComponent<GameHandler>();
+            GameStart(GH);
+        }
     }
 
     private void OnApplicationQuit(){
@@ -128,22 +140,12 @@ public class BattleSystem : MonoBehaviour
 
 
 
-    public void GameStart(){
+    public void GameStart(GameHandler GH){
+        this.GameHandler = GH;
         this.state = BattleState.SETUP;
         CheckDisplays();
-        SetGameHandler();
         SetupEverything();
-        if(this.Player != null){
-            PreStartActions();
-        }
-    }
-
-    private void SetGameHandler(){
-        GameObject GameHandler_GO = GameObject.Find("GameHandler");
-        if(GameHandler_GO != null) {
-            this.GameHandler = GameHandler_GO.GetComponent<GameHandler>();
-            this.runWithoutGameHandler = false;
-        }else this.runWithoutGameHandler = true;
+        PreStartActions();
     }
 
     private void CheckDisplays(){
@@ -170,8 +172,8 @@ public class BattleSystem : MonoBehaviour
     }
 
     public virtual void SetupEverything(){ // Changed in: NBS
-        if(this.runWithoutGameHandler) SetupStandartSettings();
-        else ImportStartSettingsFromGameHandler();
+        if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
+        else this.Player = this.GameHandler.Player;
 
         if(this.Player != null){
             SetupSystemComponents();
@@ -179,14 +181,8 @@ public class BattleSystem : MonoBehaviour
         }else Debug.LogError("Player has not been set during Setup.");
     }
 
-    private void SetupStandartSettings(){
-        if(this.TestRunPlayerPrefab == null){
-            Debug.LogError("TestRunPlayerPrefab must be set for a run without GameHandler!");
-            return;
-        }
-        Debug.Log("Starting without GameHandler.");
-
-        this.Player = this.TestRunPlayerPrefab.GetComponent<PlayerCharacter>();
+    private void CreateNewPlayerGameObjects(){
+        this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
         Weapon StandartWeapon = this.TestRunWeaponPrefab.GetComponent<Weapon>();
         Armor StandartArmor = this.TestRunArmorPrefab.GetComponent<Armor>();
 
@@ -197,29 +193,14 @@ public class BattleSystem : MonoBehaviour
         StandartArmor.Init(this.Player);
     }
 
-    private void ImportStartSettingsFromGameHandler(){
-        this.GameHandler.BattleSystem = this;
-        this.Player = this.GameHandler.Player;
-    }
-
 
 
 #region SetCurrentPlayer Functions
     private void SetupCurrentPlayer(){
-        GameObject P_GO = CreatePlayerGO();
-        this.Player = P_GO.GetComponent<PlayerCharacter>();
         if(this.setWeaponStartLevel) {
             this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
         }else this.Player.BattleSetup(this, this.ActionHUD);
     }
-
-    protected virtual GameObject CreatePlayerGO(){
-        GameObject P_GO = new GameObject();
-        P_GO.AddComponent<PlayerCharacter>();
-        P_GO.GetComponent<PlayerCharacter>().CopyFrom(this.Player);
-        P_GO.name = this.Player.unitName;
-        return P_GO;
-    } // changed in: BattleSystem_Tutorial.cs
 #endregion
 
 
@@ -454,13 +435,8 @@ public class BattleSystem : MonoBehaviour
     }
 
     public void End(){
-        if(!this.runWithoutGameHandler){
-            this.GameHandler.earnedCredits = this.earnedCredits;
-            SceneManager.LoadScene("Main Menu");
-        }else {
-            Debug.Log("BattleSystem.Quit() called");
-            Application.Quit();
-        }
+        this.GameHandler.earnedCredits = this.earnedCredits;
+        SceneManager.LoadScene("Main Menu");
     }
 
 

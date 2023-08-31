@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NewMenuHandler : MonoBehaviour
 {
@@ -43,6 +44,10 @@ public class NewMenuHandler : MonoBehaviour
             StartSetup(GH);
         }
     }
+
+    void Update(){
+        CheckPlayerInput();
+    }
     
     public void StartSetup(GameHandler GH)
     {
@@ -59,16 +64,7 @@ public class NewMenuHandler : MonoBehaviour
         UpdatePlayerTexts();
         UpdateWeaponTexts();
         UpdateArmorTexts();
-        MainMenuUpdateLoop();
     }
-
-    private async void MainMenuUpdateLoop(){
-        while(Application.isPlaying){
-            CheckPlayerInput();
-            await Task.Yield();
-        }
-    }
-
 
     private void CreateNewPlayer() 
     {
@@ -80,7 +76,7 @@ public class NewMenuHandler : MonoBehaviour
         this.GameHandler.PlayerArmor = PlayerArmor;
 
         Player.MenuSetup(PlayerWeapon, PlayerArmor);
-        this.GameHandler.Player = Player;
+        this.GameHandler.SetPlayer(Player);
     }
 
     private void CreateButtonList()
@@ -193,11 +189,14 @@ public class NewMenuHandler : MonoBehaviour
 
     private void HoverWeaponUpgrade()
     {
-        
         Weapon W = GameHandler.PlayerWeapon;
-        W.GetUpgrade(W.weaponLevel + 1);
+        if (W.weaponLevel >= W.maxWeaponLevel) 
+        {
+            return;
+        }
+        W.UpgradeWeapon();
         UpdateNextWeaponTexts();
-        W.GetUpgrade(W.weaponLevel - 1);
+        W.DowngradeWeapon();
         if (currentMenuIndex == 0 && currentButtonIndex != 1)
         {
             int lastButtonIndex = 1;
@@ -208,9 +207,13 @@ public class NewMenuHandler : MonoBehaviour
     private void HoverArmorUpgrade()
     {
         Armor A = GameHandler.PlayerArmor;
-        A.GetUpgrade(A.armorLevel + 1);
+        if (A.armorLevel >= A.maxArmorLevel)
+        {
+            return;
+        }
+        A.UpgradeArmor();
         UpdateNextArmorTexts();
-        A.GetUpgrade(A.armorLevel - 1);
+        A.DowngradeArmor();
         if (currentMenuIndex == 0 && currentButtonIndex != 2)
         {
             int lastButtonIndex = 2;
@@ -259,23 +262,28 @@ public class NewMenuHandler : MonoBehaviour
 
     private void SubmitStageSelect()
     {
-        MenuList[currentMenuIndex].SetActive(false);
-        currentMenuIndex = 1;
-        currentButtonIndex = 0;
-        MenuList[currentMenuIndex].SetActive(true);
-        CreateButtonList();
+        // MenuList[currentMenuIndex].SetActive(false);
+        // currentMenuIndex = 1;
+        // currentButtonIndex = 0;
+        // MenuList[currentMenuIndex].SetActive(true);
+        // CreateButtonList();
+        GameHandler.LoadBattleScene();
     }
 
     private void SubmitWeaponUpgrade()
     {
         Weapon W = GameHandler.PlayerWeapon;
+        if (W.weaponLevel >= W.maxWeaponLevel)
+        {
+            return;
+        }
         if (GameHandler.earnedCredits >= W.upgradeCost)
         {
-            W.GetUpgrade(W.weaponLevel + 1);
             GameHandler.earnedCredits -= W.upgradeCost;
+            W.UpgradeWeapon();
             UpdatePlayerTexts();
             UpdateWeaponTexts();
-            if (W.weaponLevel != 5)
+            if (W.weaponLevel != W.maxWeaponLevel)
             {
                 HoverWeaponUpgrade();
             }
@@ -289,13 +297,17 @@ public class NewMenuHandler : MonoBehaviour
     private void SubmitArmorUpgrade()
     {
         Armor A = GameHandler.PlayerArmor;
+        if (A.armorLevel >= A.maxArmorLevel)
+        {
+            return;
+        }
         if (GameHandler.earnedCredits >= A.upgradeCost)
         {
-            A.GetUpgrade(A.armorLevel + 1);
             GameHandler.earnedCredits -= A.upgradeCost;
+            A.UpgradeArmor();
             UpdatePlayerTexts();
             UpdateArmorTexts();
-            if (A.armorLevel != 5)
+            if (A.armorLevel != A.maxArmorLevel)
             {
                 HoverArmorUpgrade();
             }
@@ -308,6 +320,6 @@ public class NewMenuHandler : MonoBehaviour
 
     private void SubmitExitGame()
     {
-        Application.Quit();
+        GameHandler.LoadStartMenu();
     }
 }

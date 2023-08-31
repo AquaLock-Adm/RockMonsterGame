@@ -8110,9 +8110,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159621f5b49af5146bb0d932d80b1a53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
   enemyDefeatCount: 0
   wavesClearedCount: 0
-  runWithoutGameHandler: 1
   WaveScript: {fileID: 0}
   useWaveScript: 0
   inBossWave: 0

@@ -28,6 +28,10 @@ public class StartMenuHandler : MonoBehaviour
         }
     }
 
+    void Update(){
+        CheckPlayerInput();
+    }
+
     public void StartSetup(GameHandler GH){
         this.GameHandler = GH;
 
@@ -37,15 +41,6 @@ public class StartMenuHandler : MonoBehaviour
 
         this.buttonIndex = 0;
         this.buttonList[this.buttonIndex].HoverMenuButton();
-
-        CheckPlayerInputLoop();
-    }
-
-    private async void CheckPlayerInputLoop(){
-        while(Application.isPlaying){
-            CheckPlayerInput();
-            await Task.Yield();
-        }
     }
 
     private void CheckPlayerInput(){
@@ -96,15 +91,11 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void StartGame(){
-        Debug.Log("Todo");
-
-        Debug.Log("Start Normal Game");
+        GameHandler.LoadMainMenu();
     }
 
     private void StartTutorial(){
-        Debug.Log("Todo");
-
-        Debug.Log("Start Tutorial");
+        GameHandler.LoadTutorial();
     }
 
     private void QuitGame(){
