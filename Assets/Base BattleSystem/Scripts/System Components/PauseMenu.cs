@@ -25,11 +25,11 @@ public class PauseMenu : MonoBehaviour
     private bool startButtonSPressed = false;
     private bool startButtonDPressed = false;
 
-    [SerializeField] private GameObject NextWaveInfo;
+    [SerializeField] protected GameObject NextWaveInfo;
 
     [SerializeField] private Text NextWaveText;
 
-    [SerializeField] private Slider PauseHpSlider;
+    [SerializeField] protected Slider PauseHpSlider;
     [SerializeField] private TextMeshProUGUI PauseHpText;
 
     [SerializeField] public Color StartButtonPressedColor;
@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour
         ShowPauseMenu(true);
     }   // Changed in: PauseMenu_Tutorial.cs
     
-    public void ShowPauseMenu(bool turnOn){
+    public virtual void ShowPauseMenu(bool turnOn){
         if(!Application.isPlaying) return;
         // Debug.Log("ShowPauseMenu() called");
         this.DarkFilter.SetActive(turnOn);
@@ -124,25 +124,20 @@ public class PauseMenu : MonoBehaviour
             this.LeaveButton.SetActive(this.showLeaveButton); 
             this.NextStageButton.SetActive(this.showNextStageButton);
             if(BattleSystem.state == BattleState.WAVEOVER){
-                if(!BattleSystem.finalStageReached){
-                    SetupNextWaveText();
-                    SetupPauseHealthBar();
-                }else {
-                    this.NextWaveInfo.SetActive(false);
-                    this.PauseHpSlider.gameObject.SetActive(false); 
-                }
+                SetupNextWaveText();
+                SetupPauseHealthBar();
             }else{
                 this.NextWaveInfo.SetActive(false);
                 this.PauseHpSlider.gameObject.SetActive(false);
             }     
         } else this.PauseMenuScreen.SetActive(turnOn);
-    }
+    } // changed in PauseMenu_Tutorial.cs
 
-    private void LoadText(string text){
+    protected void LoadText(string text){
         MainText.text = text;
     }
 
-    private void SetupStartButtonTest(){
+    protected void SetupStartButtonTest(){
         this.startButtonWPressed = false;
         this.startButtonAPressed = false;
         this.startButtonSPressed = false;

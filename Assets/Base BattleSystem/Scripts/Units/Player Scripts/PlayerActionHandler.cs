@@ -126,6 +126,12 @@ public class PlayerActionHandler : MonoBehaviour
 
 
 
+    public void BattleEnd(){
+        Destroy(this);
+    }
+
+
+
 #region Input Functions During Player turn
     public void CastAttack(int attackIndex){
         List<Action> PlayerAbilities = Player.GetAbilityList();

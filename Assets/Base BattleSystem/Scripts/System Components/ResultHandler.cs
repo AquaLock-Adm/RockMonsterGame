@@ -39,6 +39,8 @@ public class ResultHandler : MonoBehaviour
     }
 
     public async void ShowResult(){
+        BattleSystem.Player.BattleEnd();
+
         if(this.BattleSystem.state == BattleState.PLAYERDIED){
             this.defeatCredits = 0;
         }else this.defeatCredits = this.BattleSystem.earnedCredits;

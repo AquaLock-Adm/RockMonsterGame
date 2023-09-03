@@ -15,6 +15,8 @@ public class PlayerControl : MonoBehaviour
 
     private List<Action> CurrentMenuAttacks = new List<Action>();
 
+    private bool battleActive = true;
+
     [SerializeField] private bool stopInputs = false;
 
     [SerializeField] private bool blockInputW = false;
@@ -50,6 +52,11 @@ public class PlayerControl : MonoBehaviour
         LoadMainMenu();
 
         BattleUpdateLoop();
+    }
+
+    public void BattleEnd(){
+        this.battleActive = false;
+        Destroy(this);
     }
 
     private void SetupButtonTexts()
@@ -93,7 +100,7 @@ public class PlayerControl : MonoBehaviour
 
     private async void BattleUpdateLoop()
     {
-        while (!Player.deathTriggered && Application.isPlaying)
+        while (!Player.deathTriggered && this.battleActive && Application.isPlaying)
         {
             if (!this.stopInputs) CheckInputs();
             else this.InputDarkFilter.SetActive(true);

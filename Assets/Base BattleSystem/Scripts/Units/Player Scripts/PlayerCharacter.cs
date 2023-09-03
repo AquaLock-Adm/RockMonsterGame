@@ -216,6 +216,18 @@ public class PlayerCharacter : Unit
         }
     }
 
+    public void BattleEnd(){
+        ResourceHandler.BattleEnd();
+        Controls.BattleEnd();
+        ActionHandler.BattleEnd();
+        ResetHealth();
+    }
+
+    private void ResetHealth(){
+        this.Armor.healthPoints = this.Armor.maxHealthPoints;
+        this.healthPoints = this.maxHealthPoints;
+    }
+
 
 
     #region Resource Handler Functions

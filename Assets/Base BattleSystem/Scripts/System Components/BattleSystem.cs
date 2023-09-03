@@ -56,16 +56,6 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] public PlayerCharacter Player;
     [SerializeField] public Enemy Enemy;
 
-    public List<List<EnemySettings>> EnemyLibrary = new List<List<EnemySettings>>(); // Lib[0] => Stage 1 Enemies       EnemyLibrary.Add(List);
-
-    /*
-        EnemySettings Enemy1 = EnemyLibrary[0][0];
-
-        string enemyName = Enemy1.name;
-        int enemyHP = Enemy1.hp;
-        2dSprite sprite = Enemy1.fantaTM;
-    */
-
     [Header("System Counters")]
     public int earnedCredits = 0;
 
@@ -143,6 +133,7 @@ public class BattleSystem : MonoBehaviour
     public void GameStart(GameHandler GH){
         this.GameHandler = GH;
         this.state = BattleState.SETUP;
+        CheckEnemyLibraryInit();
         CheckDisplays();
         SetupEverything();
         PreStartActions();
@@ -308,8 +299,8 @@ public class BattleSystem : MonoBehaviour
         if(this.useWaveScript) {
             EnemySettingsList = this.WaveScript.GetEnemySettingsList();
             foreach(EnemySettings E in EnemySettingsList){
-                if(this.EnemyLibrary.Count < E.level) this.EnemyLibrary.Add(new List<EnemySettings>());
-                this.EnemyLibrary[E.level-1].Add(E);
+                if(GetEnemyLibraryStageCount() < E.level) InitNewEnemyLibraryStage(E.level-1, new List<EnemySettings>());
+                GameHandler.AddNewEnemyToLibrary(E);
             }
         }else {
             EnemySettingsList = this.WaveRandomizer.GetEnemySettingsList();
@@ -435,49 +426,41 @@ public class BattleSystem : MonoBehaviour
     }
 
     public void End(){
-        this.GameHandler.earnedCredits = this.earnedCredits;
-        SceneManager.LoadScene("Main Menu");
+        this.GameHandler.earnedCredits += this.earnedCredits;
+        this.GameHandler.LoadMainMenu();
     }
 
 
 
 #region EnemyLibrary Functions
+    public void CheckEnemyLibraryInit(){
+        if(!GameHandler.EnemyLibraryInitialized()){
+            GameHandler.InitEnemyLibrary();
+        }
+    }
+
     public EnemySettings GetEnemySettingsByName(string name, int stageIndex){
-        if(stageIndex >= this.EnemyLibrary.Count || stageIndex < 0){
-            Debug.LogError("Invalid Stage index!");
-            return null;
-        }
-
-        foreach(EnemySettings E in this.EnemyLibrary[stageIndex]){
-            if(E.name == name) return E;
-        }
-        Debug.LogError("Could not find Enemy in EnemyLibrary!");
-        return null;
+        return GameHandler.GetEnemySettingsByName(name, stageIndex);
     }
 
-    public int GetSettingsIndexByName(string name, int stageIndex){
-        if(stageIndex >= this.EnemyLibrary.Count || stageIndex < 0) return -1;
-        int res = -1;
-
-        for(int i=0;i<this.EnemyLibrary[stageIndex].Count;i++){
-            if(this.EnemyLibrary[stageIndex][i].name == name) return i;
-        }
-        return res;
+    public List<EnemySettings> GetAllEnemiesFromStage(int stageIndex){
+        return GameHandler.GetAllEnemiesFromStage(stageIndex);
     }
 
-    public void UpdateEnemyLibrary(EnemySettings E){
-        if(E.level == 0) return;    // Case: Enemy is first enemy of Wave
+    public int GetSettingsIndexByName(string name, int stageIndexOfSettings){
+        return GameHandler.GetSettingsIndexByName(name, stageIndexOfSettings);
+    }
 
-        if(E.level > this.EnemyLibrary.Count){
-            Debug.LogError("Stage for Enemy not initialized!");
-            return;
-        }
+    public int GetEnemyLibraryStageCount(){
+        return GameHandler.GetEnemyLibraryStageCount();
+    }
 
-        for(int i=0;i<this.EnemyLibrary[E.level-1].Count; i++){
-            if(this.EnemyLibrary[E.level-1][i].name == name){
-                this.EnemyLibrary[E.level-1][i] = E;
-            }
-        }
+    public void InitNewEnemyLibraryStage(int stageIndex, List<EnemySettings> NewEnemies){
+        GameHandler.InitNewEnemyLibraryStage(stageIndex, NewEnemies);
+    }
+
+    public void UpdateEnemyLibraryEntryOf(EnemySettings E){
+        GameHandler.UpdateEnemyLibraryEntryOf(E);
     }
 #endregion
 } // EOF

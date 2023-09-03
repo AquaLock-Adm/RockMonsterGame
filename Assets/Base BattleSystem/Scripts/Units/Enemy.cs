@@ -176,7 +176,7 @@ public class Enemy : Unit
         EnemySettings mySettings = new EnemySettings();
         this.DefensiveModes[1][this.defensiveModeIndex] = this.CurrentDiscoveredShields;
         mySettings.CopyFromEnemyPrefab(this.gameObject);
-        BattleSystem.UpdateEnemyLibrary(mySettings);
+        BattleSystem.UpdateEnemyLibraryEntryOf(mySettings);
 
         CalcKillPrice();
         BattleSystem.EnemyDied(this);

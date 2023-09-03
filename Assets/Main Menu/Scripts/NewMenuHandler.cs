@@ -68,6 +68,8 @@ public class NewMenuHandler : MonoBehaviour
 
     private void CreateNewPlayer() 
     {
+        Debug.Log("Creating new player");
+        
         Player = Instantiate(PlayerPrefab).GetComponent<PlayerCharacter>();
 
         Weapon PlayerWeapon = Instantiate(WeaponPrefab).GetComponent<Weapon>();

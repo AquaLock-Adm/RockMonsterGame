@@ -101,14 +101,14 @@ public class WaveRandomizer : MonoBehaviour
 
     private List<EnemySettings> AddLowerStageEnemies(List<EnemySettings> Pool, StageSettings sSettings){
         int bossIndex = BattleSystem.GetSettingsIndexByName(this.StageSettingsList[this.stageIndex-1].BossSettings.name, this.stageIndex-1);
-        List<EnemySettings> lowEn = SelectRandomEnemiesFrom(BattleSystem.EnemyLibrary[this.stageIndex-1], sSettings.enemiesFromLowerStage, bossIndex);
+        List<EnemySettings> lowEn = SelectRandomEnemiesFrom(BattleSystem.GetAllEnemiesFromStage(this.stageIndex-1), sSettings.enemiesFromLowerStage, bossIndex);
         foreach(EnemySettings E in lowEn){
             Pool.Add(E);
         }
         return Pool;
     }
     private List<EnemySettings> AddCurrentStageEnemies(List<EnemySettings> Pool, StageSettings sSettings){
-        foreach(EnemySettings E in BattleSystem.EnemyLibrary[this.stageIndex]){
+        foreach(EnemySettings E in BattleSystem.GetAllEnemiesFromStage(this.stageIndex)){
             if(E.name != sSettings.BossSettings.name) Pool.Add(E);
         }
         return Pool;
@@ -126,13 +126,15 @@ public class WaveRandomizer : MonoBehaviour
 
     private void SetupStageSettings(){
         SetupStageOne();
-        SetupStageTwo();
+        // SetupStageTwo();
     }
 
     private void SetupStageOne(){
         StageSettings StageOneSettings = new StageSettings();
         int myStageIndex = 0;
 
+        // StageOneSettings.WaveSizes.Add(1);
+        
         StageOneSettings.WaveSizes.Add(3);
         StageOneSettings.WaveSizes.Add(4);
         StageOneSettings.WaveSizes.Add(5);
@@ -141,20 +143,21 @@ public class WaveRandomizer : MonoBehaviour
         StageOneSettings.WaveSizes.Add(7);
 
         StageOneSettings.bossWaveIndex = StageOneSettings.WaveSizes.Count;
-        if(BattleSystem.EnemyLibrary.Count >= myStageIndex+1){
+        if(BattleSystem.GetEnemyLibraryStageCount() >= myStageIndex+1){
             Debug.Log("Setting up with BS.EnemyLibrary");
 
             string bossName = GetStageOneBossName();
             StageOneSettings.BossSettings = BattleSystem.GetEnemySettingsByName(bossName, myStageIndex);
-            AddNamesToNameLibrary(BattleSystem.EnemyLibrary[myStageIndex]);
+            AddNamesToNameLibrary(BattleSystem.GetAllEnemiesFromStage(myStageIndex));
         }else{
             StageOneSettings.BossSettings = SetupStageOneBoss();
             this.EnemyNameLibrary.Add(StageOneSettings.BossSettings.name);
 
-            BattleSystem.EnemyLibrary.Add(new List<EnemySettings>());
+            List<EnemySettings> NewStageOneEnemies = new List<EnemySettings>();
+            NewStageOneEnemies = RandomizeStageOneEnemies(15);
+            NewStageOneEnemies.Add(StageOneSettings.BossSettings);
 
-            BattleSystem.EnemyLibrary[myStageIndex] = RandomizeStageOneEnemies(15);
-            BattleSystem.EnemyLibrary[myStageIndex].Add(StageOneSettings.BossSettings);
+            BattleSystem.InitNewEnemyLibraryStage(0, NewStageOneEnemies);
         }
 
         StageOneSettings.afterStageClearedWaveSize = 10;
@@ -264,20 +267,21 @@ public class WaveRandomizer : MonoBehaviour
         StageTwoSettings.WaveSizes.Add(15);
 
         StageTwoSettings.bossWaveIndex = StageTwoSettings.WaveSizes.Count;
-        if(BattleSystem.EnemyLibrary.Count >= myStageIndex+1){
+        if(BattleSystem.GetEnemyLibraryStageCount() >= myStageIndex+1){
             Debug.Log("Setting up with BS.EnemyLibrary");
 
             string bossName = GetStageTwoBossName();
             StageTwoSettings.BossSettings = BattleSystem.GetEnemySettingsByName(bossName, myStageIndex);
-            AddNamesToNameLibrary(BattleSystem.EnemyLibrary[myStageIndex]);
+            AddNamesToNameLibrary(BattleSystem.GetAllEnemiesFromStage(myStageIndex));
         }else{
             StageTwoSettings.BossSettings = SetupStageTwoBoss();
             this.EnemyNameLibrary.Add(StageTwoSettings.BossSettings.name);
 
-            BattleSystem.EnemyLibrary.Add(new List<EnemySettings>());
+            List<EnemySettings> NewStageTwoEnemies = new List<EnemySettings>();
+            NewStageTwoEnemies = RandomizeStageTwoEnemies(20);
+            NewStageTwoEnemies.Add(StageTwoSettings.BossSettings);
 
-            BattleSystem.EnemyLibrary[myStageIndex] = RandomizeStageTwoEnemies(20);
-            BattleSystem.EnemyLibrary[myStageIndex].Add(StageTwoSettings.BossSettings);
+            BattleSystem.InitNewEnemyLibraryStage(1, NewStageTwoEnemies);
         }
 
         StageTwoSettings.enemiesFromLowerStage = 5;
@@ -492,7 +496,7 @@ public class WaveRandomizer : MonoBehaviour
     private List<EnemySettings> GetEnemyLibraryFromBattleSystem(int stageIndex, string bossName){
         List<EnemySettings> res = new List<EnemySettings>();
 
-        foreach(EnemySettings E in BattleSystem.EnemyLibrary[stageIndex]){
+        foreach(EnemySettings E in BattleSystem.GetAllEnemiesFromStage(stageIndex)){
             if(E.name != bossName) res.Add(E);
         }
         return res;
