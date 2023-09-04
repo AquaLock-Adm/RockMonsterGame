@@ -34,6 +34,7 @@ public class GameHandler : MonoBehaviour
             break;
 
             case "Battle Scene":
+            case "Tutorial":
                 GameObject.Find("BattleSystem").GetComponent<BattleSystem>().GameStart(this);
             break;
 
@@ -80,6 +81,17 @@ public class GameHandler : MonoBehaviour
 #region EnemyLibrary Functions
     public bool EnemyLibraryInitialized(){
         return this.EnemyLibrary != null;
+    }
+
+    public bool EnemyLibraryEmpty(){
+        if(!EnemyLibraryInitialized()) return true;
+        int entryCounts = 0;
+        foreach(List<EnemySettings> stageList in this.EnemyLibrary){
+            foreach(EnemySettings E in stageList){
+                entryCounts++;
+            }
+        }
+        return entryCounts <= 0;
     }
 
     public void InitEnemyLibrary(){

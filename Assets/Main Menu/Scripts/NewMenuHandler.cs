@@ -40,8 +40,6 @@ public class NewMenuHandler : MonoBehaviour
 
             GHGO = Instantiate(this.GameHandlerPrefab);
             GHGO.name = "GameHandler";
-            GameHandler GH = GHGO.GetComponent<GameHandler>();
-            StartSetup(GH);
         }
     }
 

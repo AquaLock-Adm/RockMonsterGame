@@ -204,7 +204,7 @@ public class PauseMenu : MonoBehaviour
         ShowPauseMenu(false);
         //BattleSystem.pauseTimer = true;
         BattleSystem.ResultHandler.ShowResult();
-    }
+    } // Changed in: PauseMenu_Tutorial.cs
 
     private void SetupNextWaveText(){
         this.NextWaveInfo.SetActive(true);

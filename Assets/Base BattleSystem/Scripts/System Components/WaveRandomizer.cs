@@ -126,7 +126,7 @@ public class WaveRandomizer : MonoBehaviour
 
     private void SetupStageSettings(){
         SetupStageOne();
-        // SetupStageTwo();
+        SetupStageTwo();
     }
 
     private void SetupStageOne(){
@@ -143,7 +143,7 @@ public class WaveRandomizer : MonoBehaviour
         StageOneSettings.WaveSizes.Add(7);
 
         StageOneSettings.bossWaveIndex = StageOneSettings.WaveSizes.Count;
-        if(BattleSystem.GetEnemyLibraryStageCount() >= myStageIndex+1){
+        if(!BattleSystem.EnemyLibraryEmpty()){
             Debug.Log("Setting up with BS.EnemyLibrary");
 
             string bossName = GetStageOneBossName();

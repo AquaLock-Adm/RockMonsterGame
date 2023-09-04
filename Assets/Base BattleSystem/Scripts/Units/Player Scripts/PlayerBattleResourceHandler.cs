@@ -65,13 +65,13 @@ public class PlayerBattleResourceHandler : MonoBehaviour
     }
 
 
-    public void DealDamage(int damage){
+    public virtual void DealDamage(int damage){
         Player.healthPoints = (int)Mathf.Max(0f, (float)( Player.healthPoints - damage ));
 
         if(Player.healthPoints <= 0) {
             Player.deathTriggered = true;
         }
-    }
+    } // changed in: PlayerResource_Tutorial.cs
 
     public void Heal(int healAmount){
         Player.GetArmor().Repair(healAmount);

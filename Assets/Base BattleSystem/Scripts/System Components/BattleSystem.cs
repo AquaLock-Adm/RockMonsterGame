@@ -118,8 +118,6 @@ public class BattleSystem : MonoBehaviour
 
             GHGO = Instantiate(this.GameHandlerPrefab);
             GHGO.name = "GameHandler";
-            GameHandler GH = GHGO.GetComponent<GameHandler>();
-            GameStart(GH);
         }
     }
 
@@ -162,7 +160,7 @@ public class BattleSystem : MonoBehaviour
         Debug.Log(res);*/
     }
 
-    public virtual void SetupEverything(){ // Changed in: NBS
+    protected virtual void SetupEverything(){ // Changed in: NBS
         if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
         else this.Player = this.GameHandler.Player;
 
@@ -170,9 +168,9 @@ public class BattleSystem : MonoBehaviour
             SetupSystemComponents();
             SetupCurrentPlayer();
         }else Debug.LogError("Player has not been set during Setup.");
-    }
+    } // Changed in: BattleSystem_Tutorial.cs
 
-    private void CreateNewPlayerGameObjects(){
+    protected void CreateNewPlayerGameObjects(){
         this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
         Weapon StandartWeapon = this.TestRunWeaponPrefab.GetComponent<Weapon>();
         Armor StandartArmor = this.TestRunArmorPrefab.GetComponent<Armor>();
@@ -187,7 +185,7 @@ public class BattleSystem : MonoBehaviour
 
 
 #region SetCurrentPlayer Functions
-    private void SetupCurrentPlayer(){
+    protected void SetupCurrentPlayer(){
         if(this.setWeaponStartLevel) {
             this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
         }else this.Player.BattleSetup(this, this.ActionHUD);
@@ -425,10 +423,11 @@ public class BattleSystem : MonoBehaviour
         this.PauseMenu.ShowPauseMenu(true);
     }
 
-    public void End(){
+    public virtual void End(){
+        Player.BattleEnd();
         this.GameHandler.earnedCredits += this.earnedCredits;
         this.GameHandler.LoadMainMenu();
-    }
+    } // Changed in: BattleSystem_Tutorial.cs
 
 
 
@@ -437,6 +436,10 @@ public class BattleSystem : MonoBehaviour
         if(!GameHandler.EnemyLibraryInitialized()){
             GameHandler.InitEnemyLibrary();
         }
+    }
+
+    public bool EnemyLibraryEmpty(){
+        return GameHandler.EnemyLibraryEmpty();
     }
 
     public EnemySettings GetEnemySettingsByName(string name, int stageIndex){

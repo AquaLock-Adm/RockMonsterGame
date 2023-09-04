@@ -72,4 +72,10 @@ public class PauseMenu_Tutorial : PauseMenu
             }     
         } else this.PauseMenuScreen.SetActive(turnOn);
     }
+
+    public override void LeaveGame(){
+        ShowPauseMenu(false);
+        //BattleSystem.pauseTimer = true;
+        BattleSystem.End();
+    }
 }
