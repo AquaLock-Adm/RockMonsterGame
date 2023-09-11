@@ -8,6 +8,7 @@ public class StartMenuHandler : MonoBehaviour
     [SerializeField] private GameObject GameHandlerPrefab;
 
     private GameHandler GameHandler;
+
     [SerializeField] private int buttonIndex;
 
     [SerializeField] private List<StartMenuButton> buttonList = new List<StartMenuButton>();
@@ -46,12 +47,13 @@ public class StartMenuHandler : MonoBehaviour
             OptionDown();
         }else if( Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) ){
             OptionUp();
-        }else if( Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) ){
+        }else if( Input.GetKeyDown(KeyCode.Space) ){
             SelectOption();
         }
     }
 
     private void OptionDown(){
+        GameHandler.PlaySwitchMenuOptionSound();
         int lastIndex = this.buttonIndex;
         this.buttonIndex = (this.buttonIndex+1) % this.buttonList.Count;
 
@@ -60,6 +62,7 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void OptionUp(){
+        GameHandler.PlaySwitchMenuOptionSound();
         int lastIndex = this.buttonIndex;
         if(this.buttonIndex > 0) this.buttonIndex--;
         else this.buttonIndex = this.buttonList.Count-1;
@@ -69,6 +72,7 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void SelectOption(){
+        GameHandler.PlaySelectMenuOptionSound();
         switch(this.buttonIndex){
             case 0:
                 StartGame();

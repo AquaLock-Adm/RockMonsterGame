@@ -1,8 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
+
+[System.Serializable]
+public class Sound {
+    public string name;
+    public AudioClip clip;
+
+    [Range(0f, 1f)] public float volume = 0.5f;
+    [Range(0.1f, 3f)] public float pitch = 1f;
+
+}
 
 public class GameHandler : MonoBehaviour
 {
@@ -13,6 +25,14 @@ public class GameHandler : MonoBehaviour
     private List<List<EnemySettings>> EnemyLibrary;
 
     public int earnedCredits;
+
+    private Sound currentSound;
+
+    [Header("Audio")]
+    [SerializeField] AudioSource AudioSource;
+    [SerializeField] Sound SwitchMenuOptionSound;
+    [SerializeField] Sound SelectMenuOptionSound;
+    [SerializeField] Sound BlockedMenuOptionSound;
 
     void Awake(){
         DontDestroyOnLoad(this.gameObject);
@@ -73,6 +93,35 @@ public class GameHandler : MonoBehaviour
         DontDestroyOnLoad(this.PlayerWeapon.gameObject);
         this.PlayerArmor = P.GetArmor();
         DontDestroyOnLoad(this.PlayerArmor.gameObject); 
+    }
+#endregion
+
+
+
+#region Audio
+    private void SetSound(Sound S){
+        if(currentSound == null || currentSound.name != S.name){
+            AudioSource.clip = S.clip;
+            AudioSource.volume = S.volume;
+            AudioSource.pitch = S.pitch;
+
+            currentSound = S;
+        }
+    }
+    
+    public void PlaySwitchMenuOptionSound(){
+        SetSound(SwitchMenuOptionSound);
+        AudioSource.Play();
+    }
+    
+    public void PlaySelectMenuOptionSound(){
+        SetSound(SelectMenuOptionSound);
+        AudioSource.Play();
+    }
+    
+    public void PlayBlockedMenuOptionSound(){
+        SetSound(BlockedMenuOptionSound);
+        AudioSource.Play();
     }
 #endregion
 

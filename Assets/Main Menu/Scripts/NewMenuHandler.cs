@@ -143,6 +143,7 @@ public class NewMenuHandler : MonoBehaviour
         {
             int lastButtonIndex = currentButtonIndex;
             currentButtonIndex = (currentButtonIndex + 1) % ButtonList.Count;
+            GameHandler.PlaySwitchMenuOptionSound();
             SelectOption(lastButtonIndex);
         }
         else if (Input.GetKeyDown(KeyCode.W))
@@ -153,6 +154,7 @@ public class NewMenuHandler : MonoBehaviour
             {
                 currentButtonIndex = ButtonList.Count - 1;
             }
+            GameHandler.PlaySwitchMenuOptionSound();
             SelectOption(lastButtonIndex);
         }
         else if (Input.GetKeyDown(KeyCode.Space))
@@ -240,6 +242,7 @@ public class NewMenuHandler : MonoBehaviour
 
     private void SubmitOption()
     {
+        GameHandler.PlaySelectMenuOptionSound();
         switch (currentButtonIndex)
         {
             case 0:
@@ -252,6 +255,7 @@ public class NewMenuHandler : MonoBehaviour
                 SubmitArmorUpgrade();
                 break;
             case 3:
+                GameHandler.PlayBlockedMenuOptionSound();
                 //SubmitEnemyIndex();
                 break;
             case 4:

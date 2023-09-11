@@ -1,0 +1,29 @@
+AUDIO
+> Start Menu
+ - Option Select Sound -O
+ - Option Switch Sound -O
+
+> Main Menu
+ - Option Select Sound -O
+ - Option unavailable Sound -O
+ - Option Switch Sound -O
+
+> Battle Scene
+ - Pause Menu Select
+ - Ability Select
+ - Heat level up 
+ - Attack Shield Unblocked
+ - Attack Shield Blocked
+ - Attack Hit unshielded
+ - Input Canceled
+ - Input blocked (after round over)
+ - Input reactivated (New Round)
+ - Enemy Attack Blocked
+ - Enemy Attack hits
+ - Enemy Dies
+ - Credit Score Crawl
+ - Player Dies (GameOver)
+ - Wave finished (Pausemenu up)
+
+ > Tutorial
+ - Continue Text
