@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {   
-    private BattleSystem BattleSystem;
-    private GameObject MainCanvas;
-    private int enemyIndex = 0;
+    protected BattleSystem BattleSystem;
+    protected GameObject MainCanvas;
+    protected int enemyIndex = 0;
 
     [Header("Enemy Spawn Data")]
     [SerializeField] private List<int> EnemyLevels = new List<int>();
 
-    [SerializeField] private List<EnemySettings> EnemySettingsList = new List<EnemySettings>();
+    [SerializeField] protected List<EnemySettings> EnemySettingsList = new List<EnemySettings>();
     [SerializeField] private GameObject BaseEnemyPrefab;
 
     [SerializeField] private int waveSize;
@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviour
         this.waveSize = enemySettingsList.Count;
     }
 
-    public void SpawnNextEnemy(){
+    public virtual void SpawnNextEnemy(){
         if(this.enemyIndex >= this.EnemySettingsList.Count){
             BattleSystem.WaveOver();
             return;
@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
 
         BattleSystem.Enemy = CurrentEnemy;
         this.enemyIndex++;
-    }
+    } // changed in: EnemySpawner_BossEnemy.cs
 
     public void SpawnEnemyExtern(GameObject EnemyPrefab, int level, int timeBeforeSpawn = 0){
         Debug.LogError("Change the way boss enemies work!");

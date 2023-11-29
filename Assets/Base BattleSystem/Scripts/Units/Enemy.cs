@@ -203,7 +203,8 @@ public class Enemy : Unit
         // Debug.Log("Calc KP: "+this.killPrice.ToString());
     }
 
-    public void BattleSetup(){
+    // changed in Engenia.cs
+    public virtual void BattleSetup(){
         if(!gameObject.activeSelf) gameObject.SetActive(true);
         this.AttackRushDamageText.gameObject.SetActive(false);
 
