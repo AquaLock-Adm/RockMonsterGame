@@ -1,0 +1,13 @@
+Make boss fights great again:
+
+when enemy attacks:
+multiple possible block strings
+row of block strings at once
+hp gain after perfect blocks
+
+when player attacks:
+attack learning alg 
+block stamina for boss
+block break with extra damage
+
+

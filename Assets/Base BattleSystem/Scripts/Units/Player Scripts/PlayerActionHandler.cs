@@ -169,7 +169,6 @@ public class PlayerActionHandler : MonoBehaviour
 
 	public void SwitchModes(bool playerIsDefending){
 		if(playerIsDefending){
-			this.currentMaxAttackLength = this.comboLevel;
 			int comboLengthMax = Player.GetCurrentEnemy().GetCurrentAttackSequenceLength();
 			this.comboLevel = (int)Mathf.Min((float)this.comboLevel, (float)comboLengthMax);
 		}else{
@@ -405,6 +404,7 @@ public class PlayerActionHandler : MonoBehaviour
 				this.ComboLevelText.text = "Lv.MAX";
 			}else this.ComboLevelText.text = "Lv."+comboLevel.ToString();
 		}
+		this.currentMaxAttackLength = this.comboLevel;
 	}
 #endregion
 

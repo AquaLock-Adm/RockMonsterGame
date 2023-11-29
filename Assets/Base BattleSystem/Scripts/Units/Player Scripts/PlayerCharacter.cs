@@ -30,6 +30,8 @@ public class PlayerCharacter : Unit
     public bool deathTriggered = false;
     private bool heatChargeAvailable = false;
 
+    [SerializeField] private int baseBattleSpeed = 5;
+    [SerializeField] private int battleSpeed = 5;
 
 
     #region overrides
@@ -208,6 +210,25 @@ public class PlayerCharacter : Unit
         this.Controls.LoadMainMenu();
     }
 
+    public void PassRound()
+    {
+    // private int baseBattleSpeed;
+    // private int battleSpeed;
+        // use only vals 1-10
+
+        int enemySpeedVal = 3;
+
+        if(this.battleSpeed >= enemySpeedVal){
+            Debug.Log("Would be Attack Turn.\n"+battleSpeed.ToString()+","+enemySpeedVal.ToString());
+            this.battleSpeed -= enemySpeedVal;
+        }else{
+            Debug.Log("Would be Defend Turn.\n"+battleSpeed.ToString()+","+enemySpeedVal.ToString());
+            this.battleSpeed += this.baseBattleSpeed;
+        }
+
+        this.ActionHandler.PassRound();
+    }
+
     public virtual void SwitchBattleModes()
     {
         this.defendModeActive = !this.defendModeActive;
@@ -256,10 +277,6 @@ public class PlayerCharacter : Unit
     public void CancelLastAction()
     {
         this.ActionHandler.CancelLastAction();
-    }
-    public void PassRound()
-    {
-        this.ActionHandler.PassRound();
     }
     public void StopAttackRushQueue()
     {
