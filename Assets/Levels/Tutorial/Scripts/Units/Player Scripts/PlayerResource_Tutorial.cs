@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerResource_Tutorial : PlayerBattleResourceHandler
 {
+    // took out health deplete & enemy DOT
     public override void Setup(PlayerCharacter Player, TextMeshProUGUI NameText, Slider HpSlider){
         this.Player = Player;
 
@@ -15,5 +16,12 @@ public class PlayerResource_Tutorial : PlayerBattleResourceHandler
         this.HpSlider = HpSlider;
         
         BattleUpdateLoop();
+    }
+
+    // prevented player from dying by keeping hp >= 1
+    public override void DealDamage(int damage){
+        if(damage >= Player.healthPoints) return;
+
+        Player.healthPoints = (int)Mathf.Max(0f, (float)( Player.healthPoints - damage ));
     }
 }

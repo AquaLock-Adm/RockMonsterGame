@@ -17,10 +17,10 @@ public enum BattleState {SETUP, RUNNING, DIALOGUE, WAVEOVER, PLAYERDIED, ENEMYDI
 
 public class BattleSystem : MonoBehaviour
 {
+    [SerializeField] private GameObject GameHandlerPrefab;
     [Header("Dungeon Run Variables")]
     public int enemyDefeatCount = 0;
     public int wavesClearedCount = 0;
-    public bool runWithoutGameHandler = false;
 
     public WaveScript WaveScript;
     public bool useWaveScript = false;
@@ -55,16 +55,6 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] public PlayerCharacter Player;
     [SerializeField] public Enemy Enemy;
-
-    public List<List<EnemySettings>> EnemyLibrary = new List<List<EnemySettings>>(); // Lib[0] => Stage 1 Enemies       EnemyLibrary.Add(List);
-
-    /*
-        EnemySettings Enemy1 = EnemyLibrary[0][0];
-
-        string enemyName = Enemy1.name;
-        int enemyHP = Enemy1.hp;
-        2dSprite sprite = Enemy1.fantaTM;
-    */
 
     [Header("System Counters")]
     public int earnedCredits = 0;
@@ -118,7 +108,17 @@ public class BattleSystem : MonoBehaviour
 
 #region Unity Functions
     private void Awake(){
-        GameStart();
+        GameObject GHGO = GameObject.Find("GameHandler");
+
+        if(GHGO == null){
+            if(this.GameHandlerPrefab == null){
+                Debug.LogError("No Game Handler Prefab Set!");
+                return;
+            }
+
+            GHGO = Instantiate(this.GameHandlerPrefab);
+            GHGO.name = "GameHandler";
+        }
     }
 
     private void OnApplicationQuit(){
@@ -128,22 +128,13 @@ public class BattleSystem : MonoBehaviour
 
 
 
-    public void GameStart(){
+    public void GameStart(GameHandler GH){
+        this.GameHandler = GH;
         this.state = BattleState.SETUP;
+        CheckEnemyLibraryInit();
         CheckDisplays();
-        SetGameHandler();
         SetupEverything();
-        if(this.Player != null){
-            PreStartActions();
-        }
-    }
-
-    private void SetGameHandler(){
-        GameObject GameHandler_GO = GameObject.Find("GameHandler");
-        if(GameHandler_GO != null) {
-            this.GameHandler = GameHandler_GO.GetComponent<GameHandler>();
-            this.runWithoutGameHandler = false;
-        }else this.runWithoutGameHandler = true;
+        PreStartActions();
     }
 
     private void CheckDisplays(){
@@ -169,24 +160,18 @@ public class BattleSystem : MonoBehaviour
         Debug.Log(res);*/
     }
 
-    public virtual void SetupEverything(){ // Changed in: NBS
-        if(this.runWithoutGameHandler) SetupStandartSettings();
-        else ImportStartSettingsFromGameHandler();
+    protected virtual void SetupEverything(){ // Changed in: NBS
+        if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
+        else this.Player = this.GameHandler.Player;
 
         if(this.Player != null){
             SetupSystemComponents();
             SetupCurrentPlayer();
         }else Debug.LogError("Player has not been set during Setup.");
-    }
+    } // Changed in: BattleSystem_Tutorial.cs
 
-    private void SetupStandartSettings(){
-        if(this.TestRunPlayerPrefab == null){
-            Debug.LogError("TestRunPlayerPrefab must be set for a run without GameHandler!");
-            return;
-        }
-        Debug.Log("Starting without GameHandler.");
-
-        this.Player = this.TestRunPlayerPrefab.GetComponent<PlayerCharacter>();
+    protected void CreateNewPlayerGameObjects(){
+        this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
         Weapon StandartWeapon = this.TestRunWeaponPrefab.GetComponent<Weapon>();
         Armor StandartArmor = this.TestRunArmorPrefab.GetComponent<Armor>();
 
@@ -197,29 +182,14 @@ public class BattleSystem : MonoBehaviour
         StandartArmor.Init(this.Player);
     }
 
-    private void ImportStartSettingsFromGameHandler(){
-        this.GameHandler.BattleSystem = this;
-        this.Player = this.GameHandler.Player;
-    }
-
 
 
 #region SetCurrentPlayer Functions
-    private void SetupCurrentPlayer(){
-        GameObject P_GO = CreatePlayerGO();
-        this.Player = P_GO.GetComponent<PlayerCharacter>();
+    protected void SetupCurrentPlayer(){
         if(this.setWeaponStartLevel) {
             this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
         }else this.Player.BattleSetup(this, this.ActionHUD);
     }
-
-    protected virtual GameObject CreatePlayerGO(){
-        GameObject P_GO = new GameObject();
-        P_GO.AddComponent<PlayerCharacter>();
-        P_GO.GetComponent<PlayerCharacter>().CopyFrom(this.Player);
-        P_GO.name = this.Player.unitName;
-        return P_GO;
-    } // changed in: BattleSystem_Tutorial.cs
 #endregion
 
 
@@ -327,8 +297,8 @@ public class BattleSystem : MonoBehaviour
         if(this.useWaveScript) {
             EnemySettingsList = this.WaveScript.GetEnemySettingsList();
             foreach(EnemySettings E in EnemySettingsList){
-                if(this.EnemyLibrary.Count < E.level) this.EnemyLibrary.Add(new List<EnemySettings>());
-                this.EnemyLibrary[E.level-1].Add(E);
+                if(GetEnemyLibraryStageCount() < E.level) InitNewEnemyLibraryStage(E.level-1, new List<EnemySettings>());
+                GameHandler.AddNewEnemyToLibrary(E);
             }
         }else {
             EnemySettingsList = this.WaveRandomizer.GetEnemySettingsList();
@@ -453,55 +423,47 @@ public class BattleSystem : MonoBehaviour
         this.PauseMenu.ShowPauseMenu(true);
     }
 
-    public void End(){
-        if(!this.runWithoutGameHandler){
-            this.GameHandler.earnedCredits = this.earnedCredits;
-            SceneManager.LoadScene("Main Menu");
-        }else {
-            Debug.Log("BattleSystem.Quit() called");
-            Application.Quit();
-        }
-    }
+    public virtual void End(){
+        Player.BattleEnd();
+        this.GameHandler.earnedCredits += this.earnedCredits;
+        this.GameHandler.LoadMainMenu();
+    } // Changed in: BattleSystem_Tutorial.cs
 
 
 
 #region EnemyLibrary Functions
+    public void CheckEnemyLibraryInit(){
+        if(!GameHandler.EnemyLibraryInitialized()){
+            GameHandler.InitEnemyLibrary();
+        }
+    }
+
+    public bool EnemyLibraryEmpty(){
+        return GameHandler.EnemyLibraryEmpty();
+    }
+
     public EnemySettings GetEnemySettingsByName(string name, int stageIndex){
-        if(stageIndex >= this.EnemyLibrary.Count || stageIndex < 0){
-            Debug.LogError("Invalid Stage index!");
-            return null;
-        }
-
-        foreach(EnemySettings E in this.EnemyLibrary[stageIndex]){
-            if(E.name == name) return E;
-        }
-        Debug.LogError("Could not find Enemy in EnemyLibrary!");
-        return null;
+        return GameHandler.GetEnemySettingsByName(name, stageIndex);
     }
 
-    public int GetSettingsIndexByName(string name, int stageIndex){
-        if(stageIndex >= this.EnemyLibrary.Count || stageIndex < 0) return -1;
-        int res = -1;
-
-        for(int i=0;i<this.EnemyLibrary[stageIndex].Count;i++){
-            if(this.EnemyLibrary[stageIndex][i].name == name) return i;
-        }
-        return res;
+    public List<EnemySettings> GetAllEnemiesFromStage(int stageIndex){
+        return GameHandler.GetAllEnemiesFromStage(stageIndex);
     }
 
-    public void UpdateEnemyLibrary(EnemySettings E){
-        if(E.level == 0) return;    // Case: Enemy is first enemy of Wave
+    public int GetSettingsIndexByName(string name, int stageIndexOfSettings){
+        return GameHandler.GetSettingsIndexByName(name, stageIndexOfSettings);
+    }
 
-        if(E.level > this.EnemyLibrary.Count){
-            Debug.LogError("Stage for Enemy not initialized!");
-            return;
-        }
+    public int GetEnemyLibraryStageCount(){
+        return GameHandler.GetEnemyLibraryStageCount();
+    }
 
-        for(int i=0;i<this.EnemyLibrary[E.level-1].Count; i++){
-            if(this.EnemyLibrary[E.level-1][i].name == name){
-                this.EnemyLibrary[E.level-1][i] = E;
-            }
-        }
+    public void InitNewEnemyLibraryStage(int stageIndex, List<EnemySettings> NewEnemies){
+        GameHandler.InitNewEnemyLibraryStage(stageIndex, NewEnemies);
+    }
+
+    public void UpdateEnemyLibraryEntryOf(EnemySettings E){
+        GameHandler.UpdateEnemyLibraryEntryOf(E);
     }
 #endregion
 } // EOF

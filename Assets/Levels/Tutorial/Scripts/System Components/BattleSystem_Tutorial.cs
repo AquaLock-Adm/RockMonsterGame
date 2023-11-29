@@ -8,18 +8,21 @@ public class BattleSystem_Tutorial : BattleSystem
     [Header("Tutorial References")]
     [SerializeField] private TutorialHandler TutorialHandler;
 
+    // Setup is called on TutorialHandler here
     protected override void PreStartActions(){
         RunTests();
         TutorialHandler.Setup(this);
         TutorialHandler.Continue();
     }
 
-    protected override GameObject CreatePlayerGO(){
-        GameObject P_GO = new GameObject();
-        P_GO.AddComponent<Player_Tutorial>();
-        P_GO.GetComponent<PlayerCharacter>().CopyFrom(this.Player);
-        P_GO.name = this.Player.unitName;
-        return P_GO;
+    // Always creates New Player GO
+    protected override void SetupEverything(){ // Changed in: NBS
+        CreateNewPlayerGameObjects();
+
+        if(this.Player != null){
+            SetupSystemComponents();
+            SetupCurrentPlayer();
+        }else Debug.LogError("Player has not been set during Setup.");
     }
 
     public void BlockPlayerBattleModeSwitch(bool blockOn){
@@ -46,6 +49,7 @@ public class BattleSystem_Tutorial : BattleSystem
         this.Player.GetComponent<Player_Tutorial>().WaitForQueuedActions(on);
     }
 
+    // Stage clear rewards are disabled
     protected override void UpdateStageClearRewards(){
         // if(!this.useWaveScript){
         //     if(!this.stagesClearedBefore[this.WaveRandomizer.stageIndex]){
@@ -54,5 +58,11 @@ public class BattleSystem_Tutorial : BattleSystem
         //         this.stagesClearedBefore[this.WaveRandomizer.stageIndex] = true;
         //     }
         // }else Debug.Log("Not implemented yet!");
+    }
+
+    // Loading Start Menu instead of Main Menu and No credits are being earned
+    public override void End(){
+        Player.BattleEnd();
+        this.GameHandler.LoadStartMenu();
     }
 }

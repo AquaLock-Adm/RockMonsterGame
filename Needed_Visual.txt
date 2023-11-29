@@ -1,0 +1,31 @@
+VISUAL
+> Start Menu
+ - Option Buttons (Start Game, Tutorial, Quit)
+ - Background_simple
+
+> Main Menu
+ - Status Screen_simple
+ - Healthbar
+ - Credit Score
+ - Background_simple
+
+> Battle Scene
+ - Pause Menu Box
+ - Pause Menu Text
+ - Pause Menu Health Bar
+ - Pause Menu Buttons
+ - Player Status (Name + HP bar, box unnecessary?)
+ - Credit Score (under Status)
+ - Wave Counter (Center very top)
+ - Kill Counter (under Wavecounter)
+ - Player Character_simple
+ - Enemy_simple
+ - Attack effect (+ quick animation)
+ - Battle Menu (+Options)
+ - Heat Gauge
+ - Action Queue Visualizer (+ Ability Box)
+ - Background_simple
+ - Result Screen
+
+ > Tutorial
+ -> Textbox + Text

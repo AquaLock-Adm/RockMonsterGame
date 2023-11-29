@@ -7,7 +7,10 @@ using TMPro;
 
 public class PlayerBattleResourceHandler : MonoBehaviour
 {
+
     protected PlayerCharacter Player;
+
+    private bool battleActive = true;
 
     [SerializeField] protected TextMeshProUGUI NameText;
     [SerializeField] protected Slider HpSlider;
@@ -38,7 +41,7 @@ public class PlayerBattleResourceHandler : MonoBehaviour
     } // changed in: PlayerResource_Tutorial.cs
 
     protected async void BattleUpdateLoop(){
-        while(!Player.deathTriggered && Application.isPlaying){
+        while(!Player.deathTriggered && this.battleActive && Application.isPlaying){
             UpdateHUDElements();
             UpdateArmorStats();
             await Task.Yield();
@@ -52,18 +55,23 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         this.HpSlider.maxValue = Player.maxHealthPoints;
     }
 
+    public void BattleEnd(){
+        this.battleActive = false;
+        Destroy(this);
+    }
+
     private void UpdateArmorStats(){
         Player.GetArmor().healthPoints = Player.healthPoints;
     }
 
 
-    public void DealDamage(int damage){
+    public virtual void DealDamage(int damage){
         Player.healthPoints = (int)Mathf.Max(0f, (float)( Player.healthPoints - damage ));
 
         if(Player.healthPoints <= 0) {
             Player.deathTriggered = true;
         }
-    }
+    } // changed in: PlayerResource_Tutorial.cs
 
     public void Heal(int healAmount){
         Player.GetArmor().Repair(healAmount);

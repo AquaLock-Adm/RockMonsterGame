@@ -100,10 +100,18 @@ public abstract class Weapon : MonoBehaviour
     private void SetBaseStats(){
         List<WeaponUpgrade> upgradeTable = this.GetUpgradeTable();
         this.maxWeaponLevel = upgradeTable.Count;
-        GetUpgrade(1);
+        UpgradeWeaponToLevel(1);
     }
 
-    public void GetUpgrade(int level){
+    public void UpgradeWeapon(){
+        UpgradeWeaponToLevel(this.weaponLevel+1);
+    }
+
+    public void DowngradeWeapon(){
+        UpgradeWeaponToLevel(this.weaponLevel-1);
+    }
+
+    public void UpgradeWeaponToLevel(int level){
         if(level > this.maxWeaponLevel || level <= 0) return;
 
         this.weaponLevel = level;

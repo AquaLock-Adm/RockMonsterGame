@@ -8,6 +8,7 @@ public class StartMenuHandler : MonoBehaviour
     [SerializeField] private GameObject GameHandlerPrefab;
 
     private GameHandler GameHandler;
+
     [SerializeField] private int buttonIndex;
 
     [SerializeField] private List<StartMenuButton> buttonList = new List<StartMenuButton>();
@@ -23,9 +24,11 @@ public class StartMenuHandler : MonoBehaviour
 
             GHGO = Instantiate(this.GameHandlerPrefab);
             GHGO.name = "GameHandler";
-            GameHandler GH = GHGO.GetComponent<GameHandler>();
-            StartSetup(GH);
         }
+    }
+
+    void Update(){
+        CheckPlayerInput();
     }
 
     public void StartSetup(GameHandler GH){
@@ -37,15 +40,6 @@ public class StartMenuHandler : MonoBehaviour
 
         this.buttonIndex = 0;
         this.buttonList[this.buttonIndex].HoverMenuButton();
-
-        CheckPlayerInputLoop();
-    }
-
-    private async void CheckPlayerInputLoop(){
-        while(Application.isPlaying){
-            CheckPlayerInput();
-            await Task.Yield();
-        }
     }
 
     private void CheckPlayerInput(){
@@ -53,12 +47,13 @@ public class StartMenuHandler : MonoBehaviour
             OptionDown();
         }else if( Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) ){
             OptionUp();
-        }else if( Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) ){
+        }else if( Input.GetKeyDown(KeyCode.Space) ){
             SelectOption();
         }
     }
 
     private void OptionDown(){
+        GameHandler.PlaySwitchMenuOptionSound();
         int lastIndex = this.buttonIndex;
         this.buttonIndex = (this.buttonIndex+1) % this.buttonList.Count;
 
@@ -67,6 +62,7 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void OptionUp(){
+        GameHandler.PlaySwitchMenuOptionSound();
         int lastIndex = this.buttonIndex;
         if(this.buttonIndex > 0) this.buttonIndex--;
         else this.buttonIndex = this.buttonList.Count-1;
@@ -76,6 +72,7 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void SelectOption(){
+        GameHandler.PlaySelectMenuOptionSound();
         switch(this.buttonIndex){
             case 0:
                 StartGame();
@@ -96,15 +93,11 @@ public class StartMenuHandler : MonoBehaviour
     }
 
     private void StartGame(){
-        Debug.Log("Todo");
-
-        Debug.Log("Start Normal Game");
+        GameHandler.LoadMainMenu();
     }
 
     private void StartTutorial(){
-        Debug.Log("Todo");
-
-        Debug.Log("Start Tutorial");
+        GameHandler.LoadTutorial();
     }
 
     private void QuitGame(){
