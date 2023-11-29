@@ -1610,7 +1610,7 @@ MonoBehaviour:
   EnemyLevels: 
   BaseEnemyPrefab: {fileID: 0}
   waveSize: 0
-  BossEnemyPrefab: {fileID: 0}
+  BossEnemyPrefab: {fileID: 3993717952223098724, guid: 2a8542abd1a6ffb4c98335f49ba05d49, type: 3}
 --- !u!1 &316727418
 GameObject:
   m_ObjectHideFlags: 0
@@ -7558,8 +7558,8 @@ MonoBehaviour:
   GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
   enemyDefeatCount: 0
   wavesClearedCount: 0
-  WaveScript: {fileID: 0}
-  useWaveScript: 0
+  WaveScript: {fileID: 1943261269}
+  useWaveScript: 1
   inBossWave: 0
   finalStageReached: 0
   afterFinalWave: 0

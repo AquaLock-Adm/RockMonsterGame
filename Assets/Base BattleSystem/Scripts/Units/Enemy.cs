@@ -11,6 +11,7 @@ public class EnemySettings{
     public int hp;
 
     public int damage;
+    public int battleSpeed;
 
     public int baseKillPrice;
     public int maxKillPrice;
@@ -27,6 +28,7 @@ public class EnemySettings{
         Enemy PrefabEnemy = Prefab.GetComponent<Enemy>();
 
         this.damage = PrefabEnemy.GetDamage();
+        this.battleSpeed = PrefabEnemy.GetBattleSpeed();
         this.level = PrefabEnemy.GetLevel();
         this.name = PrefabEnemy.unitName;
         this.hp = PrefabEnemy.healthPoints;
@@ -111,6 +113,8 @@ public class Enemy : Unit
     [SerializeField] private int level;
 
     [SerializeField] private int damage;
+
+    [SerializeField] private int battleSpeed;
 
     [SerializeField] private int killPrice = 0;
     [SerializeField] private int maxKillPrice = 0; // at 400% HP damage dealt as overkill 
@@ -208,6 +212,8 @@ public class Enemy : Unit
         if(!gameObject.activeSelf) gameObject.SetActive(true);
         this.AttackRushDamageText.gameObject.SetActive(false);
 
+        CheckBattleSpeed();
+
         SetCurrentShieldModes();
         
         this.nextShield = this.CurrentShieldModes[0];
@@ -227,6 +233,13 @@ public class Enemy : Unit
         }
         damageTextIndex = 0;
         BattleUpdateLoop();
+    }
+
+    private void CheckBattleSpeed(){
+        if(this.battleSpeed <= 0 || this.battleSpeed > 10){
+            Debug.Log("Error setting BattleSpeed. Should be between 1 and 10. Was "+this.battleSpeed.ToString());
+            this.battleSpeed = 1;
+        }
     }
 
     private async void BattleUpdateLoop(){
@@ -746,6 +759,10 @@ public class Enemy : Unit
         return this.damage;
     }
 
+    public int GetBattleSpeed(){
+        return this.battleSpeed;
+    }
+
     public int GetKillPrice(){
         return this.killPrice;
     }
@@ -796,6 +813,7 @@ public class Enemy : Unit
         this.maxHealthPoints = Settings.hp;
         this.healthPoints = Settings.hp;
         this.damage = Settings.damage;
+        this.battleSpeed = Settings.battleSpeed;
 
         this.killPrice = Settings.baseKillPrice;
         this.maxKillPrice = Settings.maxKillPrice;

@@ -55,6 +55,7 @@ public class GameHandler : MonoBehaviour
 
             case "Battle Scene":
             case "Tutorial":
+            case "Boss Enemy Scene":
                 GameObject.Find("BattleSystem").GetComponent<BattleSystem>().GameStart(this);
             break;
 
