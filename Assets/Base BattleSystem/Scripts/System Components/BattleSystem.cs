@@ -19,6 +19,7 @@ public class BattleSystem : MonoBehaviour
 {
     [SerializeField] private GameObject GameHandlerPrefab;
     [Header("Dungeon Run Variables")]
+    public bool useBattleSpeed = false;
     public int enemyDefeatCount = 0;
     public int wavesClearedCount = 0;
 
@@ -309,15 +310,44 @@ public class BattleSystem : MonoBehaviour
 
 
 
+#region BattleSequence Functions
+    public void PassRound(){
+        Player.StartActionQueue();
+    }
+    public void NextRound(){
+        if(this.useBattleSpeed){
+            if(Player.battleSpeed >= Enemy.battleSpeed){
+                // Debug.Log("Player Attack Turn.\n"+Player.battleSpeed.ToString()+","+Enemy.battleSpeed.ToString());
+                Player.battleSpeed -= Enemy.battleSpeed;
+                Enemy.SwitchBattleModes(false);
+                Player.SwitchBattleModes(false);
+            }else{
+                // Debug.Log("Player Defend Turn.\n"+Player.battleSpeed.ToString()+","+Enemy.battleSpeed.ToString());
+                Player.battleSpeed += Player.baseBattleSpeed;
+                Enemy.SwitchBattleModes(true);
+                Player.SwitchBattleModes(true);
+            }
+            Player.UpdateNextRoundModeInfo();  
+        }else{
+            Enemy.SwitchBattleModes(!Player.defendModeActive);
+            Player.SwitchBattleModes(!Player.defendModeActive);
+        }
+        
+        // New Round Starts Now !
+    }
+#endregion
+
+
+
 #region Round Start Functions
     public void NextWave(){
-        // Debug.Log("NextWave() called");
         this.Player.BlockAllInputsFor(100);
         this.Player.NextWave();
 
         SetupEnemySpawner();
         this.EnemySpawner.SpawnNextEnemy();
         this.Player.state = PlayerState.START;
+        NextRound();
         this.state = BattleState.RUNNING;
     }
 
@@ -343,9 +373,15 @@ public class BattleSystem : MonoBehaviour
         UpdateEnemyKillRewards(E);
         if(this.inBossWave && !this.afterFinalWave) UpdateStageClearRewards();
         // CheckEnemyItemDrop(E);
+        Player.ResetBattleSpeed();
         this.Player.state = PlayerState.PLAYERTURN;
         this.state = BattleState.RUNNING;
         this.EnemySpawner.SpawnNextEnemy();
+
+        if(this.state != BattleState.WAVEOVER){
+            Player.defendModeActive = true;
+            NextRound();
+        }
     }
 
     private void UpdateKillCount(){

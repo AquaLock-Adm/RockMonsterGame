@@ -51,6 +51,8 @@ MonoBehaviour:
   unitName: Hoover
   healthPoints: 0
   maxHealthPoints: 0
+  battleSpeed: 5
+  baseBattleSpeed: 5
   state: 0
   defendModeActive: 0
   BattleSystem: {fileID: 0}

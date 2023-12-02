@@ -8,6 +8,9 @@ ADDON - BattleSystem:
  > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
 
 Bugs - BattleSystem:
+ > Shows LV 1 Heat after Nextwave
+ > Next Stage doesnt reset Heat Level
+ > Next Stage Doesnt reset BattleSpeed
 
 
 mini - BattleSystem:

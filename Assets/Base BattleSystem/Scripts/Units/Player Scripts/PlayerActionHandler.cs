@@ -160,15 +160,6 @@ public class PlayerActionHandler : MonoBehaviour
 			RemoveLastAction();
         }
     }
-
-    public virtual async void PassRound(){
-        this.inAttackRushPreLoop = false;
-        if(Player.state == PlayerState.START) {
-            this.heatChargeDone = true;
-        }
-        Player.state = PlayerState.QUEUE;
-        await ExecuteAllActions();
-    } // Changed in: PlayerAction_Tutorial.cs
 #endregion
 
 
@@ -256,6 +247,15 @@ public class PlayerActionHandler : MonoBehaviour
 
 
 #region Executing Actions
+    public virtual async void StartActionQueue(){
+        this.inAttackRushPreLoop = false;
+        if(Player.state == PlayerState.START) {
+            this.heatChargeDone = true;
+        }
+        Player.state = PlayerState.QUEUE;
+        await ExecuteAllActions();
+    } // Changed in: PlayerAction_Tutorial.cs
+
 	protected async Task ExecuteAllActions(){
 		this.stopQueue = false;
 		Enemy TargetEnemy = Player.GetCurrentEnemy();
@@ -279,6 +279,8 @@ public class PlayerActionHandler : MonoBehaviour
 	}
 
 	private async Task ExecuteAttacks(Enemy TargetEnemy){
+		int perfectCounter = 0;
+
 		while(this.Actions.Count > 0 && !this.stopQueue) {
 			Action CurrentAction = GetNextActionFromActionsList();
 
@@ -297,13 +299,24 @@ public class PlayerActionHandler : MonoBehaviour
 			UpdateVisualizer();
 
 			if(addHeatAfterAttack){
+				perfectCounter++;
 				AddHeat();
+				if(perfectCounter > TargetEnemy.GetCurrentDefendSequenceLength()){
+					Player.battleSpeed += 1;
+					Player.UpdateNextRoundModeInfo();
+				}
 			}
+		}
+
+		if(perfectCounter > TargetEnemy.GetCurrentDefendSequenceLength()){
+			Player.battleSpeed += 1;
+			Player.UpdateNextRoundModeInfo();
 		}
 	}	
 
 	private async Task ExecuteBlocks(Enemy TargetEnemy){
 		int executedActions = 0;
+		int perfectCounter = 0;
 
 		while(executedActions < TargetEnemy.GetCurrentAttackSequenceLength() && !this.stopQueue) {
 			Action CurrentAction = new NoBlock(Player);
@@ -311,23 +324,35 @@ public class PlayerActionHandler : MonoBehaviour
 				CurrentAction = GetNextActionFromActionsList();
 			}
 				
-			await TargetEnemy.HandleAction(CurrentAction);
+			bool blockSuccessful = await TargetEnemy.HandleAction(CurrentAction);
 
 			UpdateVisualizer();
 
 			executedActions++;
+			if(blockSuccessful){
+				perfectCounter++;
+			}else{
+				Player.battleSpeed -= 1;
+				Player.UpdateNextRoundModeInfo();
+			}
+		}
+
+		if(perfectCounter >= TargetEnemy.GetCurrentAttackSequenceLength()){
+			Player.battleSpeed += 3;
+			Player.UpdateNextRoundModeInfo();
 		}
 	}
 
-	protected virtual void ActionQueueEnd(){
+	private void ActionQueueEnd(){
 		ClearActionQueue();
 		UpdateActionBoxList();
 
 		if(Player.state == PlayerState.QUEUE){
+			// Enemy didnt die
 			Player.state = PlayerState.PLAYERTURN;
-			Player.SwitchBattleModes();
+			Player.NextRound();
 		}
-	} // Changed in: PlayerAction_Tutorial.cs
+	}
 
 	public void StopQueue(){
         this.stopQueue = true;

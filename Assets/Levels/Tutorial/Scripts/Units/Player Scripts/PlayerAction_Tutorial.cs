@@ -9,7 +9,7 @@ public class PlayerAction_Tutorial : PlayerActionHandler
     public bool checkForExecutedActions = false;
     public bool checkForQueuedActions = false;
 
-    public override async void PassRound(){
+    public override async void StartActionQueue(){
         if(this.checkForExecutedActions) gameObject.GetComponent<Player_Tutorial>().UpdateAwaitedActions(this.Actions);
 
         this.inAttackRushPreLoop = false;
@@ -36,16 +36,6 @@ public class PlayerAction_Tutorial : PlayerActionHandler
             Player.LoadRoundOverMenu();
         }else{
             Player.LoadMainMenu();
-        }
-    }
-
-    protected override void ActionQueueEnd(){
-        ClearActionQueue();
-        UpdateActionBoxList();
-
-        if(Player.state == PlayerState.QUEUE){
-            Player.state = PlayerState.PLAYERTURN;
-            Player.SwitchBattleModes();
         }
     }
 

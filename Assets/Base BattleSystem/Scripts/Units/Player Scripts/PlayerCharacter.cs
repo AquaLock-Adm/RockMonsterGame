@@ -21,6 +21,7 @@ public class PlayerCharacter : Unit
     private GameObject ActionHUD;
     protected List<TextMeshProUGUI> MenuTexts = new List<TextMeshProUGUI>();
     protected List<GameObject> ReferencesForActionHandler = new List<GameObject>();
+    private TextMeshProUGUI NextRoundModeInfoText;
 
     [Header("Player Stats:")]
 
@@ -29,9 +30,6 @@ public class PlayerCharacter : Unit
 
     public bool deathTriggered = false;
     private bool heatChargeAvailable = false;
-
-    [SerializeField] private int baseBattleSpeed = 5;
-    [SerializeField] private int battleSpeed = 5;
 
 
     #region overrides
@@ -76,6 +74,8 @@ public class PlayerCharacter : Unit
     {
         SetupMenuTexts();
         SetupReferencesForActionHandler();
+        SetupNextRoundInfoText();
+        
     }
 
     private void SetupMenuTexts()
@@ -115,6 +115,18 @@ public class PlayerCharacter : Unit
         this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar").gameObject);
         this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar/Remain Box").gameObject);
         this.ReferencesForActionHandler.Add(this.ActionHUD.transform.Find("Attack Rush Bar/Decrease Box").gameObject);
+    }
+
+    private void SetupNextRoundInfoText(){
+        if(BattleSystem.useBattleSpeed){
+            GameObject NextRoundModeInfo_GO = GameObject.Find("Next Round Text");
+            if(NextRoundModeInfo_GO == null){
+                Debug.LogError("Could not find GameObject named [Next Round Text].");
+                BattleSystem.useBattleSpeed = false;
+                return;
+            }
+            this.NextRoundModeInfoText = NextRoundModeInfo_GO.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     protected virtual void SetupBattleComponents()
@@ -190,37 +202,44 @@ public class PlayerCharacter : Unit
         Debug.Log(s);
     }
 
+    public void ResetBattleSpeed(){
+        this.battleSpeed = this.baseBattleSpeed;
+        UpdateNextRoundModeInfo();
+    }
+
+    public void UpdateNextRoundModeInfo(){
+        if(!BattleSystem.useBattleSpeed){
+            ResetBattleSpeed();
+            return;
+        }
+
+        if(BattleSystem.Enemy == null || this.battleSpeed >= BattleSystem.Enemy.battleSpeed){
+            this.NextRoundModeInfoText.text = "ATK";
+        }else{
+            this.NextRoundModeInfoText.text = "DEF";
+        }
+    }
+
     public void NextWave()
     {
         this.ActionHandler.CheckHeatChargeAvailability();
         this.ActionHandler.attackRushUsed = false;
-        this.Controls.LoadMainMenu();
+        this.defendModeActive = true; // because it will be changed right after in next round;
+        ResetBattleSpeed();
     }
 
     public void PassRound()
     {
-    // private int baseBattleSpeed;
-    // private int battleSpeed;
-        // use only vals 1-10
-
-        int enemySpeedVal = 3;
-
-        if(this.battleSpeed >= enemySpeedVal){
-            Debug.Log("Would be Attack Turn.\n"+battleSpeed.ToString()+","+enemySpeedVal.ToString());
-            this.battleSpeed -= enemySpeedVal;
-        }else{
-            Debug.Log("Would be Defend Turn.\n"+battleSpeed.ToString()+","+enemySpeedVal.ToString());
-            this.battleSpeed += this.baseBattleSpeed;
-        }
-
-        this.ActionHandler.PassRound();
+        BattleSystem.PassRound();
     }
 
-    public virtual void SwitchBattleModes()
-    {
-        this.defendModeActive = !this.defendModeActive;
+    public void NextRound(){
+        BattleSystem.NextRound();
+    }
 
-        BattleSystem.Enemy.SwitchModes(this.defendModeActive);
+    public virtual void SwitchBattleModes(bool defendModeOn)
+    {
+        this.defendModeActive = defendModeOn;
         this.ActionHandler.SwitchModes(this.defendModeActive);
         this.Controls.LoadMainMenu();
     } // Changed in: Player_Tutorial.cs
@@ -265,6 +284,9 @@ public class PlayerCharacter : Unit
 
 
     #region Action Handler Functions
+    public void StartActionQueue(){
+        this.ActionHandler.StartActionQueue();
+    }
     public void CastBlock(int abilityIndex)
     {
         this.ActionHandler.CastBlock(abilityIndex);

@@ -17,6 +17,9 @@ public abstract class Unit : MonoBehaviour
 	[SerializeField] public int healthPoints = 0;
 	[SerializeField] public int maxHealthPoints = 0;
 
+    public int battleSpeed = 1;
+    public int baseBattleSpeed = 5;
+
 
     public abstract Task Death();
 

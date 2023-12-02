@@ -18,11 +18,10 @@ public class Player_Tutorial : PlayerCharacter
         this.Controls.Setup(this, BattleSystem.InputDarkFilter, this.MenuTexts);
     }
 
-    public override void SwitchBattleModes(){
+    public override void SwitchBattleModes(bool defendModeOn){
         if(!this.blockBattleModeSwitch){
-            this.defendModeActive = !this.defendModeActive;
+            this.defendModeActive = defendModeOn;
 
-            BattleSystem.Enemy.SwitchModes(this.defendModeActive);
             this.ActionHandler.SwitchModes(this.defendModeActive);
             this.Controls.LoadMainMenu();
         }

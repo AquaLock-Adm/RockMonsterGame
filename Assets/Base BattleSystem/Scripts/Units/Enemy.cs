@@ -114,8 +114,6 @@ public class Enemy : Unit
 
     [SerializeField] private int damage;
 
-    [SerializeField] private int battleSpeed;
-
     [SerializeField] private int killPrice = 0;
     [SerializeField] private int maxKillPrice = 0; // at 400% HP damage dealt as overkill 
 
@@ -259,7 +257,7 @@ public class Enemy : Unit
         HpSlider.maxValue = maxHealthPoints;
     }
 
-    public void SwitchModes(bool playerInDefendMode){
+    public void SwitchBattleModes(bool playerInDefendMode){
         if(playerInDefendMode) {
             ResetAttackSequence();
             SetShieldVisualizer(false);
@@ -530,6 +528,7 @@ public class Enemy : Unit
             Debug.LogError("More Blocks then attacks!");
             return false;
         }
+        bool blockSuccessful = false;
 
         EnemyAttack currentAttack = this.AttackLibrary[this.CurrentAttackSequence[this.attackModeIndex]];
 
@@ -538,6 +537,8 @@ public class Enemy : Unit
         if(BattleSystem.Player.state == PlayerState.QUEUE){
             if(!IsCorrectBlock(A.AbilityType)){
                 BattleSystem.Player.DealDamage(this.damage);
+            }else{
+                blockSuccessful = true;
             }
         }
 
@@ -546,7 +547,7 @@ public class Enemy : Unit
         this.attackModeIndex++;
         SetAttackVisualizer(true);
 
-        return false;
+        return blockSuccessful;
     }
 
     private bool IsCorrectBlock(AbilityType aType){
@@ -781,6 +782,10 @@ public class Enemy : Unit
 
     public int GetDefensiveModeIndex(){
         return this.defensiveModeIndex;
+    }
+
+    public int GetCurrentDefendSequenceLength(){
+        return this.CurrentShieldModes.Count;
     }
 
     public Dictionary<AbilityType, EnemyAttack> GetAttackLibrary(){
