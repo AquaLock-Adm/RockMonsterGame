@@ -7559,6 +7559,7 @@ MonoBehaviour:
   useBattleSpeed: 1
   enemyDefeatCount: 0
   wavesClearedCount: 0
+  startStage: 1
   WaveScript: {fileID: 0}
   useWaveScript: 0
   inBossWave: 0
@@ -7595,6 +7596,8 @@ MonoBehaviour:
   log1: 
   setWeaponStartLevel: 1
   testWeaponStartLevel: 10
+  setStartStage: 0
+  testStartStage: 1
 --- !u!4 &1591755359
 Transform:
   m_ObjectHideFlags: 0

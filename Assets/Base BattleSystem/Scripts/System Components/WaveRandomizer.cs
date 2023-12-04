@@ -12,6 +12,8 @@ public class WaveRandomizer : MonoBehaviour
         public EnemySettings BossSettings;
     }
 
+    public const int MAX_STAGES_CURRENTLY_AVAILABLE = 2;
+
     private char[] ALPHABET = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}; 
     private const int MAX_ENEMY_INDEX_NUMBER = 2600;
 
@@ -35,6 +37,8 @@ public class WaveRandomizer : MonoBehaviour
 
     public void Setup(BattleSystem BS){
         // TODO: Dont re randomize if level is restarted during normal play
+        this.stageIndex = BS.startStage-1;
+
         this.BattleSystem = BS;
         SetupStageSettings();
         this.lastStageIndex = this.StageSettingsList.Count-1;
@@ -129,18 +133,21 @@ public class WaveRandomizer : MonoBehaviour
         SetupStageTwo();
     }
 
+
+
+#region Stage 1 Setup
     private void SetupStageOne(){
         StageSettings StageOneSettings = new StageSettings();
         int myStageIndex = 0;
 
-        // StageOneSettings.WaveSizes.Add(1);
+        StageOneSettings.WaveSizes.Add(1);
         
-        StageOneSettings.WaveSizes.Add(3);
-        StageOneSettings.WaveSizes.Add(4);
-        StageOneSettings.WaveSizes.Add(5);
-        StageOneSettings.WaveSizes.Add(6);
-        StageOneSettings.WaveSizes.Add(7);
-        StageOneSettings.WaveSizes.Add(7);
+        // StageOneSettings.WaveSizes.Add(3);
+        // StageOneSettings.WaveSizes.Add(4);
+        // StageOneSettings.WaveSizes.Add(5);
+        // StageOneSettings.WaveSizes.Add(6);
+        // StageOneSettings.WaveSizes.Add(7);
+        // StageOneSettings.WaveSizes.Add(7);
 
         StageOneSettings.bossWaveIndex = StageOneSettings.WaveSizes.Count;
         if(!BattleSystem.EnemyLibraryEmpty()){
@@ -154,7 +161,8 @@ public class WaveRandomizer : MonoBehaviour
             this.EnemyNameLibrary.Add(StageOneSettings.BossSettings.name);
 
             List<EnemySettings> NewStageOneEnemies = new List<EnemySettings>();
-            NewStageOneEnemies = RandomizeStageOneEnemies(15);
+            // NewStageOneEnemies = RandomizeStageOneEnemies(15);
+            NewStageOneEnemies = RandomizeStageOneEnemies(1);
             NewStageOneEnemies.Add(StageOneSettings.BossSettings);
 
             BattleSystem.InitNewEnemyLibraryStage(0, NewStageOneEnemies);
@@ -254,7 +262,11 @@ public class WaveRandomizer : MonoBehaviour
 
         return Res;
     }
+#endregion
 
+    
+
+#region Stage 2 Setup
     private void SetupStageTwo(){
         StageSettings StageTwoSettings = new StageSettings();
         int myStageIndex = 1;
@@ -428,6 +440,9 @@ public class WaveRandomizer : MonoBehaviour
 
         return Res;
     }
+#endregion
+
+
 
     private EnemySettings InitAttackLibrary(EnemySettings Res, int minLength, int maxLength, int codingsPerAbility){
         Res.minAttackSequenceLength = minLength;

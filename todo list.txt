@@ -11,7 +11,8 @@ Bugs - BattleSystem:
  > Shows LV 1 Heat after Nextwave
  > Next Stage doesnt reset Heat Level
  > Next Stage Doesnt reset BattleSpeed
-
+ > 3 Shield, 0 hp enemy didnt die on 3rd shield broken(used lvl weapon with 4 apr)
+ > going to stage 2 started endless loop (-||-)
 
 mini - BattleSystem:
  > Boss heals for x amount of shields broken or perfect blocks

@@ -23,6 +23,7 @@ public class GameHandler : MonoBehaviour
     [HideInInspector] public Armor PlayerArmor;
 
     private List<List<EnemySettings>> EnemyLibrary;
+    private int currentHighestStage = 1;
 
     public int earnedCredits;
 
@@ -37,6 +38,8 @@ public class GameHandler : MonoBehaviour
     void Awake(){
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        this.currentHighestStage = 1;
     }
 
     void OnSceneLoaded (Scene scene, LoadSceneMode mode){
@@ -51,6 +54,10 @@ public class GameHandler : MonoBehaviour
 
             case "Main Menu":
                 GameObject.Find("MenuHandler").GetComponent<NewMenuHandler>().StartSetup(this);
+            break;
+
+            case "Stage Select":
+                GameObject.Find("Stage Select Handler").GetComponent<StageSelectHandler>().StartSetup(this);
             break;
 
             case "Battle Scene":
@@ -82,6 +89,10 @@ public class GameHandler : MonoBehaviour
 
     public void LoadStartMenu(){
         SceneManager.LoadScene("Start Menu");
+    }
+
+    public void LoadStageSelect(){
+        SceneManager.LoadScene("Stage Select");
     }
 
     public void SetPlayer(PlayerCharacter P){
@@ -213,6 +224,15 @@ public class GameHandler : MonoBehaviour
                 this.EnemyLibrary[E.level-1][i] = E;
             }
         }
+    }
+#endregion
+
+#region Getter/Setter
+    public int GetCurrentHighestStage(){
+        return this.currentHighestStage;
+    }
+    public void SetCurrentHighestStage(int stage){
+        this.currentHighestStage = stage;
     }
 #endregion
 }

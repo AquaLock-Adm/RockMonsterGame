@@ -22,6 +22,7 @@ public class BattleSystem : MonoBehaviour
     public bool useBattleSpeed = false;
     public int enemyDefeatCount = 0;
     public int wavesClearedCount = 0;
+    public int startStage = 1;
 
     public WaveScript WaveScript;
     public bool useWaveScript = false;
@@ -104,6 +105,9 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] private bool setWeaponStartLevel = false;
     [SerializeField] private int testWeaponStartLevel = 1;
+
+    [SerializeField] private bool setStartStage = false;
+    [SerializeField] private int testStartStage = 1;
 
 
 
@@ -252,6 +256,13 @@ public class BattleSystem : MonoBehaviour
         this.ResultHandler.Setup(this);
     }
     private void SetWaveRandomizerInnerReferenzes(){
+        if(setStartStage){
+            if(testStartStage > WaveRandomizer.MAX_STAGES_CURRENTLY_AVAILABLE){
+                Debug.LogError("Error: MAX_STAGES_CURRENTLY_AVAILABLE: "+WaveRandomizer.MAX_STAGES_CURRENTLY_AVAILABLE.ToString());
+                testStartStage = startStage;
+            }
+            startStage = testStartStage;
+        }
         this.WaveRandomizer.Setup(this);
     }
     private GameObject GetSystemComponentGameObject(string componentName){
