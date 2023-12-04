@@ -11,3 +11,22 @@ block stamina for boss
 block break with extra damage
 
 
+Keep track of player input frequency, as in which blocks are used how often
+ > use it for Hase BossFight
+ > Track the last 100 moves in an array and keep count of how much each attack is used
+  > keep track of these counters while filling the array, saves compute time
+
+Add Improv attacks, these are rarely used(based on an enemy val) and come into play, when enemy attacks
+get frequently blocked. 
+ > Deal only half damage
+ > Counts of blocked attacks are indivual for each spawned enemy
+
+Engenia BossFight increases block ount each time she gets directly hit
+ > Don't forget about block stamina
+
+Rolling random attack patterns. find smallest demoninator and fill an array so that the lowest chance
+option is in the array once, then shuffle the array and roll the index
+
+try out disabling "Cancel Input", see how it feels
+
+make list of animal names and identifier names for enemies, keep ID's as hash
