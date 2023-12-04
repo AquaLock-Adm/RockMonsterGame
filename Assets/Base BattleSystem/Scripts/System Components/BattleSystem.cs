@@ -3,14 +3,11 @@
     Viele wichtige daten und referenzen werden hier gehalten und können per referenz auch von hier geholt werden.
 */
 
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public enum BattleState {SETUP, RUNNING, DIALOGUE, WAVEOVER, PLAYERDIED, ENEMYDIED, RESULT} // bsvg1
 
@@ -136,6 +133,7 @@ public class BattleSystem : MonoBehaviour
     public void GameStart(GameHandler GH){
         this.GameHandler = GH;
         this.state = BattleState.SETUP;
+        this.startStage = GH.GetCurrentStartStage();
         CheckEnemyLibraryInit();
         CheckDisplays();
         SetupEverything();

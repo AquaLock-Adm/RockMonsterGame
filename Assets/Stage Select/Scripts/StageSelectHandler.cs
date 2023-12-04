@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +11,8 @@ public class StageSelectHandler : MonoBehaviour
     [SerializeField] private int buttonIndex;
 
     [SerializeField] private List<StartMenuButton> buttonList = new List<StartMenuButton>();
+    [SerializeField] private StartMenuButton BackButton;
+    private bool backButtonHovered = false;
 
 
     void Awake(){
@@ -42,8 +43,10 @@ public class StageSelectHandler : MonoBehaviour
             buttonList.Add(B);
         }
 
+        this.backButtonHovered = false;
         this.buttonIndex = 0;
         this.buttonList[this.buttonIndex].HoverMenuButton();
+        this.BackButton.UnHoverMenuButton();
     }
 
     private void CheckPlayerInput(){
@@ -51,9 +54,28 @@ public class StageSelectHandler : MonoBehaviour
             OptionDown();
         }else if( Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) ){
             OptionUp();
+        }else if( Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) ){
+            HoverBackOption();
+        }else if( Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) ){
+            UnhoverBackoption();
         }else if( Input.GetKeyDown(KeyCode.Space) ){
             SelectStage();
         }
+    }
+
+    private void HoverBackOption(){
+        GameHandler.PlaySwitchMenuOptionSound();
+        this.buttonList[this.buttonIndex].UnHoverMenuButton();
+        BackButton.HoverMenuButton();
+        backButtonHovered = true;
+
+    }
+
+    private void UnhoverBackoption(){
+        GameHandler.PlaySwitchMenuOptionSound();
+        this.buttonList[this.buttonIndex].HoverMenuButton();
+        BackButton.UnHoverMenuButton();
+        backButtonHovered = false;
     }
 
     private void OptionDown(){
@@ -77,22 +99,11 @@ public class StageSelectHandler : MonoBehaviour
 
     private void SelectStage(){
         GameHandler.PlaySelectMenuOptionSound();
-        // switch(this.buttonIndex){
-        //     case 0:
-        //         StartGame();
-        //     break;
-
-        //     case 1:
-        //         StartTutorial();
-        //     break;
-
-        //     case 2:
-        //         QuitGame();
-        //     break;
-
-        //     default:
-        //         Debug.LogError("Error: Button Index Out Of Bounds!");
-        //     break;
-        // }
+        if(backButtonHovered){
+            GameHandler.LoadMainMenu();
+        }else{
+            GameHandler.SetCurrentStartStage(this.buttonIndex+1);
+            GameHandler.LoadBattleScene();
+        }
     }
 }

@@ -271,8 +271,8 @@ public class NewMenuHandler : MonoBehaviour
         // currentButtonIndex = 0;
         // MenuList[currentMenuIndex].SetActive(true);
         // CreateButtonList();
-        // GameHandler.LoadStageSelect();
-        GameHandler.LoadBattleScene();
+        GameHandler.LoadStageSelect();
+        // GameHandler.LoadBattleScene();
     }
 
     private void SubmitWeaponUpgrade()

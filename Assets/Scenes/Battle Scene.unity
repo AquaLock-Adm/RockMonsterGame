@@ -7556,7 +7556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
-  useBattleSpeed: 0
+  useBattleSpeed: 1
   enemyDefeatCount: 0
   wavesClearedCount: 0
   startStage: 1

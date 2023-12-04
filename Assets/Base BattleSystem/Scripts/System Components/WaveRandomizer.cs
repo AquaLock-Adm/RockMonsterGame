@@ -139,14 +139,14 @@ public class WaveRandomizer : MonoBehaviour
         StageSettings StageOneSettings = new StageSettings();
         int myStageIndex = 0;
 
-        StageOneSettings.WaveSizes.Add(1);
+        // StageOneSettings.WaveSizes.Add(1);
         
-        // StageOneSettings.WaveSizes.Add(3);
-        // StageOneSettings.WaveSizes.Add(4);
-        // StageOneSettings.WaveSizes.Add(5);
-        // StageOneSettings.WaveSizes.Add(6);
-        // StageOneSettings.WaveSizes.Add(7);
-        // StageOneSettings.WaveSizes.Add(7);
+        StageOneSettings.WaveSizes.Add(3);
+        StageOneSettings.WaveSizes.Add(4);
+        StageOneSettings.WaveSizes.Add(5);
+        StageOneSettings.WaveSizes.Add(6);
+        StageOneSettings.WaveSizes.Add(7);
+        StageOneSettings.WaveSizes.Add(7);
 
         StageOneSettings.bossWaveIndex = StageOneSettings.WaveSizes.Count;
         if(!BattleSystem.EnemyLibraryEmpty()){
@@ -218,9 +218,8 @@ public class WaveRandomizer : MonoBehaviour
 
         for(int enemyI = 0; enemyI < enemyCount; enemyI++){
             int ran = Random.Range(1, 101);
-            // if(ran <= shieldModeThreeChance_p) res.Add(RandomizeSingleStageOneEnemy(3));
-            // else res.Add(RandomizeSingleStageOneEnemy(2));
-            res.Add(RandomizeSingleStageOneEnemy(3));
+            if(ran <= shieldModeThreeChance_p) res.Add(RandomizeSingleStageOneEnemy(3));
+            else res.Add(RandomizeSingleStageOneEnemy(2));
         }
         return res;
     }

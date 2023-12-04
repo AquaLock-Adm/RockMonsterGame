@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
@@ -24,6 +21,7 @@ public class GameHandler : MonoBehaviour
 
     private List<List<EnemySettings>> EnemyLibrary;
     private int currentHighestStage = 1;
+    private int currentStartStage = 1;
 
     public int earnedCredits;
 
@@ -233,6 +231,12 @@ public class GameHandler : MonoBehaviour
     }
     public void SetCurrentHighestStage(int stage){
         this.currentHighestStage = stage;
+    }
+    public int GetCurrentStartStage(){
+        return this.currentStartStage;
+    }
+    public void SetCurrentStartStage(int stage){
+        this.currentStartStage = stage;
     }
 #endregion
 }
