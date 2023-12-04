@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -71,7 +70,6 @@ public class PlayerActionHandler : MonoBehaviour
 		this.Player = Player;
 		SetupHUDReferences(HUDReferences);
 		SetComboLevel();
-
 		CheckHeatChargeAvailability();
 		UpdateActionBoxList();
 		UpdateHeatBar();
@@ -403,6 +401,7 @@ public class PlayerActionHandler : MonoBehaviour
 		if(!Application.isPlaying) return;
 		this.currentHeat = 0;
 		this.comboLevel = 1;
+		this.currentMaxAttackLength = 1;
 		this.ComboLevelText.text = "Lv."+comboLevel.ToString();
 		UpdateHeatBar();
 		UpdateActionBoxList();

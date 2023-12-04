@@ -36,14 +36,13 @@ public class WaveRandomizer : MonoBehaviour
     }
 
     public void Setup(BattleSystem BS){
-        // TODO: Dont re randomize if level is restarted during normal play
         this.stageIndex = BS.startStage-1;
 
         this.BattleSystem = BS;
         SetupStageSettings();
         this.lastStageIndex = this.StageSettingsList.Count-1;
         if(this.lastStageIndex == 0) BattleSystem.finalStageReached = true;
-    }                                                       // TODO
+    }
 
     public void NextStage(){
         this.stageIndex++;
@@ -161,8 +160,8 @@ public class WaveRandomizer : MonoBehaviour
             this.EnemyNameLibrary.Add(StageOneSettings.BossSettings.name);
 
             List<EnemySettings> NewStageOneEnemies = new List<EnemySettings>();
-            // NewStageOneEnemies = RandomizeStageOneEnemies(15);
-            NewStageOneEnemies = RandomizeStageOneEnemies(1);
+            NewStageOneEnemies = RandomizeStageOneEnemies(15);
+            // NewStageOneEnemies = RandomizeStageOneEnemies(1);
             NewStageOneEnemies.Add(StageOneSettings.BossSettings);
 
             BattleSystem.InitNewEnemyLibraryStage(0, NewStageOneEnemies);
@@ -219,8 +218,9 @@ public class WaveRandomizer : MonoBehaviour
 
         for(int enemyI = 0; enemyI < enemyCount; enemyI++){
             int ran = Random.Range(1, 101);
-            if(ran <= shieldModeThreeChance_p) res.Add(RandomizeSingleStageOneEnemy(3));
-            else res.Add(RandomizeSingleStageOneEnemy(2));
+            // if(ran <= shieldModeThreeChance_p) res.Add(RandomizeSingleStageOneEnemy(3));
+            // else res.Add(RandomizeSingleStageOneEnemy(2));
+            res.Add(RandomizeSingleStageOneEnemy(3));
         }
         return res;
     }

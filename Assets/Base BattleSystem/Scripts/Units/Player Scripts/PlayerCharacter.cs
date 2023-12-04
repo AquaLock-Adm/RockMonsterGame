@@ -208,10 +208,7 @@ public class PlayerCharacter : Unit
     }
 
     public void UpdateNextRoundModeInfo(){
-        if(!BattleSystem.useBattleSpeed){
-            ResetBattleSpeed();
-            return;
-        }
+        if(!BattleSystem.useBattleSpeed) return;
 
         if(BattleSystem.Enemy == null || this.battleSpeed >= BattleSystem.Enemy.battleSpeed){
             this.NextRoundModeInfoText.text = "ATK";

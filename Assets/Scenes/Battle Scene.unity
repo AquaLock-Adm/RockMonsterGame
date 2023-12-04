@@ -7556,7 +7556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
-  useBattleSpeed: 1
+  useBattleSpeed: 0
   enemyDefeatCount: 0
   wavesClearedCount: 0
   startStage: 1
@@ -7594,7 +7594,7 @@ MonoBehaviour:
   InputDarkFilter: {fileID: 1536168137}
   PauseScreen: {fileID: 1038482426}
   log1: 
-  setWeaponStartLevel: 1
+  setWeaponStartLevel: 0
   testWeaponStartLevel: 10
   setStartStage: 0
   testStartStage: 1
