@@ -421,6 +421,7 @@ public class BattleSystem : MonoBehaviour
     }
 
     public async void WaveOver(){
+        this.earnedCredits += WaveRandomizer.GetCurrentWaveClearRewardCredits();
         this.Player.StopQueue();
         this.state = BattleState.WAVEOVER;
         this.Player.state = PlayerState.WAITING;

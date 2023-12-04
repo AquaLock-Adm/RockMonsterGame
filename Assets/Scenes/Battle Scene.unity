@@ -7594,7 +7594,7 @@ MonoBehaviour:
   InputDarkFilter: {fileID: 1536168137}
   PauseScreen: {fileID: 1038482426}
   log1: 
-  setWeaponStartLevel: 0
+  setWeaponStartLevel: 1
   testWeaponStartLevel: 10
   setStartStage: 0
   testStartStage: 1

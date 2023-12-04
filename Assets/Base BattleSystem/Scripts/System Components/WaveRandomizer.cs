@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ public class WaveRandomizer : MonoBehaviour
     private class StageSettings{
         public List<int> WaveSizes = new List<int>();
         public int bossWaveIndex;
+        public int standartWaveRewardCredits;
+        public int afterStageClearWaveRewardCredits;
         public int afterStageClearedWaveSize;
         public int enemiesFromLowerStage = 0;
         public EnemySettings BossSettings;
@@ -102,6 +103,18 @@ public class WaveRandomizer : MonoBehaviour
         return res;
     }
 
+    public int GetCurrentWaveClearRewardCredits(){
+        StageSettings CurrentStageSettings = this.StageSettingsList[this.stageIndex];
+        int reward = 0;
+
+        if (this.waveIndex-1 < CurrentStageSettings.bossWaveIndex){
+            reward = CurrentStageSettings.standartWaveRewardCredits;
+        }else if(this.waveIndex-1 > this.StageSettingsList[this.stageIndex].bossWaveIndex){
+            reward = CurrentStageSettings.afterStageClearWaveRewardCredits;
+        }
+        return reward;
+    }
+
     private List<EnemySettings> AddLowerStageEnemies(List<EnemySettings> Pool, StageSettings sSettings){
         int bossIndex = BattleSystem.GetSettingsIndexByName(this.StageSettingsList[this.stageIndex-1].BossSettings.name, this.stageIndex-1);
         List<EnemySettings> lowEn = SelectRandomEnemiesFrom(BattleSystem.GetAllEnemiesFromStage(this.stageIndex-1), sSettings.enemiesFromLowerStage, bossIndex);
@@ -167,6 +180,9 @@ public class WaveRandomizer : MonoBehaviour
             BattleSystem.InitNewEnemyLibraryStage(0, NewStageOneEnemies);
         }
 
+        StageOneSettings.standartWaveRewardCredits = 150;
+        StageOneSettings.afterStageClearWaveRewardCredits = 220;
+
         StageOneSettings.afterStageClearedWaveSize = 10;
 
         this.StageSettingsList.Add(StageOneSettings);
@@ -187,23 +203,23 @@ public class WaveRandomizer : MonoBehaviour
         defMode3.Add(ShieldMode.LIGHT);
         defMode3.Add(ShieldMode.LIGHT);
 
-        bossSettings = InitDefensiveMode(bossSettings);
+        bossSettings.InitDefensiveMode();
 
         bossSettings.DefensiveModes[0].Add(defMode1);
         bossSettings.DefensiveModes[0].Add(defMode2);
         bossSettings.DefensiveModes[0].Add(defMode3);
-
-        bossSettings = InitDiscoveredShieldsList(bossSettings, bossSettings.DefensiveModes[0].Count);
+        // bossSettings.InitDiscoveredShieldsList(bossSettings.DefensiveModes[0].Count);
+        bossSettings.InitDiscoveredShieldsList();
 
         bossSettings.defensiveModeIndex = Random.Range(0,3);
 
-        bossSettings = InitAttackLibrary(bossSettings, 1, 3, 2);
+        bossSettings.InitAttackLibrary(1, 3, 5);
 
         bossSettings.name = GetStageOneBossName();
         bossSettings.damage = 3;
         bossSettings.level = 1;
         bossSettings.hp = 120;
-        bossSettings.battleSpeed = 7;
+        bossSettings.battleSpeed = 6;
         bossSettings.baseKillPrice = 1000;
         bossSettings.maxKillPrice = 10000;
 
@@ -238,24 +254,26 @@ public class WaveRandomizer : MonoBehaviour
         }
 
         List<ShieldMode> Shields = RandomizeShields(shieldCount, 50);
-        Res = InitDefensiveMode(Res);
+        Res.InitDefensiveMode();
         Res.DefensiveModes[0].Add(Shields);
-        Res = InitDiscoveredShieldsList(Res, Shields.Count);
+
+        Res.InitDiscoveredShieldsList();
+        // Res.InitDiscoveredShieldsList(Shields.Count);   // <- this is wrong (((I think))) 
 
         Res.name = name;
         Res.level = 1;
         Res.hp = hp;
-        Res.battleSpeed = 3;
+        Res.battleSpeed = 4;
 
         if(shieldCount >= 3){
-            Res = InitAttackLibrary(Res, 1, 2, 1);
-            Res.baseKillPrice = 20;
-            Res.maxKillPrice = 800;
+            Res.InitAttackLibrary(1, 2, 3);
+            Res.baseKillPrice = 23;
+            Res.maxKillPrice = 200;
             Res.damage = 4;
         }else{
-            Res = InitAttackLibrary(Res, 1, 2, 1);
-            Res.baseKillPrice = 5;
-            Res.maxKillPrice = 400;
+            Res.InitAttackLibrary(1, 2, 3);
+            Res.baseKillPrice = 15;
+            Res.maxKillPrice = 100;
             Res.damage = 2;
         }
 
@@ -298,6 +316,10 @@ public class WaveRandomizer : MonoBehaviour
         }
 
         StageTwoSettings.enemiesFromLowerStage = 5;
+
+        StageTwoSettings.standartWaveRewardCredits = 300;
+        StageTwoSettings.afterStageClearWaveRewardCredits = 440;
+
         StageTwoSettings.afterStageClearedWaveSize = 20;
 
         this.StageSettingsList.Add(StageTwoSettings);
@@ -338,7 +360,7 @@ public class WaveRandomizer : MonoBehaviour
         defMode5.Add(ShieldMode.ANY);
         defMode5.Add(ShieldMode.ANY);
 
-        bossSettings = InitDefensiveMode(bossSettings);
+        bossSettings.InitDefensiveMode();
 
         bossSettings.DefensiveModes[0].Add(defMode1);
         bossSettings.DefensiveModes[0].Add(defMode2);
@@ -346,15 +368,17 @@ public class WaveRandomizer : MonoBehaviour
         bossSettings.DefensiveModes[0].Add(defMode4);
         bossSettings.DefensiveModes[0].Add(defMode5);
 
-        bossSettings = InitDiscoveredShieldsList(bossSettings, bossSettings.DefensiveModes[0].Count);
+        bossSettings.InitDiscoveredShieldsList();
 
         bossSettings.defensiveModeIndex = Random.Range(0,bossSettings.DefensiveModes[0].Count);
 
-        bossSettings = InitAttackLibrary(bossSettings, 2, 5, 3);
+        // bossSettings = InitAttackLibrary(bossSettings, 2, 5, 3);
+        bossSettings.InitAttackLibrary(2, 5, 6);
 
         bossSettings.name = GetStageTwoBossName();
         bossSettings.level = 2;
         bossSettings.hp = 4000;
+        bossSettings.battleSpeed = 6;
         bossSettings.baseKillPrice = 4000;
         bossSettings.maxKillPrice = 40000;
 
@@ -364,7 +388,7 @@ public class WaveRandomizer : MonoBehaviour
         return "DE556";
     }
     private List<EnemySettings> RandomizeStageTwoEnemies(int enemyCount){
-        List<EnemySettings> res = new List<EnemySettings>();
+        List<EnemySettings> Res = new List<EnemySettings>();
         int shieldModeFourChance_p = 30;
         int defensiveModesThreeChance_p = 30;
 
@@ -379,9 +403,9 @@ public class WaveRandomizer : MonoBehaviour
                 if(ran <= defensiveModesThreeChance_p) defensiveModeCount = 3;
             }
 
-            res.Add(RandomizeSingleStageTwoEnemy(shieldCount, defensiveModeCount));
+            Res.Add(RandomizeSingleStageTwoEnemy(shieldCount, defensiveModeCount));
         }
-        return res;
+        return Res;
     }
     private EnemySettings RandomizeSingleStageTwoEnemy(int shieldCount, int defensiveModeCount){
         /*
@@ -416,9 +440,10 @@ public class WaveRandomizer : MonoBehaviour
         }
 
         List<ShieldMode> Shields = RandomizeShields(shieldCount, greyShield_p);
-        Res = InitDefensiveMode(Res);
+        Res.InitDefensiveMode();
         Res.DefensiveModes[0].Add(Shields);
-        Res = InitDiscoveredShieldsList(Res, Shields.Count);
+
+        Res.InitDiscoveredShieldsList();
 
         Res.name = name;
         Res.level = 2;
@@ -426,15 +451,15 @@ public class WaveRandomizer : MonoBehaviour
         Res.battleSpeed = 5;
 
         if(shieldCount > 3){
-            Res.baseKillPrice = 55;
-            Res.maxKillPrice = 2000;
+            Res.baseKillPrice = 70;
+            Res.maxKillPrice = 700;
             Res.damage = 7;
-            Res = InitAttackLibrary(Res, 1, 4, 1);
+            Res.InitAttackLibrary(1, 4, 3);
         }else{
-            Res.baseKillPrice = 12;
-            Res.maxKillPrice = 1000;
+            Res.baseKillPrice = 45;
+            Res.maxKillPrice = 480;
             Res.damage = 6;
-            Res = InitAttackLibrary(Res, 1, 4, 2);
+            Res.InitAttackLibrary(1, 4, 4);
         }
 
         return Res;
@@ -442,82 +467,6 @@ public class WaveRandomizer : MonoBehaviour
 #endregion
 
 
-
-    private EnemySettings InitAttackLibrary(EnemySettings Res, int minLength, int maxLength, int codingsPerAbility){
-        Res.minAttackSequenceLength = minLength;
-        Res.maxAttackSequenceLength = maxLength;
-
-        HashSet<char> usedLetters = new HashSet<char>();
-        Dictionary<AbilityType, EnemyAttack> AttackLibrary = new Dictionary<AbilityType, EnemyAttack>();
-
-        EnemyAttack lightAttack = GetNewEnemyAttack(AbilityType.LIGHT, codingsPerAbility, usedLetters);
-        AttackLibrary[AbilityType.LIGHT] = lightAttack;
-
-        EnemyAttack heavyAttack = GetNewEnemyAttack(AbilityType.HEAVY, codingsPerAbility, usedLetters);
-        AttackLibrary[AbilityType.HEAVY] = heavyAttack;
-
-        EnemyAttack specialAttack = GetNewEnemyAttack(AbilityType.SPECIAL, codingsPerAbility, usedLetters);
-        AttackLibrary[AbilityType.SPECIAL] = specialAttack;
-
-        Res.AttackLibrary = AttackLibrary;
-
-        return Res;
-    }
-
-    private EnemyAttack GetNewEnemyAttack(AbilityType aType, int codingsPerAbility, HashSet<char> usedLetters){
-        EnemyAttack EA = new EnemyAttack();
-        EA.abilityType = aType;
-        EA.discovered = new Dictionary<char, bool>();
-        List<char> codings = new List<char>();
-
-        for(int i=0;i<codingsPerAbility;i++){
-            char code = ' ';
-            int tries = 0;
-
-            do{
-                int letterIndex = Random.Range(0,26);
-                code = ALPHABET[letterIndex];
-                tries++;
-            }while(!usedLetters.Add(code) && tries < MAX_TRIES_FOR_LOOP);
-            if(tries >= MAX_TRIES_FOR_LOOP) code = GetCodeSimple(usedLetters);
-            codings.Add(code);
-            EA.discovered.Add(code,false);
-        }
-
-        EA.codings = codings;
-        return EA;
-    }
-
-    private char GetCodeSimple(HashSet<char> usedLetters){
-        for(int i = 0; i< ALPHABET.Length; i++){
-            if(usedLetters.Add(ALPHABET[i])) return ALPHABET[i];
-        }
-        Debug.LogError("All Letters of the alphabet used!");
-        return ' ';
-    }
-
-    private EnemySettings InitDefensiveMode(EnemySettings Settings){
-        Settings.DefensiveModes[0] = new List<List<ShieldMode>>();
-        Settings.DefensiveModes[1] = new List<List<ShieldMode>>();
-
-        return Settings;
-    }
-
-    private EnemySettings InitDiscoveredShieldsList(EnemySettings Settings,int listCount){
-        for(int i=0;i<listCount;i++){
-            Settings.DefensiveModes[1].Add(new List<ShieldMode>());
-        }
-        return Settings;
-    }
-
-    private List<EnemySettings> GetEnemyLibraryFromBattleSystem(int stageIndex, string bossName){
-        List<EnemySettings> res = new List<EnemySettings>();
-
-        foreach(EnemySettings E in BattleSystem.GetAllEnemiesFromStage(stageIndex)){
-            if(E.name != bossName) res.Add(E);
-        }
-        return res;
-    }
 
     private void AddNamesToNameLibrary(List<EnemySettings> EList){
         foreach(EnemySettings E in EList){

@@ -1,62 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
-public class EnemySettings{
-    public int level;
-    public string name;
-    public int hp;
-
-    public int damage;
-    public int battleSpeed;
-
-    public int baseKillPrice;
-    public int maxKillPrice;
-
-    public List<List<ShieldMode>>[] DefensiveModes = new List<List<ShieldMode>>[2];
-    public int defensiveModeIndex = 0;
-
-    public Dictionary<AbilityType, EnemyAttack> AttackLibrary;
-
-    public int minAttackSequenceLength = 0;
-    public int maxAttackSequenceLength = 3;
-
-    public void CopyFromEnemyPrefab(GameObject Prefab){
-        Enemy PrefabEnemy = Prefab.GetComponent<Enemy>();
-
-        this.damage = PrefabEnemy.GetDamage();
-        this.battleSpeed = PrefabEnemy.GetBattleSpeed();
-        this.level = PrefabEnemy.GetLevel();
-        this.name = PrefabEnemy.unitName;
-        this.hp = PrefabEnemy.healthPoints;
-
-        this.DefensiveModes = PrefabEnemy.GetDefensiveModes();
-        this.defensiveModeIndex = PrefabEnemy.GetDefensiveModeIndex();
-
-        this.AttackLibrary = PrefabEnemy.GetAttackLibrary();
-        this.minAttackSequenceLength = PrefabEnemy.GetMinAttackSequenceLength();
-        this.maxAttackSequenceLength = PrefabEnemy.GetMaxAttackSequenceLength();
-    }
-}
-
-public class EnemyAttack{
-    public AbilityType abilityType;
-    public List<char> codings = new List<char>();
-    public Dictionary<char, bool> discovered = new Dictionary<char, bool>();
-
-    public override string ToString(){
-        string s = "";
-        s += this.abilityType.ToString() +": ";
-        foreach(char c in this.codings){
-            s += c.ToString() + " - ";
-            s += this.discovered[c].ToString()+" | ";
-        }
-        return s;
-    }
-}
 
 public enum ShieldMode{
     LIGHT,
