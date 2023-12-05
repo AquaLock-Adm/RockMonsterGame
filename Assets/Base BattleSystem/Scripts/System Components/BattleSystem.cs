@@ -321,6 +321,7 @@ public class BattleSystem : MonoBehaviour
 
 #region BattleSequence Functions
     public void PassRound(){
+        Enemy.PassRound();
         Player.StartActionQueue();
     }
     public void NextRound(){

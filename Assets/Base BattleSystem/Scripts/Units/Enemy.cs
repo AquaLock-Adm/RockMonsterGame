@@ -30,7 +30,7 @@ public class Enemy : Unit
     [SerializeField] private Color LightShieldColor;
     [SerializeField] private Color HeavyShieldColor;
     [SerializeField] private Color SpecialShieldColor;
-    [SerializeField] private Color AnyShieldColor;
+    [SerializeField] protected Color AnyShieldColor;
     [SerializeField] private Color RandomShieldColor;
     [SerializeField] private Color UnknownShieldColor;
 
@@ -41,7 +41,7 @@ public class Enemy : Unit
     [SerializeField] private int damageTextIndex = 0;
     protected int displayingDamageTextCount = 0;
 
-    [SerializeField] private bool critTaken = false;
+    [SerializeField] protected bool critTaken = false;
     [SerializeField] protected bool heldByCombo = false;
 
     private int attackRushMin = 0;
@@ -60,6 +60,11 @@ public class Enemy : Unit
 
     [SerializeField] private int damage;
 
+    public int heatGainedFromBlocks = 0;
+    public int speedGainedFromPerfectAttacks = 2;
+    public int speedGainedFromPerfectBlocks = 2;
+    public int speedLostFromBadBlocks = 1;
+
     [SerializeField] private int killPrice = 0;
     [SerializeField] private int maxKillPrice = 0; // at 400% HP damage dealt as overkill 
 
@@ -72,14 +77,14 @@ public class Enemy : Unit
     public List<List<ShieldMode>>[] DefensiveModes = new List<List<ShieldMode>>[2]; // DefensiveModes[0] => CurrentShieldModesList / DefensiveModes[1] => CurrentDiscoveredShieldsList
     [SerializeField] private int defensiveModeIndex = 0;
 
-    [SerializeField] private List<ShieldMode> CurrentShieldModes = new List<ShieldMode>();
+    [SerializeField] protected List<ShieldMode> CurrentShieldModes = new List<ShieldMode>();
     [SerializeField] private List<ShieldMode> CurrentDiscoveredShields = new List<ShieldMode>();
     public ShieldMode nextShield;
-    private int shieldModeIndex = 0;
+    protected int shieldModeIndex = 0;
 
     [Header("Attack Mode")]
 
-    [SerializeField] private int enemyAttacksExecuted = 0;
+    [SerializeField] protected int enemyAttacksExecuted = 0;
 
     private const int ATTACK_SEQUENCE_LENGTH_INCREASE_INTERVAL = 2;
 
@@ -111,6 +116,11 @@ public class Enemy : Unit
         Used in Child classes to use functions on void Update()
         */
     }
+
+    public virtual void PassRound(){
+        // Called when passRound is called by player
+        // used for change in child classes
+    } // changed in: Enginia.cs
 
     // changed in Enemy_Tutorial.cs
     public override async Task Death(){
@@ -203,16 +213,17 @@ public class Enemy : Unit
         HpSlider.maxValue = maxHealthPoints;
     }
 
-    public void SwitchBattleModes(bool playerInDefendMode){
+    public virtual void SwitchBattleModes(bool playerInDefendMode){
+        Debug.Log("Todo: Wrong after BattleSpeed Update");
         if(playerInDefendMode) {
-            ResetAttackSequence();
+            ResetAttackSequence();          // <-- this is correct I think
             SetShieldVisualizer(false);
         }else{
-            this.enemyAttacksExecuted++;
+            this.enemyAttacksExecuted++;    // <-- this is stupid though
             SetAttackVisualizer(false);
             SetShieldVisualizer(true);
         }
-    }
+    } // changed in Engenia.cs
 
     public async Task<bool> HandleAction(Action A){
         A.SetEnemy(this);
@@ -235,7 +246,7 @@ public class Enemy : Unit
 
 
 #region When enemy is defending
-    private async Task<bool> HandleAttackAction(Action A){
+    protected virtual async Task<bool> HandleAttackAction(Action A){
         bool addHeat = false;
         bool hitDetect = false;
 
@@ -259,9 +270,9 @@ public class Enemy : Unit
         if(this.deathTriggered) A.TriggerOnDeath();
         this.critTaken = false;
         return addHeat;
-    }
+    } // changed in: Enginia.cs
 
-    private bool CheckShieldMode(AbilityType aType){
+    protected virtual bool CheckShieldMode(AbilityType aType){
         bool addHeat = false;
         if(this.CurrentShieldModes[this.shieldModeIndex] == ShieldMode.ANY || (int)aType == (int)this.CurrentShieldModes[this.shieldModeIndex]){
             this.shieldModeIndex++;
@@ -274,7 +285,7 @@ public class Enemy : Unit
         else this.nextShield = ShieldMode.NONE;
         SetShieldVisualizer(true);
         return addHeat;
-    }
+    } // changed in Engenia.cs
 
     public int DealDamage(int dmg){
         int damageDealt = 0;
@@ -308,7 +319,9 @@ public class Enemy : Unit
             if(this.nextShield == ShieldMode.NONE) RotateShieldModes();
 
             this.shieldModeIndex = 0;
-            this.nextShield = this.CurrentShieldModes[0];
+            if(this.CurrentShieldModes.Count > 0){
+                this.nextShield = this.CurrentShieldModes[0];
+            }
             SetShieldVisualizer(true);
         }
     }
@@ -387,11 +400,11 @@ public class Enemy : Unit
         if(this.CurrentDiscoveredShields.Count < this.CurrentShieldModes.Count) InitCurrentDiscoveredShields();
     }
 
-    private void SetShieldVisualizer(bool on){
+    protected void SetShieldVisualizer(bool on){
         this.NextShieldVis.SetActive(on);
         this.MiniShieldCol.SetActive(on);
 
-        if(!on)return;
+        if(!on) return;
 
         SetMiniShields();
 
@@ -432,7 +445,7 @@ public class Enemy : Unit
         }
     }
 
-    private Color GetMiniShieldColor(int shieldIndex){
+    protected virtual Color GetMiniShieldColor(int shieldIndex){
         if(shieldIndex > this.CurrentDiscoveredShields.Count){
             Debug.LogError("Index out of bounds!");
             return new Color();
@@ -463,7 +476,7 @@ public class Enemy : Unit
         }
 
         return res;
-    }
+    } // changed in: Engenia.cs
 #endregion
 
 
@@ -529,7 +542,7 @@ public class Enemy : Unit
         }
     }
 
-    private void SetAttackVisualizer(bool on){
+    protected void SetAttackVisualizer(bool on){
         ClearAttackTexts();
         this.AttackTextRow.SetActive(on);
         if(on){

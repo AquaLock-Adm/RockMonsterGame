@@ -4,10 +4,10 @@ ADDON - BattleSystem:
  > Add new Characters
  > Dual Mode
  > disable heat discharge if heat charge is disabled
- > Make the tutorial
  > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
 
 BALANCE - BattleSystem:
+ > Adjust heat needed for different heat levels, 3 -> 4 feels insane
 
 Bugs - BattleSystem:
  > going to stage 2 started endless loop (-||-) (?)

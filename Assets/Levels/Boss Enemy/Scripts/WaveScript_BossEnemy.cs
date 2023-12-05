@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,25 +21,24 @@ public class WaveScript_BossEnemy : WaveScript
 
     private void SetupBossEnemy(){
         this.EnemySettingsList = new List<EnemySettings>();
-        EnemySettings Enemy1 = new EnemySettings();
-        Enemy1.level = 1;
-        Enemy1.name = "Engenia";
-        Enemy1.hp = 100;
-        Enemy1.battleSpeed = 1;
+        EnemySettings Eng_Settings = new EnemySettings();
+        Eng_Settings.level = 1;
+        Eng_Settings.name = "Engenia";
+        Eng_Settings.hp = 100;
+        // Eng_Settings.battleSpeed = 5;
+        Eng_Settings.battleSpeed = 1;
 
-        Enemy1 = InitDefensiveMode(Enemy1);
+        Eng_Settings.InitDefensiveMode();
 
         List<ShieldMode> shields = new List<ShieldMode>();
         shields.Add(ShieldMode.ANY);
-        Enemy1.DefensiveModes[0].Add(shields);
 
-        InitDiscoveredShieldsList(Enemy1, 1);
+        Eng_Settings.DefensiveModes[0].Add(shields);
 
-        Enemy1.AttackLibrary = new Dictionary<AbilityType, EnemyAttack>(); 
+        Eng_Settings.InitDiscoveredShieldsList();
 
-        Enemy1.minAttackSequenceLength = 0;
-        Enemy1.maxAttackSequenceLength = 0;
+        Eng_Settings.InitAttackLibrary(1,1,3);
 
-        this.EnemySettingsList.Add(Enemy1);
+        this.EnemySettingsList.Add(Eng_Settings);
     }
 }

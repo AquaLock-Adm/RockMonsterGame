@@ -875,6 +875,8 @@ MonoBehaviour:
   unitName: Boss
   healthPoints: 100
   maxHealthPoints: 100
+  battleSpeed: 1
+  baseBattleSpeed: 5
   NameText: {fileID: 7558923083246192493}
   LevelText: {fileID: 3993717951689620272}
   HpSlider: {fileID: 3993717951553791709}
@@ -902,6 +904,10 @@ MonoBehaviour:
   timeAfterDeath: 200
   level: 1
   damage: 0
+  heatGainedFromBlocks: 0
+  speedGainedFromPerfectAttacks: 2
+  speedGainedFromPerfectBlocks: 2
+  speedLostFromBadBlocks: 1
   killPrice: 0
   maxKillPrice: 0
   itemDropChance: 0
@@ -913,6 +919,10 @@ MonoBehaviour:
   attackModeIndex: 0
   CurrentAttackSequence: 
   AttackSequenceChars: 
+  maxBlockStamina: 10
+  blockStamina: 20
+  freeAttackTurn: 0
+  currentBlockStringLength: 1
 --- !u!1 &3993717952647823814
 GameObject:
   m_ObjectHideFlags: 0

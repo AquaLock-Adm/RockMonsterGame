@@ -45,7 +45,7 @@ public class PlayerActionHandler : MonoBehaviour
 	[Header("Heat Parameters")]
 	private int currentHeat = 0;
 
-	[SerializeField] private int[] heatLimits = {0,1,2,12,50,90,120,220,500,0};
+	[SerializeField] private int[] heatLimits = {0,2,4,10,30,55,120,190,370,0};
 
 	[Header("Heat Charge Parameters")]
 	public bool heatChargeDone = false;
@@ -299,15 +299,11 @@ public class PlayerActionHandler : MonoBehaviour
 			if(addHeatAfterAttack){
 				perfectCounter++;
 				AddHeat();
-				if(perfectCounter > TargetEnemy.GetCurrentDefendSequenceLength()){
-					Player.battleSpeed += 1;
-					Player.UpdateNextRoundModeInfo();
-				}
 			}
 		}
 
 		if(perfectCounter > TargetEnemy.GetCurrentDefendSequenceLength()){
-			Player.battleSpeed += 1;
+			Player.battleSpeed += TargetEnemy.speedGainedFromPerfectAttacks;
 			Player.UpdateNextRoundModeInfo();
 		}
 	}	
@@ -330,13 +326,13 @@ public class PlayerActionHandler : MonoBehaviour
 			if(blockSuccessful){
 				perfectCounter++;
 			}else{
-				Player.battleSpeed -= 1;
+				Player.battleSpeed -= TargetEnemy.speedLostFromBadBlocks;
 				Player.UpdateNextRoundModeInfo();
 			}
 		}
 
 		if(perfectCounter >= TargetEnemy.GetCurrentAttackSequenceLength()){
-			Player.battleSpeed += 3;
+			Player.battleSpeed += TargetEnemy.speedGainedFromPerfectBlocks;
 			Player.UpdateNextRoundModeInfo();
 		}
 	}
