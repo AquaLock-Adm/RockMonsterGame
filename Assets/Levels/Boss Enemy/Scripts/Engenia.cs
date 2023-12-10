@@ -64,6 +64,7 @@ public class Engenia : Enemy
     }
 
     public override void PassRound(){
+        base.PassRound();
         if(BattleSystem.Player.defendModeActive){
             CreateAttackString();
         }else{

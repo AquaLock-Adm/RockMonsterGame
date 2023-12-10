@@ -58,6 +58,10 @@ public class GameHandler : MonoBehaviour
                 GameObject.Find("Stage Select Handler").GetComponent<StageSelectHandler>().StartSetup(this);
             break;
 
+            case "Ability Load Out":
+                GameObject.Find("Ability Loadout Handler").GetComponent<AbilityLoadoutHandler>().StartSetup(this);
+            break;
+
             case "Battle Scene":
             case "Tutorial":
             case "Boss Enemy Scene":

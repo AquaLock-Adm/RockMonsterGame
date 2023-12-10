@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Stage Select.unity
     guid: 6dfb1821fcd161342b40429ba78a5a14
+  - enabled: 1
+    path: Assets/Scenes/Ability Load Out.unity
+    guid: 46776b548a3917e4d9bee87b287afb2b
   m_configObjects: {}

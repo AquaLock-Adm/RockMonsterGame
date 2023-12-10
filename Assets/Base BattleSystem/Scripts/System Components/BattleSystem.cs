@@ -106,6 +106,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private bool setStartStage = false;
     [SerializeField] private int testStartStage = 1;
 
+    public bool useSetAbilities = true;
+
 
 
 #region Unity Functions
@@ -423,6 +425,7 @@ public class BattleSystem : MonoBehaviour
 
     public async void WaveOver(){
         this.earnedCredits += WaveRandomizer.GetCurrentWaveClearRewardCredits();
+        this.ResultHandler.ScoreText.text = this.ResultHandler.FormatIntegerCount(this.earnedCredits) + " Cd";
         this.Player.StopQueue();
         this.state = BattleState.WAVEOVER;
         this.Player.state = PlayerState.WAITING;

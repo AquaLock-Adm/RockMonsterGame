@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public enum PlayerState { WAITING, START, PLAYERTURN, QUEUE, ATTACKRUSH, DEAD }
@@ -30,6 +28,8 @@ public class PlayerCharacter : Unit
 
     public bool deathTriggered = false;
     private bool heatChargeAvailable = false;
+
+    public List<Action> SetAbilities = new List<Action>();
 
 
     #region overrides
@@ -275,6 +275,9 @@ public class PlayerCharacter : Unit
     public void Heal(int heal)
     {
         this.ResourceHandler.Heal(heal);
+    }
+    public void HealPercentual(int heal_p){
+        this.ResourceHandler.HealPercentual(heal_p);
     }
     #endregion
 

@@ -83,6 +83,11 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         UpdateHUDElements();
     }
 
+    public void HealPercentual(int heal_p){
+        int healAmount = (int)Mathf.Round( ((float)Player.maxHealthPoints/100f)*(float)heal_p );
+        Heal(healAmount);
+    }
+
 
 
 #region Health Drain

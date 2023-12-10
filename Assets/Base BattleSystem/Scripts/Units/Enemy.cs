@@ -95,6 +95,9 @@ public class Enemy : Unit
     private int maxAttackSequenceLength = 3;
     private int currentAttackSequenceLength = 3;
 
+    private int attackSequenceCount = 1;
+
+    [SerializeField] private List<List<AbilityType>> AttackSequences = new List<List<AbilityType>>();
     [SerializeField] private List<AbilityType> CurrentAttackSequence = new List<AbilityType>();
     [SerializeField] private List<char> AttackSequenceChars = new List<char>();
 
@@ -118,9 +121,8 @@ public class Enemy : Unit
     }
 
     public virtual void PassRound(){
-        // Called when passRound is called by player
-        // used for change in child classes
-    } // changed in: Enginia.cs
+        if(BattleSystem.Player.defendModeActive) this.enemyAttacksExecuted++;
+    } // changed in: Engenia.cs
 
     // changed in Enemy_Tutorial.cs
     public override async Task Death(){
@@ -214,12 +216,10 @@ public class Enemy : Unit
     }
 
     public virtual void SwitchBattleModes(bool playerInDefendMode){
-        Debug.Log("Todo: Wrong after BattleSpeed Update");
         if(playerInDefendMode) {
-            ResetAttackSequence();          // <-- this is correct I think
+            ResetAttackSequence();
             SetShieldVisualizer(false);
         }else{
-            this.enemyAttacksExecuted++;    // <-- this is stupid though
             SetAttackVisualizer(false);
             SetShieldVisualizer(true);
         }
@@ -260,8 +260,8 @@ public class Enemy : Unit
             }else {
                 hitDetect = true;
                 DealDamage(A.damage);
-                int lifeGain = (int)Mathf.Ceil(A.damage * ((float)A.Player.GetLifeSteal()/100.0f));
-                A.Player.Heal(lifeGain);
+                // int lifeGain = (int)Mathf.Ceil(A.damage * ((float)A.Player.GetLifeSteal()/100.0f));
+                A.Player.HealPercentual(5);
                 addHeat = true;
             }
         }
@@ -527,17 +527,26 @@ public class Enemy : Unit
     public void ResetAttackSequence(){
         this.attackModeIndex = 0;
         CalcAttackSequenceLength();
-        RollAttackSequence();
+        RollAttackSequences();
         SetAttackVisualizer(true);
     }
 
-    private void RollAttackSequence(){
-        this.CurrentAttackSequence = new List<AbilityType>();
+    private void RollAttackSequences(){
+        this.AttackSequences = new List<List<AbilityType>>();
+
+        for(int i=0; i < this.attackSequenceCount; i++){
+            List<AbilityType> NewAttackSequence = new List<AbilityType>();
+            for(int j=0; j< this.currentAttackSequenceLength;j++){
+                AbilityType a = GetRandomAttack();
+                NewAttackSequence.Add(a);
+            }
+            this.AttackSequences.Add(NewAttackSequence);
+        }
+
+        this.CurrentAttackSequence = this.AttackSequences[0];
         this.AttackSequenceChars = new List<char>();
 
-        for(int i=0; i< this.currentAttackSequenceLength;i++){
-            AbilityType a = GetRandomAttack();
-            this.CurrentAttackSequence.Add(a);
+        foreach(AbilityType a in this.CurrentAttackSequence){
             this.AttackSequenceChars.Add(GetRandomCharFor(a));
         }
     }
@@ -715,6 +724,10 @@ public class Enemy : Unit
 
 
 #region Getter - Setter Functions
+    public int GetCurrentAttackSequenceCount(){
+        return this.AttackSequences.Count;
+    }
+
     public int GetDamage(){
         return this.damage;
     }

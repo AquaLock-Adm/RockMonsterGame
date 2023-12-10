@@ -1,4 +1,7 @@
 ToDo:
+enable "Buy New Combos" + option in menu
+combo loadout
+Library visualizer
 
 ADDON - BattleSystem:
  > Add new Characters
@@ -7,10 +10,14 @@ ADDON - BattleSystem:
  > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
 
 BALANCE - BattleSystem:
- > Adjust heat needed for different heat levels, 3 -> 4 feels insane
+double heat for max level
+enemy damage up a bit
+how does lifesteal work again?
 
 Bugs - BattleSystem:
  > going to stage 2 started endless loop (-||-) (?)
+ > Game hung up at start of battlesystem after input test
+ > Enemy kill credits working?
 
 mini - BattleSystem:
  > Boss heals for x amount of shields broken or perfect blocks

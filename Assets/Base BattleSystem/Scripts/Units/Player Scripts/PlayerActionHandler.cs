@@ -38,6 +38,8 @@ public class PlayerActionHandler : MonoBehaviour
 
 	private Action CurrentComboAction;
 
+	private List<List<Action>> BlockSequencesList = new List<List<Action>>();
+
 	private bool stopQueue = false;
 
 	[SerializeField] private int afterComboDelay_ms = 500;
@@ -45,7 +47,7 @@ public class PlayerActionHandler : MonoBehaviour
 	[Header("Heat Parameters")]
 	private int currentHeat = 0;
 
-	[SerializeField] private int[] heatLimits = {0,2,4,10,30,55,120,190,370,0};
+	[SerializeField] private int[] heatLimits = {0,1,3,8,20,12,16,24,28,50,0};
 
 	[Header("Heat Charge Parameters")]
 	public bool heatChargeDone = false;
@@ -250,9 +252,25 @@ public class PlayerActionHandler : MonoBehaviour
         if(Player.state == PlayerState.START) {
             this.heatChargeDone = true;
         }
-        Player.state = PlayerState.QUEUE;
-        await ExecuteAllActions();
+        if(Player.defendModeActive && Player.BattleSystem.Enemy.GetCurrentAttackSequenceCount()-1 > this.BlockSequencesList.Count){
+        	AddActionsToBlockSequencesList();
+        	ClearActionQueue();
+			UpdateActionBoxList();
+			Player.LoadMainMenu();
+        }else{
+        	Player.state = PlayerState.QUEUE;
+        	await ExecuteAllActions();
+        }
     } // Changed in: PlayerAction_Tutorial.cs
+
+    private void AddActionsToBlockSequencesList(){
+    	List<Action> NewBlockSequence = new List<Action>();
+
+    	foreach(Action A in this.Actions){
+    		NewBlockSequence.Add(A);
+    	}
+    	this.BlockSequencesList.Add(NewBlockSequence);
+    }
 
 	protected async Task ExecuteAllActions(){
 		this.stopQueue = false;
@@ -332,6 +350,7 @@ public class PlayerActionHandler : MonoBehaviour
 		}
 
 		if(perfectCounter >= TargetEnemy.GetCurrentAttackSequenceLength()){
+			Player.HealPercentual(5);
 			Player.battleSpeed += TargetEnemy.speedGainedFromPerfectBlocks;
 			Player.UpdateNextRoundModeInfo();
 		}
