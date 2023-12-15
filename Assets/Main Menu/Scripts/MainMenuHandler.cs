@@ -2,25 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class NewMenuHandler : MonoBehaviour
+public class MainMenuHandler : StandartMenuHandler
 {
-    [SerializeField] private GameObject GameHandlerPrefab; 
-    private GameHandler GameHandler;
-    private PlayerCharacter Player;
-
-    private int currentButtonIndex = 0;
-    private int currentMenuIndex = 0;
-
-    [SerializeField] GameObject PlayerPrefab;
-    [SerializeField] GameObject WeaponPrefab;
-    [SerializeField] GameObject ArmorPrefab;
-
-    [SerializeField] private TextMeshProUGUI PlayerNameText, CreditsText, HealthText;
+    [Header("Main Menu Data")]
+    [SerializeField] private TextMeshProUGUI PlayerNameText;
+    [SerializeField] private TextMeshProUGUI CreditsText, HealthText;
     [SerializeField] private TextMeshProUGUI WeaponLvlText, AtkText, APRText, LifeDrainText, EnemyDotText, WeaponUpgradeCostText;
     [SerializeField] private TextMeshProUGUI NextWeaponLvlText, NextAtkText, NextAPRText, NextLifeDrainText, NextEnemyDotText;
     [SerializeField] private TextMeshProUGUI ArmorLvlText, HPText, ManaText, ManaRegText, ArmorUpgradeCostText;
@@ -29,32 +17,12 @@ public class NewMenuHandler : MonoBehaviour
     [SerializeField] private List<GameObject> ButtonList = new List<GameObject>();
     [SerializeField] private List<GameObject> MenuList = new List<GameObject>();
 
-    void Awake(){
-        GameObject GHGO = GameObject.Find("GameHandler");
-
-        if(GHGO == null){
-            if(this.GameHandlerPrefab == null){
-                Debug.LogError("No Game Handler Prefab Set!");
-                return;
-            }
-
-            GHGO = Instantiate(this.GameHandlerPrefab);
-            GHGO.name = "GameHandler";
-        }
-    }
-
-    void Update(){
-        CheckPlayerInput();
-    }
+    private int currentButtonIndex = 0;
+    private int currentMenuIndex = 0;
     
-    public void StartSetup(GameHandler GH)
+    public override void StartSetup(GameHandler GH)
     {
-        this.GameHandler = GH;
-        if(this.GameHandler.Player == null){
-            CreateNewPlayer();
-        }else{
-            Player = GameHandler.Player;
-        }
+        base.StartSetup(GH);
 
         CreateButtonList();
         SelectOption(1);
@@ -64,19 +32,30 @@ public class NewMenuHandler : MonoBehaviour
         UpdateArmorTexts();
     }
 
-    private void CreateNewPlayer() 
+    protected override void CheckPlayerInput()
     {
-        Debug.Log("Creating new player");
-        
-        Player = Instantiate(PlayerPrefab).GetComponent<PlayerCharacter>();
-
-        Weapon PlayerWeapon = Instantiate(WeaponPrefab).GetComponent<Weapon>();
-        this.GameHandler.PlayerWeapon = PlayerWeapon;
-        Armor PlayerArmor = Instantiate(ArmorPrefab).GetComponent<Armor>();
-        this.GameHandler.PlayerArmor = PlayerArmor;
-
-        Player.MenuSetup(PlayerWeapon, PlayerArmor);
-        this.GameHandler.SetPlayer(Player);
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            int lastButtonIndex = currentButtonIndex;
+            currentButtonIndex = (currentButtonIndex + 1) % ButtonList.Count;
+            GameHandler.PlaySwitchMenuOptionSound();
+            SelectOption(lastButtonIndex);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            int lastButtonIndex = currentButtonIndex;
+            currentButtonIndex = (currentButtonIndex - 1);
+            if (currentButtonIndex <= -1)
+            {
+                currentButtonIndex = ButtonList.Count - 1;
+            }
+            GameHandler.PlaySwitchMenuOptionSound();
+            SelectOption(lastButtonIndex);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SubmitOption();
+        }
     }
 
     private void CreateButtonList()
@@ -135,32 +114,6 @@ public class NewMenuHandler : MonoBehaviour
         NextHPText.text = Player.GetArmorHealth().ToString();
         NextManaText.text = Player.GetArmorMana().ToString();
         NextManaRegText.text = Player.GetArmorManaRegen().ToString();
-    }
-
-    private void CheckPlayerInput()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            int lastButtonIndex = currentButtonIndex;
-            currentButtonIndex = (currentButtonIndex + 1) % ButtonList.Count;
-            GameHandler.PlaySwitchMenuOptionSound();
-            SelectOption(lastButtonIndex);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            int lastButtonIndex = currentButtonIndex;
-            currentButtonIndex = (currentButtonIndex - 1);
-            if (currentButtonIndex <= -1)
-            {
-                currentButtonIndex = ButtonList.Count - 1;
-            }
-            GameHandler.PlaySwitchMenuOptionSound();
-            SelectOption(lastButtonIndex);
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SubmitOption();
-        }
     }
 
     private void SelectOption(int lastButtonIndex)

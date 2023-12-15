@@ -302,6 +302,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
+  PlayerPrefab: {fileID: 1636312507869965803, guid: d91024de69f14c544a5df9879c468c93, type: 3}
+  WeaponPrefab: {fileID: 7430779103724800017, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
+  ArmorPrefab: {fileID: 1825134985689378487, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
   StageOptionPrefab: {fileID: 3570748503440425100, guid: c9877d4537360314ea971e3f61ce565a, type: 3}
   MenuOptions_GO: {fileID: 69005694}
   buttonIndex: 0

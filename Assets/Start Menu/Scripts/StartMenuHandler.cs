@@ -3,36 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class StartMenuHandler : MonoBehaviour
+public class StartMenuHandler : StandartMenuHandler
 {
-    [SerializeField] private GameObject GameHandlerPrefab;
-
-    private GameHandler GameHandler;
-
+    [Header("Start Menu Data")]
     [SerializeField] private int buttonIndex;
-
     [SerializeField] private List<StartMenuButton> buttonList = new List<StartMenuButton>();
 
-    void Awake(){
-        GameObject GHGO = GameObject.Find("GameHandler");
-
-        if(GHGO == null){
-            if(this.GameHandlerPrefab == null){
-                Debug.LogError("No Game Handler Prefab Set!");
-                return;
-            }
-
-            GHGO = Instantiate(this.GameHandlerPrefab);
-            GHGO.name = "GameHandler";
-        }
-    }
-
-    void Update(){
-        CheckPlayerInput();
-    }
-
-    public void StartSetup(GameHandler GH){
-        this.GameHandler = GH;
+    public override void StartSetup(GameHandler GH){
+        base.StartSetup(GH);
 
         foreach(StartMenuButton B in this.buttonList){
             B.UnHoverMenuButton();
@@ -42,7 +20,7 @@ public class StartMenuHandler : MonoBehaviour
         this.buttonList[this.buttonIndex].HoverMenuButton();
     }
 
-    private void CheckPlayerInput(){
+    protected override void CheckPlayerInput(){
         if( Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow) ){
             OptionDown();
         }else if( Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) ){

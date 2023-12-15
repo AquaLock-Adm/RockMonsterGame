@@ -51,7 +51,7 @@ public class GameHandler : MonoBehaviour
             break;
 
             case "Main Menu":
-                GameObject.Find("MenuHandler").GetComponent<NewMenuHandler>().StartSetup(this);
+                GameObject.Find("MenuHandler").GetComponent<MainMenuHandler>().StartSetup(this);
             break;
 
             case "Stage Select":

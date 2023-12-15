@@ -40,11 +40,13 @@ public class Maria : Weapon
         List<Action> AbilityList = new List<Action>();
         int abilityIndex_c = 0;
         
-        if(!Player.BattleSystem.useSetAbilities){
-            AbilityList = GetCompleteMoveList();
-        }else{
-            AbilityList = Player.SetAbilities;
-        }
+        // if(!Player.BattleSystem.useSetAbilities){
+        //     AbilityList = GetCompleteMoveList();
+        // }else{
+        //     AbilityList = Player.SetAbilities;
+        // }
+
+        AbilityList = GetCompleteMoveList();
 
         foreach(Action A in AbilityList){
             A.abilityIndex = abilityIndex_c;
@@ -55,22 +57,27 @@ public class Maria : Weapon
 
     public override List<Action> GetCompleteMoveList(){
         List<Action> Actions_l = new List<Action>();
-
+        // Level 1
         Actions_l.Add(new Light(this.Player));
         Actions_l.Add(new Heavy(this.Player));
         Actions_l.Add(new Special(this.Player));
-
+        // Level 3
         Actions_l.Add(new Combo_A(this.Player));
-        Actions_l.Add(new Combo_A_2(this.Player));
-        Actions_l.Add(new Combo_A_3(this.Player));
-        Actions_l.Add(new Combo_A_4(this.Player));
-        Actions_l.Add(new Combo_A_5(this.Player));
-
         Actions_l.Add(new Combo_B(this.Player));
         Actions_l.Add(new Combo_C(this.Player));
         Actions_l.Add(new Combo_D(this.Player));
         Actions_l.Add(new Combo_E(this.Player));
         Actions_l.Add(new Combo_F(this.Player));
+        // Level 4
+        Actions_l.Add(new Combo_A_2(this.Player));
+        // Level 5
+        Actions_l.Add(new Combo_A_3(this.Player));
+        // Level 6
+        Actions_l.Add(new Combo_A_4(this.Player));
+        // Level 7
+        Actions_l.Add(new Combo_A_5(this.Player));
+
+        // WARNING! Sort entries by ComboLevel for Loadout Menu (I was too lazy to sort it there)
 
         return Actions_l;
     }

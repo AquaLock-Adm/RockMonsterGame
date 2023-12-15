@@ -1,40 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityLoadoutHandler : MonoBehaviour
+public class AbilityLoadoutHandler : StandartMenuHandler
 {
+    [Header("Ability Loadout Data")]
     [SerializeField] private GameObject ComboListOptionPrefab;
     [SerializeField] private GameObject ComboListOptionHeaderPrefab;
 
     [SerializeField] private GameObject ComboList_GO;
 
-    [SerializeField] private GameObject GameHandlerPrefab;
-
     private List<AbilityOptionButton> AbilityOptionButtons = new List<AbilityOptionButton>();
 
-    private GameHandler GameHandler;
-
-    void Awake(){
-        GameObject GHGO = GameObject.Find("GameHandler");
-
-        if(GHGO == null){
-            if(this.GameHandlerPrefab == null){
-                Debug.LogError("No Game Handler Prefab Set!");
-                return;
-            }
-
-            GHGO = Instantiate(this.GameHandlerPrefab);
-            GHGO.name = "GameHandler";
-        }
-    }
-
-    void Update(){
-        CheckPlayerInput();
-    }
-
-    public void StartSetup(GameHandler GH){
-        this.GameHandler = GH;
+    public override void StartSetup(GameHandler GH){
+        base.StartSetup(GH);
 
         SetupComboListOptions();
 
@@ -51,7 +29,7 @@ public class AbilityLoadoutHandler : MonoBehaviour
         // this.BackButton.UnHoverMenuButton();
     }
 
-    private void CheckPlayerInput(){
+    protected override void CheckPlayerInput(){
 
     }
 
@@ -64,7 +42,10 @@ public class AbilityLoadoutHandler : MonoBehaviour
                 Header_GO.GetComponent<StartMenuButton>().SetOptionText("Level "+A.comboLevel.ToString());
                 comboLevelDisplayed = A.comboLevel;
             }
-            Debug.Log("Spawn ComboList Item");
+            GameObject ComboOption_GO = Instantiate(ComboListOptionPrefab, ComboList_GO.transform);
+            AbilityOptionButton NewButton = ComboOption_GO.GetComponent<AbilityOptionButton>();
+            NewButton.SetOptionText(A.name);
+            AbilityOptionButtons.Add(NewButton);
         }
     }
 }

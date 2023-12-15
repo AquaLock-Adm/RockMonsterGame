@@ -264,6 +264,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameHandlerPrefab: {fileID: 8718979510780719478, guid: 4801fb90710b20f4fbf03a9a7a776319, type: 3}
+  PlayerPrefab: {fileID: 1636312507869965803, guid: d91024de69f14c544a5df9879c468c93, type: 3}
+  WeaponPrefab: {fileID: 7430779103724800017, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
+  ArmorPrefab: {fileID: 1825134985689378487, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
   buttonIndex: 0
   buttonList:
   - {fileID: 2083232011}
@@ -527,6 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893ea0d7a2a7b3b448210615b9f3b5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OptionText: {fileID: 0}
 --- !u!1 &441483557
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,6 +1112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893ea0d7a2a7b3b448210615b9f3b5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OptionText: {fileID: 0}
 --- !u!4 &1554337461
 Transform:
   m_ObjectHideFlags: 0
@@ -1747,3 +1752,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893ea0d7a2a7b3b448210615b9f3b5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OptionText: {fileID: 0}
