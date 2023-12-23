@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 // avg0
 public enum SpellElement {
@@ -61,6 +59,27 @@ public abstract class Action
 
     protected int timeBeforeAttackRush = 2000;
     protected float attackRushDamageScaling = 0.25f;
+
+    public override bool Equals(object obj){
+        if(obj == null) return false;
+        Action A_other = obj as Action;
+
+        if((object)A_other == null) {
+            return false;
+        }
+
+        return A_other.name == this.name;
+    }
+
+    public override int GetHashCode(){
+        return base.GetHashCode();
+    }
+
+    public bool Equals(Action A_other){
+        if(A_other == null) return false;
+
+        return A_other.name == this.name;
+    }
     
     public abstract void QueueAction(PlayerActionHandler AQ); // called when Action is queued into action queue
     public abstract void DequeueAction(PlayerActionHandler AQ); // called when action is dequeued from action queue
@@ -267,7 +286,7 @@ public class LowBlock : Action   // slower but more knockback
         this.name = "Low Block";
         this.cover = "Low";
         this.AbilityType = AbilityType.LIGHT;
-        this.totalTime = this.lightAttackStdTime;
+        this.totalTime = this.heavyAttackStdTime;
         this.Player = Player;
     }
 

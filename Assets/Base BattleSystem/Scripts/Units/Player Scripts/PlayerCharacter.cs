@@ -153,6 +153,10 @@ public class PlayerCharacter : Unit
         PlayerWeapon.Init(this);
         PlayerArmor.Init(this);
     }
+
+    public List<Action> GetStandartAbilitiesList(){
+        return this.Weapon.GetStandartAbilitiesList();
+    }
     #endregion
 
     public void CopyFrom(PlayerCharacter P_IN)

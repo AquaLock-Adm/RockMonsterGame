@@ -82,6 +82,22 @@ public class Maria : Weapon
         return Actions_l;
     }
 
+    public override List<Action> GetStandartAbilitiesList(){
+        List<Action> Actions_l = new List<Action>();
+        // Level 1
+        Actions_l.Add(new Light(this.Player));
+        Actions_l.Add(new Heavy(this.Player));
+        Actions_l.Add(new Special(this.Player));
+        // Level 3
+        Actions_l.Add(new Combo_A(this.Player));
+        Actions_l.Add(new Combo_B(this.Player));
+        Actions_l.Add(new Combo_C(this.Player));
+
+        // WARNING! Sort entries by ComboLevel for Loadout Menu (I was too lazy to sort it there)
+
+        return Actions_l;
+    }
+
     public override Action CombineActions(string comboList, List<Action> Actions_l){
         Action res;
         switch(comboList){

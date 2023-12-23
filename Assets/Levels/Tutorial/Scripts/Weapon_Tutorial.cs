@@ -39,6 +39,10 @@ public class Weapon_Tutorial : Weapon
         return Actions_l;
     }
 
+    public override List<Action> GetStandartAbilitiesList(){
+        return GetCompleteMoveList();
+    }
+
     public override Action CombineActions(string comboList, List<Action> Actions_l){
         Action res;
         switch(comboList){

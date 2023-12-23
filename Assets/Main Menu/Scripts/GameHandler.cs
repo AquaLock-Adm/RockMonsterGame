@@ -18,6 +18,8 @@ public class GameHandler : MonoBehaviour
     [HideInInspector] public PlayerCharacter Player;
     [HideInInspector] public Weapon PlayerWeapon;
     [HideInInspector] public Armor PlayerArmor;
+    [HideInInspector] public List<Action> SetAbilitiesList = new List<Action>();
+    [HideInInspector] public List<Action> UnlockedAbilitiesList = new List<Action>();
 
     private List<List<EnemySettings>> EnemyLibrary;
     private int currentHighestStage = 1;

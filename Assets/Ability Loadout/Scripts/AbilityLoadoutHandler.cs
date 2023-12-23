@@ -36,7 +36,9 @@ public class AbilityLoadoutHandler : StandartMenuHandler
     private void SetupComboListOptions(){
         int comboLevelDisplayed = 1;
         foreach(Action A in GameHandler.Player.GetWeapon().GetCompleteMoveList()){
+            // Skip Base Abilities (Light, Heavy, Special)
             if(A.comboLevel <= 1) continue;
+
             if(A.comboLevel > comboLevelDisplayed){
                 GameObject Header_GO = Instantiate(ComboListOptionHeaderPrefab, ComboList_GO.transform);
                 Header_GO.GetComponent<StartMenuButton>().SetOptionText("Level "+A.comboLevel.ToString());
@@ -45,6 +47,13 @@ public class AbilityLoadoutHandler : StandartMenuHandler
             GameObject ComboOption_GO = Instantiate(ComboListOptionPrefab, ComboList_GO.transform);
             AbilityOptionButton NewButton = ComboOption_GO.GetComponent<AbilityOptionButton>();
             NewButton.SetOptionText(A.name);
+            NewButton.AbilityLoadoutSetup();
+
+            if(GameHandler.SetAbilitiesList.Contains(A)) {
+                NewButton.ShowLockedStatus(false);
+                Debug.Log(A.name);
+            }
+
             AbilityOptionButtons.Add(NewButton);
         }
     }

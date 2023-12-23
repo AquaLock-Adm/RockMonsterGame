@@ -74,6 +74,8 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public abstract List<Action> GetCompleteMoveList();
+
+    public abstract List<Action> GetStandartAbilitiesList();
     // wf2
     public abstract Action CombineActions(string comboList, List<Action> Action_l);
     // wf3
