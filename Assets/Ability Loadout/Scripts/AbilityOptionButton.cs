@@ -14,14 +14,17 @@ public class AbilityOptionButton : StartMenuButton
 
     public void AbilityLoadoutSetup(){
         this.FillRect = this.Fill_GO.GetComponent<RectTransform>();
-        this.lockedWidth = this.FillRect.rect.width;
         this.unlockedWidth = gameObject.GetComponent<RectTransform>().rect.width - 10f;
-        // this.FillRect.sizeDelta = new Vector2(this.lockedWidth, FillRect.rect.height);
-        // this.FillRect.sizeDelta = new Vector2(0f, 0f);
-        this.Lock_GO.SetActive(true);
+        this.lockedWidth = this.unlockedWidth - this.Lock_GO.GetComponent<RectTransform>().rect.width-5;
+        ShowLockedStatus(true);
     }
 
     public void ShowLockedStatus(bool on){
-        Debug.Log("Todo!");
+        this.Lock_GO.SetActive(on);
+        if(on){
+            this.FillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.lockedWidth);
+        }else{
+            this.FillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.unlockedWidth);
+        }
     }
 }

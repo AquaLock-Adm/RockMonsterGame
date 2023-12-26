@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 2719175938497155059}
   - component: {fileID: 2929682745475401264}
   m_Layer: 0
-  m_Name: Combo List Option Header
+  m_Name: Header Combo List Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
