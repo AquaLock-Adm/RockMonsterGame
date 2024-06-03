@@ -48,4 +48,12 @@ public class AbilityOptionSelectBar : MonoBehaviour
         this.SelectTextList[textIndex].text = ">";
         this.CurrentHoveredText = this.SelectTextList[textIndex];
     }
+
+    public void HoverSelectBar(){
+        this.CurrentHoveredText.text = ">";
+    }
+
+    public void UnHoverSelectBar(){
+        this.CurrentHoveredText.text = "";
+    }
 }

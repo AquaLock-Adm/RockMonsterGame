@@ -400,6 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OptionText: {fileID: 2787559666003496895}
+  OptionRim_GO: {fileID: 2787559666471808088}
   Lock_GO: {fileID: 2787559666166839906}
   Fill_GO: {fileID: 2787559666834020039}
   lockedWidth: 0

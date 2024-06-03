@@ -181,14 +181,14 @@ public class PlayerControl : MonoBehaviour
 
             if (this.CurrentMenu == Menu.MAIN)
             {
-                if (Player.state == PlayerState.START && !Player.HeatChargeIsDone() && Player.GetCurrentActionCount() <= 0)
-                {
-                    HeatChargeInputs();
-                }
-                else if (Player.GetCurrentActionCount() <= 0)
-                {
-                    HeatDischargeInputs();
-                }
+                // if (Player.state == PlayerState.START && !Player.HeatChargeIsDone() && Player.GetCurrentActionCount() <= 0)
+                // {
+                //     HeatChargeInputs();
+                // }
+                // else if (Player.GetCurrentActionCount() <= 0)
+                // {
+                //     HeatDischargeInputs();
+                // }
                 NormalAttackCastInputs();
             }
             else if (this.CurrentMenu == Menu.FINALACTION)

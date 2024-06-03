@@ -1,283 +1,191 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
 public class MainMenuHandler : StandartMenuHandler
 {
-    [Header("Main Menu Data")]
-    [SerializeField] private TextMeshProUGUI PlayerNameText;
-    [SerializeField] private TextMeshProUGUI CreditsText, HealthText;
-    [SerializeField] private TextMeshProUGUI WeaponLvlText, AtkText, APRText, LifeDrainText, EnemyDotText, WeaponUpgradeCostText;
-    [SerializeField] private TextMeshProUGUI NextWeaponLvlText, NextAtkText, NextAPRText, NextLifeDrainText, NextEnemyDotText;
-    [SerializeField] private TextMeshProUGUI ArmorLvlText, HPText, ManaText, ManaRegText, ArmorUpgradeCostText;
-    [SerializeField] private TextMeshProUGUI NextArmorLvlText, NextHPText, NextManaText, NextManaRegText;
-    
-    [SerializeField] private List<GameObject> ButtonList = new List<GameObject>();
-    [SerializeField] private List<GameObject> MenuList = new List<GameObject>();
+    [Header("Main Menu Text Ref")]
+    [SerializeField] private TextMeshProUGUI CreditsText;
+    [SerializeField] private TextMeshProUGUI CreditsCostText;
+    [SerializeField] private TextMeshProUGUI StageText;
+    [SerializeField] private TextMeshProUGUI CharNameText;
+    [SerializeField] private TextMeshProUGUI ArmorLVText;
+    [SerializeField] private TextMeshProUGUI HPText;
+    [SerializeField] private TextMeshProUGUI NextHPText;
+    [SerializeField] private TextMeshProUGUI WeaponLVText;
+    [SerializeField] private TextMeshProUGUI ATKText;
+    [SerializeField] private TextMeshProUGUI NextATKText;
 
-    private int currentButtonIndex = 0;
-    private int currentMenuIndex = 0;
-    
-    public override void StartSetup(GameHandler GH)
-    {
+    [Header("Main Menu Button Ref")]
+    [SerializeField] private List<StartMenuButton> MenuButtonList;
+    [SerializeField] private StartMenuButton BackButton;
+
+    private int buttonIndex = 0;
+    private bool backButtonHovered = false;
+
+    public override void StartSetup(GameHandler GH){
         base.StartSetup(GH);
+        UpdateAllTexts();
+        ClearNextLVLTexts();
 
-        CreateButtonList();
-        SelectOption(1);
-
-        UpdatePlayerTexts();
-        UpdateWeaponTexts();
-        UpdateArmorTexts();
+        SetupMenuButtons();
     }
 
-    protected override void CheckPlayerInput()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            int lastButtonIndex = currentButtonIndex;
-            currentButtonIndex = (currentButtonIndex + 1) % ButtonList.Count;
-            GameHandler.PlaySwitchMenuOptionSound();
-            SelectOption(lastButtonIndex);
+    private void UpdateAllTexts(){
+        this.CreditsText.text = this.GameHandler.earnedCredits.ToString()+" cp";
+        this.StageText.text = this.GameHandler.GetCurrentStartStage().ToString();
+        this.CharNameText.text = this.Player.unitName;
+        this.ArmorLVText.text = "LV " + this.Player.GetArmorLevel().ToString();
+        this.HPText.text = this.Player.healthPoints.ToString();
+        this.WeaponLVText.text = "LV " + this.Player.GetWeaponLevel().ToString();
+        this.ATKText.text = this.Player.GetAttackMin().ToString() + " - " + this.Player.GetAttackMax().ToString();
+    }
+
+    private void ClearNextLVLTexts(){
+        this.NextATKText.text = "";
+        this.NextHPText.text = "";
+        this.CreditsCostText.text = "";
+    }
+
+    private void SetupMenuButtons(){
+        this.buttonIndex = 0;
+        this.backButtonHovered = false;
+
+        this.BackButton.UnHoverMenuButton();
+
+        foreach(StartMenuButton B in this.MenuButtonList){
+            B.UnHoverMenuButton();
         }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            int lastButtonIndex = currentButtonIndex;
-            currentButtonIndex = (currentButtonIndex - 1);
-            if (currentButtonIndex <= -1)
-            {
-                currentButtonIndex = ButtonList.Count - 1;
-            }
-            GameHandler.PlaySwitchMenuOptionSound();
-            SelectOption(lastButtonIndex);
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SubmitOption();
+
+        this.MenuButtonList[0].HoverMenuButton();
+    }
+
+    protected override void CheckPlayerInput(){
+        if( Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow) ){
+            OptionDown();
+        }else if( Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) ){
+            OptionUp();
+        }else if( Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)  || Input.GetKeyDown(KeyCode.LeftArrow)  || Input.GetKeyDown(KeyCode.RightArrow) ){
+            HoverBackButton();
+        }else if( Input.GetKeyDown(KeyCode.Space) ){
+            SelectOption();
         }
     }
 
-    private void CreateButtonList()
-    {
-        currentButtonIndex = 0;
-        currentMenuIndex = 0;
+    private void OptionDown(){
+        GameHandler.PlaySwitchMenuOptionSound();
+        int lastIndex = this.buttonIndex;
+        this.buttonIndex = (this.buttonIndex+1) % this.MenuButtonList.Count;
 
-        ButtonList.Clear();
+        UpdateHovers(lastIndex);
+    }
+
+    private void OptionUp(){
+        GameHandler.PlaySwitchMenuOptionSound();
+        int lastIndex = this.buttonIndex;
+        if(this.buttonIndex > 0) this.buttonIndex--;
+        else this.buttonIndex = this.MenuButtonList.Count-1;
+
+        UpdateHovers(lastIndex);
+    }
+
+    private void UpdateHovers(int lastIndex){
+        this.MenuButtonList[lastIndex].UnHoverMenuButton();
+        this.MenuButtonList[this.buttonIndex].HoverMenuButton();
+
+        ClearNextLVLTexts();
         
-        GameObject MenuButtons = MenuList[currentMenuIndex].transform.Find("MenuButtons").gameObject;
-        
-        foreach(Transform Button in MenuButtons.transform)
-        {
-            ButtonList.Add(Button.gameObject);
-        }
+        if(this.buttonIndex == 3) HoverUpgradeWeapon();
+        else if(this.buttonIndex == 4) HoverUpgradeArmor();
+
     }
 
-    private void UpdatePlayerTexts()
-    {
-        PlayerNameText.text = GameHandler.Player.unitName;
-        CreditsText.text = GameHandler.earnedCredits.ToString() + " Cd";
-        HealthText.text = GameHandler.Player.healthPoints.ToString();
-    }
-
-    private void UpdateWeaponTexts()
-    {
-        WeaponLvlText.text = "Level: " + Player.GetWeaponLevel().ToString();
-        AtkText.text = "Atk: " + Player.GetAttackMin().ToString() + " - " + Player.GetAttackMax().ToString();
-        APRText.text = "APR: " + Player.GetActionsPerRound().ToString();
-        LifeDrainText.text = "Life Drain: " + Player.GetLifeDrain().ToString();
-        EnemyDotText.text = "Enemy DOT: " + Player.GetEnemyDOT().ToString();
-        WeaponUpgradeCostText.text ="Upgrade Cost: " + Player.GetWeaponUpgradeCost().ToString();
-    }
-
-    private void UpdateNextWeaponTexts()
-    {
-        NextWeaponLvlText.text = Player.GetWeaponLevel().ToString();
-        NextAtkText.text = Player.GetAttackMin().ToString() + " - " + Player.GetAttackMax().ToString();
-        NextAPRText.text = Player.GetActionsPerRound().ToString();
-        NextLifeDrainText.text = Player.GetLifeDrain().ToString();
-        NextEnemyDotText.text = Player.GetEnemyDOT().ToString();
-    }
-
-    private void UpdateArmorTexts()
-    {
-        ArmorLvlText.text = "Level: " + Player.GetArmorLevel().ToString();
-        HPText.text = "HP: " + Player.GetArmorHealth().ToString();
-        ManaText.text = "Mana: " + Player.GetArmorMana().ToString();
-        ManaRegText.text = "Mana Regen: " + Player.GetArmorManaRegen().ToString();
-        ArmorUpgradeCostText.text = "Upgrade Cost: " + Player.GetArmorUpgradeCost().ToString();
-    }
-
-    private void UpdateNextArmorTexts()
-    {
-        NextArmorLvlText.text = Player.GetArmorLevel().ToString();
-        NextHPText.text = Player.GetArmorHealth().ToString();
-        NextManaText.text = Player.GetArmorMana().ToString();
-        NextManaRegText.text = Player.GetArmorManaRegen().ToString();
-    }
-
-    private void SelectOption(int lastButtonIndex)
-    {
-        Animator CurrentAnimator = ButtonList[currentButtonIndex].GetComponent<Animator>();
-        Animator LastAnimator = ButtonList[lastButtonIndex].GetComponent<Animator>();
-        CurrentAnimator.SetBool("Selected", true);
-        LastAnimator.SetBool("Selected", false);
-
-        if (currentMenuIndex == 0 && currentButtonIndex == 1)
-        {
-            UnhoverArmorUpgrade();
-            HoverWeaponUpgrade();
+    private void SelectOption(){
+        if(this.backButtonHovered){
+            this.GameHandler.LoadStartMenu();
             return;
         }
-        else if (currentMenuIndex == 0 && currentButtonIndex == 2)
-        {
-            UnhoverWeaponUpgrade();
-            HoverArmorUpgrade();
-            return;
-        }
-        else
-        {
-            UnhoverWeaponUpgrade();
-            UnhoverArmorUpgrade();
-        }
-    }
 
-    private void HoverWeaponUpgrade()
-    {
-        Weapon W = GameHandler.PlayerWeapon;
-        if (W.weaponLevel >= W.maxWeaponLevel) 
-        {
-            return;
-        }
-        W.UpgradeWeapon();
-        UpdateNextWeaponTexts();
-        W.DowngradeWeapon();
-        if (currentMenuIndex == 0 && currentButtonIndex != 1)
-        {
-            int lastButtonIndex = 1;
-            SelectOption(lastButtonIndex);
-        }
-    }
-
-    private void HoverArmorUpgrade()
-    {
-        Armor A = GameHandler.PlayerArmor;
-        if (A.armorLevel >= A.maxArmorLevel)
-        {
-            return;
-        }
-        A.UpgradeArmor();
-        UpdateNextArmorTexts();
-        A.DowngradeArmor();
-        if (currentMenuIndex == 0 && currentButtonIndex != 2)
-        {
-            int lastButtonIndex = 2;
-            SelectOption(lastButtonIndex);
-        }
-    }
-
-    private void UnhoverWeaponUpgrade()
-    {
-        NextWeaponLvlText.text = "";
-        NextAtkText.text = "";
-        NextAPRText.text = "";
-        NextLifeDrainText.text = "";
-        NextEnemyDotText.text = "";
-    }
-
-    private void UnhoverArmorUpgrade()
-    {
-        NextArmorLvlText.text = "";
-        NextHPText.text = "";
-        NextManaText.text = "";
-        NextManaRegText.text = "";
-    }
-
-    private void SubmitOption()
-    {
-        GameHandler.PlaySelectMenuOptionSound();
-        switch (currentButtonIndex)
-        {
+        switch(this.buttonIndex){
             case 0:
-                SubmitStageSelect();
-                break;
+                this.GameHandler.LoadBattleScene();
+            break;
+
             case 1:
-                SubmitWeaponUpgrade();
-                break;
+                this.GameHandler.LoadStageSelect();
+            break;
+
             case 2:
-                SubmitArmorUpgrade();
-                break;
+                this.GameHandler.LoadAbilityLoadOut();
+            break;
+
             case 3:
-                GameHandler.PlayBlockedMenuOptionSound();
-                //SubmitEnemyIndex();
-                break;
+                UpgradeWeapon();
+            break;
+
             case 4:
-                SubmitExitGame();
-                break;
+                UpgradeArmor();
+            break;
+
+            case 5:
+                this.GameHandler.LoadEnemyLibrary();
+            break;
+
+            default:
+                Debug.LogError("Error: Button Index out of Range!");
+            break;
         }
     }
 
-    private void SubmitStageSelect()
-    {
-        // MenuList[currentMenuIndex].SetActive(false);
-        // currentMenuIndex = 1;
-        // currentButtonIndex = 0;
-        // MenuList[currentMenuIndex].SetActive(true);
-        // CreateButtonList();
-        GameHandler.LoadStageSelect();
-        // GameHandler.LoadBattleScene();
-    }
-
-    private void SubmitWeaponUpgrade()
-    {
-        Weapon W = GameHandler.PlayerWeapon;
-        if (W.weaponLevel >= W.maxWeaponLevel)
-        {
-            return;
-        }
-        if (GameHandler.earnedCredits >= W.upgradeCost)
-        {
-            GameHandler.earnedCredits -= W.upgradeCost;
-            W.UpgradeWeapon();
-            UpdatePlayerTexts();
-            UpdateWeaponTexts();
-            if (W.weaponLevel != W.maxWeaponLevel)
-            {
-                HoverWeaponUpgrade();
-            }
-            else
-            {
-                UnhoverWeaponUpgrade();
-            }
+    private void HoverBackButton(){
+        GameHandler.PlaySwitchMenuOptionSound();
+        
+        if(this.backButtonHovered){
+            this.MenuButtonList[this.buttonIndex].HoverMenuButton();
+            this.BackButton.UnHoverMenuButton();
+            this.backButtonHovered = false;
+        }else{
+            this.MenuButtonList[this.buttonIndex].UnHoverMenuButton();
+            this.BackButton.HoverMenuButton();
+            this.backButtonHovered = true;
         }
     }
 
-    private void SubmitArmorUpgrade()
-    {
-        Armor A = GameHandler.PlayerArmor;
-        if (A.armorLevel >= A.maxArmorLevel)
-        {
-            return;
-        }
-        if (GameHandler.earnedCredits >= A.upgradeCost)
-        {
-            GameHandler.earnedCredits -= A.upgradeCost;
-            A.UpgradeArmor();
-            UpdatePlayerTexts();
-            UpdateArmorTexts();
-            if (A.armorLevel != A.maxArmorLevel)
-            {
-                HoverArmorUpgrade();
-            }
-            else
-            {
-                UnhoverArmorUpgrade();
-            }
-        }
+    private void HoverUpgradeWeapon(){
+        if(GameHandler.PlayerWeapon.weaponLevel >= GameHandler.PlayerWeapon.maxWeaponLevel) return;
+        this.CreditsCostText.text = "- " + GameHandler.PlayerWeapon.upgradeCost.ToString()+" cp";
+
+        WeaponUpgrade up = GameHandler.PlayerWeapon.GetUpgradeTable()[GameHandler.PlayerWeapon.weaponLevel];
+        this.NextATKText.text = ">\t" + up.baseAttackMin.ToString() + " - " + up.baseAttackMax.ToString();
     }
 
-    private void SubmitExitGame()
-    {
-        GameHandler.LoadStartMenu();
+    private void UpgradeWeapon(){
+        if(GameHandler.earnedCredits < GameHandler.PlayerWeapon.upgradeCost) return;
+
+        GameHandler.earnedCredits -= GameHandler.PlayerWeapon.upgradeCost;
+
+        GameHandler.PlayerWeapon.UpgradeWeapon();
+
+        UpdateAllTexts();
+        HoverUpgradeWeapon();
+    }
+
+    private void HoverUpgradeArmor(){
+        if(GameHandler.PlayerArmor.armorLevel >= GameHandler.PlayerArmor.maxArmorLevel) return;
+        this.CreditsCostText.text = "- " + GameHandler.PlayerArmor.upgradeCost.ToString()+" cp";
+
+        this.NextHPText.text = ">\t" + GameHandler.PlayerArmor.GetUpgradeTable()[GameHandler.PlayerArmor.armorLevel, 0].ToString();
+    }
+
+    private void UpgradeArmor(){
+        if(GameHandler.earnedCredits < GameHandler.PlayerArmor.upgradeCost) return;
+
+        GameHandler.earnedCredits -= GameHandler.PlayerArmor.upgradeCost;
+
+        GameHandler.PlayerArmor.UpgradeArmor();
+
+        UpdateAllTexts();
+        HoverUpgradeArmor();
     }
 }

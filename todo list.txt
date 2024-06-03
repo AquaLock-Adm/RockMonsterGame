@@ -1,23 +1,25 @@
 ToDo:
-enable "Buy New Combos" + option in menu
-combo loadout
-Library visualizer
+- Scroll in Ability Loadout
+- Attack Rush finisher in Ability Loadout
+- Add heat spent action
+
+- display damage taken *10
+
+
+- add heat reduction on block ?
+- add weapon demon health bar
+- level 0
+- level 1
 
 ADDON - BattleSystem:
+ > Sounds!
+ > Move them boxes gurl
  > Add new Characters
  > Dual Mode
- > disable heat discharge if heat charge is disabled
  > I'm with my squaaaaaaaaaaaaaaaaaaaaaaad
 
-BALANCE - BattleSystem:
-double heat for max level
-enemy damage up a bit
-how does lifesteal work again?
-
 Bugs - BattleSystem:
- > going to stage 2 started endless loop (-||-) (?)
- > Game hung up at start of battlesystem after input test
- > Enemy kill credits working?
+
 
 mini - BattleSystem:
  > Boss heals for x amount of shields broken or perfect blocks
@@ -33,12 +35,6 @@ CORE - Menu:
 ADDON - Menu:
  > Loadout Menu
   > Skill Loadout
-
-Level 0 - Tutorial
- > Tutorial Dialogue Script
- > Tutorial Enemies
- > Tutorial System
-  > Remove Heatbar
 
 Old:
  > Add WaveCheck points

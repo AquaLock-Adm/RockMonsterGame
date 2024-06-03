@@ -47,7 +47,7 @@ public class PlayerActionHandler : MonoBehaviour
 	[Header("Heat Parameters")]
 	private int currentHeat = 0;
 
-	[SerializeField] private int[] heatLimits = {0,1,3,8,20,12,16,24,28,50,0};
+	[SerializeField] private int[] heatLimits = {0,1,3,9,22,12,16,24,28,50,0};
 
 	[Header("Heat Charge Parameters")]
 	public bool heatChargeDone = false;
@@ -110,7 +110,8 @@ public class PlayerActionHandler : MonoBehaviour
 	private void SetComboLevel(){
 		this.comboLevel = 1;
 		this.currentMaxAttackLength = this.comboLevel;
-		this.maxComboLv = Player.GetWeapon().actionsPerRound;
+		// this.maxComboLv = Player.GetWeapon().actionsPerRound;
+		this.maxComboLv = 7;
 
 		this.ComboLevelText.text = "Lv."+comboLevel.ToString();
 	}
@@ -126,44 +127,10 @@ public class PlayerActionHandler : MonoBehaviour
 
 
 
+#region Battle Flow Funtions
     public void BattleEnd(){
         Destroy(this);
     }
-
-
-
-#region Input Functions During Player turn
-    public void CastAttack(int attackIndex){
-        List<Action> PlayerAbilities = Player.GetAbilityList();
-        if(!IndexInBoundsOfList(attackIndex, PlayerAbilities.Count)){
-            Debug.LogError("Attack index is not in Bounds of Player.Abilities");
-            return;
-        }
-
-        Action A = PlayerAbilities[attackIndex].Copy();
-        AddAction(A);
-    }
-
-    public void CastBlock(int blockIndex){
-        List<Action> blocks = Player.GetBlockAbilities();
-        if(!IndexInBoundsOfList(blockIndex, blocks.Count)){
-            Debug.LogError("Attack index is not in Bounds of Player.Blocks");
-            return;
-        }
-
-        Action A = blocks[blockIndex].Copy();
-        AddAction(A);
-    }
-
-    public void CancelLastAction(bool gainApBack = true){
-        if(this.Actions.Count > 0) {
-			RemoveLastAction();
-        }
-    }
-#endregion
-
-
-
 	public void SwitchModes(bool playerIsDefending){
 		if(playerIsDefending){
 			int comboLengthMax = Player.GetCurrentEnemy().GetCurrentAttackSequenceLength();
@@ -219,8 +186,8 @@ public class PlayerActionHandler : MonoBehaviour
 	}
 
 	public void CheckHeatChargeAvailability(){
-		if(this.maxComboLv < 5) this.heatChargeDone = true;
-		else this.heatChargeDone = false;
+		// if(this.maxComboLv < 5) this.heatChargeDone = true;
+		// else this.heatChargeDone = false;
 	}
 
 	private void LoadActionBoxes(bool on){
@@ -244,6 +211,42 @@ public class PlayerActionHandler : MonoBehaviour
 			Debug.Log(A.name);
 		}
 	}
+#endregion
+
+
+
+#region Input Functions During Player turn
+    public void CastAttack(int attackIndex){
+        List<Action> PlayerAbilities = Player.GetAbilityList();
+        if(!IndexInBoundsOfList(attackIndex, PlayerAbilities.Count)){
+            Debug.LogError("Attack index is not in Bounds of Player.Abilities");
+            Debug.Log("Index: "+attackIndex.ToString() +", List Size: "+PlayerAbilities.Count.ToString());
+
+            return;
+        }
+
+        Action A = PlayerAbilities[attackIndex].Copy();
+        AddAction(A);
+    }
+
+    public void CastBlock(int blockIndex){
+        List<Action> blocks = Player.GetBlockAbilities();
+        if(!IndexInBoundsOfList(blockIndex, blocks.Count)){
+            Debug.LogError("Attack index is not in Bounds of Player.Blocks");
+            return;
+        }
+
+        Action A = blocks[blockIndex].Copy();
+        AddAction(A);
+    }
+
+    public void CancelLastAction(bool gainApBack = true){
+        if(this.Actions.Count > 0) {
+			RemoveLastAction();
+        }
+    }
+#endregion
+
 
 
 #region Executing Actions
@@ -310,13 +313,14 @@ public class PlayerActionHandler : MonoBehaviour
 
 			// Debug.Log("Executing "+CurrentAction.name+" on "+ this.BattleSystem.Enemy.unitName);
 				
-			bool addHeatAfterAttack = await TargetEnemy.HandleAction(CurrentAction);
+			bool attackHitEnemy = await TargetEnemy.HandleAction(CurrentAction);
 
 			UpdateVisualizer();
 
-			if(addHeatAfterAttack){
+			if(attackHitEnemy){
 				perfectCounter++;
-				AddHeat();
+				if(CurrentAction.spentHeatOnHit) LoseHeat(CurrentAction.heatSpentOnHit);
+				else AddHeat();
 			}
 		}
 
@@ -396,20 +400,66 @@ public class PlayerActionHandler : MonoBehaviour
 		UpdateHeatBar();
 	}
 
+	// private void OLD_LoseHeat(int heatLoss = 1){
+	// 	if(this.comboLevel <= 1) return;
+
+	// 	if(this.currentHeat <= 0 && this.comboLevel > 1){
+	// 		this.currentHeat = this.heatLimits[this.comboLevel-1];
+	// 		this.comboLevel--;
+
+	// 		if(this.comboLevel >= this.maxComboLv){
+	// 			this.ComboLevelText.text = "Lv.MAX";
+	// 		}else this.ComboLevelText.text = "Lv."+comboLevel.ToString();
+
+	// 		Player.UpdateCurrentHCPS();
+	// 	}
+
+	// 	this.currentHeat = (int)Mathf.Max(0.0f, this.currentHeat - heatLoss);
+	// 	UpdateHeatBar();
+	// }
+
 	private void LoseHeat(int heatLoss = 1){
-		if(this.comboLevel <= 1) return;
+		/*
+		Test: comboLevel = 3, cHeat = 3, heatLoss = 5
 
-		if(this.currentHeat <= 0 && this.comboLevel > 1){
-			this.currentHeat = this.heatLimits[this.comboLevel-1];
+			totalheat = heatLimit[2] + heatLimit[1] + 3 = 3 + 1 + 3 = 7
+
+			rem = totalheat - heatLoss = 7 - 5 = 2
+			New ComboLevel: 
+				level = 1
+				rem = 2 >= heatLimit[1] = 1
+				level++, rem -= 1
+
+				level = 2
+				rem = 1 !>= heatLimit[2] = 3
+
+			=> New ComboLevel = 2, rem = currentHeat = 1
+
+		*/
+		int totalHeat = this.currentHeat;
+
+		while(this.comboLevel > 1){
+			totalHeat += this.heatLimits[this.comboLevel-1];
 			this.comboLevel--;
-
-			if(this.comboLevel >= this.maxComboLv){
-				this.ComboLevelText.text = "Lv.MAX";
-			}else this.ComboLevelText.text = "Lv."+comboLevel.ToString();
 		}
 
-		this.currentHeat = (int)Mathf.Max(0.0f, this.currentHeat - heatLoss);
+		totalHeat = (int)Mathf.Max(0.0f, (float)(totalHeat - heatLoss));
+
+		while(this.comboLevel<this.maxComboLv && totalHeat >= this.heatLimits[this.comboLevel]){
+			totalHeat -= this.heatLimits[this.comboLevel];
+			this.comboLevel++;
+		}
+
+		this.currentHeat = totalHeat;
+		this.currentMaxAttackLength = this.currentHeat;
+
+		if(this.comboLevel >= this.maxComboLv){
+			this.ComboLevelText.text = "Lv.MAX";
+		}else this.ComboLevelText.text = "Lv."+comboLevel.ToString();
+
+		Player.UpdateCurrentHCPS();
 		UpdateHeatBar();
+		UpdateActionBoxList();
 	}
 
 	public void ResetHeatLevel(){
@@ -418,6 +468,7 @@ public class PlayerActionHandler : MonoBehaviour
 		this.comboLevel = 1;
 		this.currentMaxAttackLength = 1;
 		this.ComboLevelText.text = "Lv."+comboLevel.ToString();
+		Player.UpdateCurrentHCPS();
 		UpdateHeatBar();
 		UpdateActionBoxList();
 		UpdateVisualizer();
@@ -448,6 +499,8 @@ public class PlayerActionHandler : MonoBehaviour
 			if(this.comboLevel >= this.maxComboLv){
 				this.ComboLevelText.text = "Lv.MAX";
 			}else this.ComboLevelText.text = "Lv."+comboLevel.ToString();
+
+			Player.UpdateCurrentHCPS();
 		}
 		this.currentMaxAttackLength = this.comboLevel;
 	}
@@ -500,6 +553,7 @@ public class PlayerActionHandler : MonoBehaviour
 		return this.comboLevel - this.Actions.Count;
 	}
 #endregion
+
 
 
 #region Checking For Combo Abilities

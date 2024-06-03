@@ -5,20 +5,20 @@ using UnityEngine.UI;
 
 public class WeaponUpgrade
 {
-    public WeaponUpgrade(int baseAttackMin, int baseAttackMax, int actionsPerRound, float healthCostPerSecond, float enemyDamagePerSecond, int upgradeCost){
+    public WeaponUpgrade(int baseAttackMin, int baseAttackMax, int lifeDrainIncreaseStartLevel, float healthCostPerSecond, float HCPSmax, int upgradeCost){
         this.baseAttackMin = baseAttackMin;
         this.baseAttackMax = baseAttackMax;
-        this.actionsPerRound = actionsPerRound;
+        this.lifeDrainIncreaseStartLevel = lifeDrainIncreaseStartLevel;
         this.healthCostPerSecond = healthCostPerSecond;
-        this.enemyDamagePerSecond = enemyDamagePerSecond;
+        this.HCPSmax = HCPSmax;
         this.upgradeCost = upgradeCost;
     }
 
     public int baseAttackMin;
     public int baseAttackMax;
-    public int actionsPerRound;
+    public int lifeDrainIncreaseStartLevel;
     public float healthCostPerSecond;
-    public float enemyDamagePerSecond;
+    public float HCPSmax;
     public int upgradeCost;
 }
 
@@ -35,7 +35,15 @@ public abstract class Weapon : MonoBehaviour
     public int maxWeaponLevel = 5;
     public int upgradeCost = 0;
 
-    public int actionsPerRound = 3;
+    public int lifeDrainIncreaseStartLevel = 3;
+
+    public float baseHealthCostPerSecond;
+    public float healthCostPerSecond;
+
+    public float HCPSmax;
+
+    public int baseLifeSteal; // in percent
+    public int lifeSteal;
 
     public List<Action> Abilities;
 
@@ -46,12 +54,6 @@ public abstract class Weapon : MonoBehaviour
     public int baseAttackMin;
     public int attackMax;
     public int attackMin;
-
-    public int baseLifeSteal; // in percent
-    public int lifeSteal;
-
-    public float baseHealthCostPerSecond;
-    public float healthCostPerSecond;
 
     public float enemyDamagePerSecond;
 
@@ -94,6 +96,16 @@ public abstract class Weapon : MonoBehaviour
         SetPlayer(PC);
     }
 
+    public void UpdateAbilityIndex(){
+        int cI = 0;
+        this.Abilities = new List<Action>();
+        foreach(Action A in Player.SetAbilities){
+            A.abilityIndex = cI;
+            cI++;
+            this.Abilities.Add(A);
+        }
+    }
+
     public void SetPlayer(PlayerCharacter PC){
         this.Player = PC;
         PC.SetWeapon(this);
@@ -125,12 +137,12 @@ public abstract class Weapon : MonoBehaviour
         this.baseAttackMax = upgradeTable[this.weaponLevel-1].baseAttackMax;
         this.attackMax = this.baseAttackMax;
 
-        this.actionsPerRound = upgradeTable[this.weaponLevel-1].actionsPerRound;
+        // this.actionsPerRound = upgradeTable[this.weaponLevel-1].actionsPerRound;
+        this.lifeDrainIncreaseStartLevel = upgradeTable[this.weaponLevel-1].lifeDrainIncreaseStartLevel;
 
         this.baseHealthCostPerSecond = upgradeTable[this.weaponLevel-1].healthCostPerSecond;
         this.healthCostPerSecond = this.baseHealthCostPerSecond;
-
-        this.enemyDamagePerSecond = upgradeTable[this.weaponLevel-1].enemyDamagePerSecond;
+        this.HCPSmax = upgradeTable[this.weaponLevel-1].HCPSmax;
 
         this.upgradeCost = upgradeTable[this.weaponLevel-1].upgradeCost;
 
@@ -143,7 +155,7 @@ public abstract class Weapon : MonoBehaviour
         this.weaponLevel = Other.weaponLevel;
         this.maxWeaponLevel = Other.maxWeaponLevel;
         this.upgradeCost = Other.upgradeCost;
-        this.actionsPerRound = Other.actionsPerRound;
+        this.lifeDrainIncreaseStartLevel = Other.lifeDrainIncreaseStartLevel;
         this.Abilities = Other.Abilities;
         this.baseAttackMax = Other.baseAttackMax;
         this.baseAttackMin = Other.baseAttackMin;
@@ -161,7 +173,7 @@ public abstract class Weapon : MonoBehaviour
                 +  "AttackMax: " + this.attackMax.ToString()+"\n"
                 +  "AttackMin: " + this.attackMin.ToString()+"\n\n"
 
-                +  "APR: "+ this.actionsPerRound.ToString()+"\n\n"
+                +  "Drain Ramp LVL: "+ this.lifeDrainIncreaseStartLevel.ToString()+"\n\n"
 
                 +  "Upgrade Cost: "+ this.upgradeCost.ToString()+" Cd\n";
 

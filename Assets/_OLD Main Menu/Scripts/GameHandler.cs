@@ -40,6 +40,10 @@ public class GameHandler : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         this.currentHighestStage = 1;
+
+        // FOR TESTING
+
+        // this.earnedCredits += 10000;
     }
 
     void OnSceneLoaded (Scene scene, LoadSceneMode mode){
@@ -63,6 +67,11 @@ public class GameHandler : MonoBehaviour
             case "Ability Load Out":
                 GameObject.Find("Ability Loadout Handler").GetComponent<AbilityLoadoutHandler>().StartSetup(this);
             break;
+
+            case "Enemy Library":
+                GameObject.Find("Enemy Library Handler").GetComponent<EnemyLibraryHandler>().StartSetup(this);
+            break;
+
 
             case "Battle Scene":
             case "Tutorial":
@@ -97,6 +106,14 @@ public class GameHandler : MonoBehaviour
 
     public void LoadStageSelect(){
         SceneManager.LoadScene("Stage Select");
+    }
+
+    public void LoadAbilityLoadOut(){
+        SceneManager.LoadScene("Ability Load Out");
+    }
+
+    public void LoadEnemyLibrary(){
+        SceneManager.LoadScene("Enemy Library");
     }
 
     public void SetPlayer(PlayerCharacter P){

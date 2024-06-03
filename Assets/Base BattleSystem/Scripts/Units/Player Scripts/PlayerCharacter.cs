@@ -56,7 +56,7 @@ public class PlayerCharacter : Unit
         if (this.Weapon != null)
         {
             if (weaponStartLevel > 1) Weapon.UpgradeWeaponToLevel(weaponStartLevel);
-            if (Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
+            // if (Weapon.actionsPerRound >= 5) this.heatChargeAvailable = true;
         }
         else Debug.LogError("Weapon is not set");
 
@@ -152,6 +152,7 @@ public class PlayerCharacter : Unit
         this.Armor = PlayerArmor;
         PlayerWeapon.Init(this);
         PlayerArmor.Init(this);
+        this.SetAbilities = GetStandartAbilitiesList();
     }
 
     public List<Action> GetStandartAbilitiesList(){
@@ -250,6 +251,7 @@ public class PlayerCharacter : Unit
         Action ActionFromPlayerAbilityList = this.Weapon.Abilities.Find(action => action.name == givenActionName);
 
         if (ActionFromPlayerAbilityList != null) return ActionFromPlayerAbilityList.abilityIndex;
+        
         else
         {
             Debug.LogError("Ability Name not found in Player Abilities: " + givenActionName);
@@ -282,6 +284,10 @@ public class PlayerCharacter : Unit
     }
     public void HealPercentual(int heal_p){
         this.ResourceHandler.HealPercentual(heal_p);
+    }
+
+    public void UpdateCurrentHCPS(){
+        this.ResourceHandler.CalcCurrentHCPS();
     }
     #endregion
 
@@ -434,9 +440,9 @@ public class PlayerCharacter : Unit
         return this.Weapon.upgradeCost;
     }
 
-    public int GetActionsPerRound()
+    public int GetLifeDrainIncreaseStartLevel()
     {
-        return this.Weapon.actionsPerRound;
+        return this.Weapon.lifeDrainIncreaseStartLevel;
     }
 
     public Weapon GetWeapon()
@@ -498,7 +504,7 @@ public class PlayerCharacter : Unit
 
     public List<Action> GetAbilityList()
     {
-        return this.Weapon.Abilities;
+        return this.SetAbilities;
     }
 
     public List<Action> GetBlockAbilities()

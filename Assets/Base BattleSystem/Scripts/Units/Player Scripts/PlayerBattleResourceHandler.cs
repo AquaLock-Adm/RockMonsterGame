@@ -21,6 +21,8 @@ public class PlayerBattleResourceHandler : MonoBehaviour
     private float lifeDrainPerTick = 1.0f;
     private float lifeDrained = 0.0f;
 
+    private float currentHCPS = 0.0f;
+
     private bool enemyDOTLoopRunning = false;
     private float enemyDOTPerTick = 1.0f;
     private float currentEnemyDOT = 0.0f;
@@ -36,7 +38,7 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         this.HpSlider = HpSlider;
 
         StartHealthDepleteLoop();
-        if(Player.GetWeapon().actionsPerRound > 5) StartEnemyDOTLoop();
+        // if(Player.GetWeapon().actionsPerRound > 5) StartEnemyDOTLoop();
         BattleUpdateLoop();
     } // changed in: PlayerResource_Tutorial.cs
 
@@ -96,9 +98,39 @@ public class PlayerBattleResourceHandler : MonoBehaviour
             Debug.Log("Health Deplete Loop is already running!");
             return;
         }
+        CalcCurrentHCPS();
         this.lifeDrained = 0.0f;
         this.healthDepleteLoopRunning = true;
         HealthDepleteLoop();
+    }
+
+    public void CalcCurrentHCPS(){
+        Weapon PW = Player.GetWeapon();
+        float hcps = PW.healthCostPerSecond;
+        int levelOverRamp = 0;
+
+        if( (levelOverRamp = Player.GetCurrentComboLevel() - PW.lifeDrainIncreaseStartLevel) > 0 ){
+            /*
+                increase per level:
+                    2 ^ (levelOverRamp-1) * stdIncrease
+                    stdIncrease = (hcpsmax - hcps) / 2^(7 - strtLVL -1)
+
+                    for maria lvl1: stdIncrease = (4.9f - 0.8f) / 2^(7-3-1) = 4.1f / 2^3 = 0.5125f
+
+                    cmbLVL4 : 2 ^ 0 * 0.5125f => 0.8f + 0.5125f = 1.3125f
+                    cmbLVL5 : 2 ^ 1 * 0.5125f => 0.8f + 1.025f  = 1.825f
+                    cmbLVL6 : 2 ^ 2 * 0.5125f => 0.8f + 2.05f   = 2.85f
+                    cmbLVL7 : 2 ^ 3 * 0.5125f => 0.8f + 4.1f    = 4.9f
+
+            */
+
+            float stdIncrease = (PW.HCPSmax - hcps) / Mathf.Pow( 2.0f, 7.0f - 1.0f - (float)PW.lifeDrainIncreaseStartLevel );
+            float drainIncrease = Mathf.Pow( 2.0f, (float)levelOverRamp - 1.0f ) * stdIncrease;
+            hcps += drainIncrease;
+        }
+
+        this.currentHCPS = hcps;
+        // Debug.Log("New HCPS: "+this.currentHCPS.ToString());
     }
 
     private async void HealthDepleteLoop(){
@@ -129,8 +161,8 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         }
     }
 
-    private void CalcLifeDrainPerTick(){
-        this.lifeDrainPerTick = (float)(Player.GetWeapon().healthCostPerSecond / (1000.0f/(float)TICK_TIME_MS)); 
+    private void CalcLifeDrainPerTick(){ 
+        this.lifeDrainPerTick = (float)( this.currentHCPS / (1000.0f/(float)TICK_TIME_MS)); 
     }
 #endregion
 

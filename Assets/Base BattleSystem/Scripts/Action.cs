@@ -48,7 +48,15 @@ public abstract class Action
     public int abilityIndex = -1;
     public int totalTime = 1000;
     public int damage = 0;
-    public int baseDamage = 0;
+    public bool spentHeatOnHit = false;
+    public int heatSpentOnHit = 0;
+
+    public int unlockPrice = 0;
+
+    protected int baseDamageMin = 0;
+    protected int baseDamageMax = 1;
+    protected float damageMultiplicator = 1.0f;
+    protected bool damageSet = false;
 
     protected int lightAttackStdTime = 300;
     protected int specialAttackStdTime = 150;
@@ -88,16 +96,6 @@ public abstract class Action
 #region SetUp Functions
     public void SetEnemy(Enemy Enemy){
         this.Enemy = Enemy;
-    }
-    public virtual void BaseDamageCalculation(int baseDmg, float damageMultiplicator = 1.0f){
-        if(this.Player == null){
-            Debug.LogError("Player not set for action "+this.name+"!");
-            this.baseDamage = 0;
-            return;
-        }
-        this.baseDamage = baseDmg + Random.Range(this.Player.GetAttackMin(), this.Player.GetAttackMax()+1);
-        this.baseDamage = (int)Mathf.Round(this.baseDamage*damageMultiplicator);
-        this.damage = this.baseDamage;
     }
     public virtual void TriggerOnHit(){
         // Debug.Log("On-Hit!");
@@ -163,8 +161,24 @@ public abstract class Action
         if(!CheckBattleUnits()) return 0;
         // Debug.Log("Executing: "+this.name);
 
+        this.BaseDamageCalculation();
         await Task.Delay(this.totalTime);
         return this.damage;
+    }
+
+    protected virtual void BaseDamageCalculation(){
+        if(this.Player == null){
+            Debug.LogError("Player not set for action "+this.name+"!");
+            this.damage = 0;
+            return;
+        }
+
+        this.damage = Random.Range(this.baseDamageMin, this.baseDamageMax+1);
+
+        if(this.damageSet) return;
+
+        this.damage += Random.Range(this.Player.GetAttackMin(), this.Player.GetAttackMax()+1);
+        this.damage = (int)Mathf.Round(this.damage*damageMultiplicator);
     }
 
 
@@ -198,7 +212,10 @@ public class Light : Action
         this.AbilityType = AbilityType.LIGHT;
         this.totalTime = this.lightAttackStdTime;
         this.Player = Player;
-        this.BaseDamageCalculation(0);
+
+        this.baseDamageMin = 2;
+        this.baseDamageMax = 6;
+        this.damageSet = true;
     }
 
     public override void QueueAction(PlayerActionHandler AQ){
@@ -229,7 +246,10 @@ public class Heavy : Action     // slower but twice damage
         this.AbilityType = AbilityType.HEAVY;
         this.totalTime = this.heavyAttackStdTime;
         this.Player = Player;
-        this.BaseDamageCalculation(0, heavyStdDamageMult);
+
+        this.baseDamageMin = 4;
+        this.baseDamageMax = 8;
+        this.damageSet = true;
     }
 
     public override void QueueAction(PlayerActionHandler AQ){
@@ -260,7 +280,9 @@ public class Special : Action   // slower but more knockback
         this.AbilityType = AbilityType.SPECIAL;
         this.totalTime = this.specialAttackStdTime;
         this.Player = Player;
-        this.BaseDamageCalculation(0, specialStdDamageMult);
+        this.baseDamageMin = 1;
+        this.baseDamageMax = 3;
+        this.damageSet = true;
     }
 
     public override void QueueAction(PlayerActionHandler AQ){

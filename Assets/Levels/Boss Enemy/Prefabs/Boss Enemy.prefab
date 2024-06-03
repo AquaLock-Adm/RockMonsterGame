@@ -923,6 +923,17 @@ MonoBehaviour:
   blockStamina: 20
   freeAttackTurn: 0
   currentBlockStringLength: 1
+  useLightBlockChance_p: 34
+  useHeavyBlockChance_p: 33
+  useSpecialBlockChance_p: 33
+  lightReceivedCount: 0
+  heavyReceivedCount: 0
+  specialReceivedCount: 0
+  totalAttacksReceivedBias: 1.1
+  AttacksReceivedList: 
+  ARListSize: 5
+  recentAttacksReceivedBias: 1.7
+  randomFactorBias: 0.8
 --- !u!1 &3993717952647823814
 GameObject:
   m_ObjectHideFlags: 0

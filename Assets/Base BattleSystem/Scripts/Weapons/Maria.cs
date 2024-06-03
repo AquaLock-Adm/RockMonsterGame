@@ -5,32 +5,33 @@ public class Maria : Weapon
 {
     public override List<WeaponUpgrade> GetUpgradeTable(){
         List<WeaponUpgrade> table = new List<WeaponUpgrade>();
-                                // (baseMinAtk, baseMaxAtk, APR, lifeDrain, EnemyDOT, UpgradeCost)
-        table.Add(new WeaponUpgrade(   5,   9, 3, 0.8f , 0.0f,   900)); //(+ 200 (+50 *x))
-        table.Add(new WeaponUpgrade(   9,  13, 3, 0.84f, 0.0f,  1100));
-        table.Add(new WeaponUpgrade(  15,  19, 3, 0.88f, 0.0f,  1350));
-        table.Add(new WeaponUpgrade(  23,  27, 3, 0.92f, 0.0f,  1650));
-        table.Add(new WeaponUpgrade(  33,  34, 3, 0.96f, 0.0f,  5000));
+        
+                                // (baseMinAtk, baseMaxAtk, drainRampLVL, lifeDrain, lifeDrainMax, UpgradeCost)
+        table.Add(new WeaponUpgrade(   5,   9, 3, 0.8f , 4.5f,   900)); //(+ 200 (+50 *x))
+        table.Add(new WeaponUpgrade(   9,  13, 3, 0.84f, 4.4f,  1100));
+        table.Add(new WeaponUpgrade(  15,  19, 3, 0.88f, 4.3f,  1350));
+        table.Add(new WeaponUpgrade(  23,  27, 3, 0.92f, 4.2f,  1650));
+        table.Add(new WeaponUpgrade(  33,  34, 3, 0.96f, 4.1f,  5000));
 
-        table.Add(new WeaponUpgrade(  35,  43, 4, 1.1f , 0.0f,  5250)); //(+400 (+150 *x))
-        table.Add(new WeaponUpgrade(  47,  55, 4, 1.14f, 0.0f,  5650));
-        table.Add(new WeaponUpgrade(  61,  69, 4, 1.18f, 0.0f,  6200));
-        table.Add(new WeaponUpgrade(  77,  85, 4, 1.22f, 0.0f,  6900));
-        table.Add(new WeaponUpgrade(  95, 103, 4, 1.26f, 0.0f, 20000));
+        table.Add(new WeaponUpgrade(  35,  43, 4, 1.1f , 4.5f,  5250)); //(+400 (+150 *x))
+        table.Add(new WeaponUpgrade(  47,  55, 4, 1.14f, 4.4f,  5650));
+        table.Add(new WeaponUpgrade(  61,  69, 4, 1.18f, 4.3f,  6200));
+        table.Add(new WeaponUpgrade(  77,  85, 4, 1.22f, 4.2f,  6900));
+        table.Add(new WeaponUpgrade(  95, 103, 4, 1.26f, 4.1f, 20000));
 
-        table.Add(new WeaponUpgrade( 100, 112, 5, 1.4f , 0.0f, 20350)); //(+800 (+450 *x))
-        table.Add(new WeaponUpgrade( 120, 132, 5, 1.44f, 0.0f, 21150));
-        table.Add(new WeaponUpgrade( 142, 154, 5, 1.48f, 0.0f, 22400));
-        table.Add(new WeaponUpgrade( 166, 178, 5, 1.52f, 0.0f, 24100));
-        table.Add(new WeaponUpgrade( 192, 204, 5, 1.56f, 0.0f, 70000));
+        table.Add(new WeaponUpgrade( 100, 112, 5, 1.4f , 6.4f, 20350)); //(+800 (+450 *x))
+        table.Add(new WeaponUpgrade( 120, 132, 5, 1.44f, 6.3f, 21150));
+        table.Add(new WeaponUpgrade( 142, 154, 5, 1.48f, 6.2f, 22400));
+        table.Add(new WeaponUpgrade( 166, 178, 5, 1.52f, 6.1f, 24100));
+        table.Add(new WeaponUpgrade( 192, 204, 5, 1.56f, 6.0f, 70000));
 
-        table.Add(new WeaponUpgrade( 180, 196, 6, 2.6f , 0.5f, 71150)); //(+2400 (+1250 *x))
-        table.Add(new WeaponUpgrade( 208, 224, 6, 2.65f, 0.7f, 73550));
-        table.Add(new WeaponUpgrade( 238, 254, 6, 2.7f , 0.9f, 77200));
-        table.Add(new WeaponUpgrade( 270, 286, 6, 2.75f, 1.1f, 82100));
-        table.Add(new WeaponUpgrade( 304, 320, 6, 2.8f , 1.3f,200000));
+        table.Add(new WeaponUpgrade( 180, 196, 5, 2.6f , 8.4f, 71150)); //(+2400 (+1250 *x))
+        table.Add(new WeaponUpgrade( 208, 224, 5, 2.65f, 8.3f, 73550));
+        table.Add(new WeaponUpgrade( 238, 254, 5, 2.7f , 8.2f, 77200));
+        table.Add(new WeaponUpgrade( 270, 286, 5, 2.75f, 8.1f, 82100));
+        table.Add(new WeaponUpgrade( 304, 320, 5, 2.8f , 8.0f,200000));
 
-        table.Add(new WeaponUpgrade( 660, 692, 7, 4.0f , 2.5f,     0)); //(== LV21)
+        table.Add(new WeaponUpgrade( 660, 692, 5, 4.0f , 10.0f,     0)); //(== LV21)
 
         return table;
     }
@@ -39,12 +40,6 @@ public class Maria : Weapon
         this.Abilities = new List<Action>();
         List<Action> AbilityList = new List<Action>();
         int abilityIndex_c = 0;
-        
-        // if(!Player.BattleSystem.useSetAbilities){
-        //     AbilityList = GetCompleteMoveList();
-        // }else{
-        //     AbilityList = Player.SetAbilities;
-        // }
 
         AbilityList = GetCompleteMoveList();
 
@@ -149,17 +144,6 @@ public class Maria : Weapon
     public override List<Action> GetMovesToTest(){
         List<Action> Actions_l = new List<Action>();
 
-        //Actions_l.Add(new ShieldBreak());
-        //Actions_l.Add(new ElementalInfuse(new Element(SpellElement.FIRE)));
-        //Actions_l.Add(new JumpAttack());
-        //Actions_l.Add(new Execute());
-        //Actions_l.Add(new SpinAttack());
-        //Actions_l.Add(new Lunge(new Element(SpellElement.FIRE)));
-        //Actions_l.Add(new MagicBoom(new Element(SpellElement.FIRE), new Element(SpellElement.FIRE)));
-        //Actions_l.Add(new WyvernSlayer(new Element(SpellElement.FIRE), new Element(SpellElement.FIRE), new Element(SpellElement.FIRE)));
-        //Actions_l.Add(new PaladinsBane());
-        //Actions_l.Add(new MariasWrath(new Element(SpellElement.FIRE), new Element(SpellElement.FIRE)));
-
         return Actions_l;
     }
 
@@ -190,7 +174,10 @@ public class Maria : Weapon
             this.cover = "F_A";
             this.totalTime = 700;
             this.Player = Player;
-            this.BaseDamageCalculation(20, 1.7f);
+            this.baseDamageMin = 20;
+            this.baseDamageMax = 20;
+            this.damageMultiplicator = 1.7f;
+            // this.BaseDamageCalculation(20, 1.7f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -208,6 +195,12 @@ public class Maria : Weapon
         } 
     }
 
+    /*
+        ABOUT COMBOS:
+        - Lv3 Combos have rel. high basedamage but bad scaling so they are not as usefull with a higher level weapon -> See A / A_2
+        - Heat Spent Actions have higher damage overall -> See A / D
+    */
+
     private class Combo_A : Action 
     {
         private List<Action> RemovedActionsOnQueue = new List<Action>();
@@ -219,8 +212,12 @@ public class Maria : Weapon
             this.comboString = "LHS";
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.heavyAttackStdTime;
+
             this.Player = Player;
-            this.BaseDamageCalculation(30, 1.4f);
+            this.baseDamageMin = 25;
+            this.baseDamageMax = 25;
+            this.damageMultiplicator = 0.75f;
+            // this.BaseDamageCalculation(30, 1.4f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -258,8 +255,14 @@ public class Maria : Weapon
             this.comboString = "LHSS";
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.heavyAttackStdTime+200;
+
+            this.unlockPrice = 1500;
+
             this.Player = Player;
-            this.BaseDamageCalculation(76, 1.4f);
+            this.baseDamageMin = 45;
+            this.baseDamageMax = 45;
+            this.damageMultiplicator = 1.2f;
+            // this.BaseDamageCalculation(76, 1.4f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -298,8 +301,15 @@ public class Maria : Weapon
             this.comboString = "LHSSH";
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime+400;
+
+            this.unlockPrice = 3000;
+
+
             this.Player = Player;
-            this.BaseDamageCalculation(115, 1.4f);
+            this.baseDamageMin = 115;
+            this.baseDamageMax = 115;
+            this.damageMultiplicator = 1.3f;
+            // this.BaseDamageCalculation(115, 1.4f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -339,8 +349,14 @@ public class Maria : Weapon
             this.comboString = "LHSSHL";
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.heavyAttackStdTime+600;
+
+            this.unlockPrice = 4500;
+
             this.Player = Player;
-            this.BaseDamageCalculation(138, 1.5f);
+            this.baseDamageMin = 210;
+            this.baseDamageMax = 210;
+            this.damageMultiplicator = 1.35f;
+            // this.BaseDamageCalculation(138, 1.5f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -381,8 +397,14 @@ public class Maria : Weapon
             this.comboString = "LHSSHLH";
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime + 800;
+
+            this.unlockPrice = 6000;
+
             this.Player = Player;
-            this.BaseDamageCalculation(190, 1.5f);
+            this.baseDamageMin = 430;
+            this.baseDamageMax = 430;
+            this.damageMultiplicator = 1.4f;
+            // this.BaseDamageCalculation(190, 1.5f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -423,7 +445,7 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0);
+            // this.BaseDamageCalculation(0);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -452,7 +474,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.heavyStdDamageMult);
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.heavyStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -481,7 +504,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.specialAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.specialStdDamageMult);
+            this.damageMultiplicator = this.specialStdDamageMult;
+            // this.BaseDamageCalculation(0, this.specialStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -514,8 +538,12 @@ public class Maria : Weapon
             this.comboString = "LSH";
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
+
             this.Player = Player;
-            this.BaseDamageCalculation(35, 1.35f);
+            this.baseDamageMin = 25;
+            this.baseDamageMax = 25;
+            this.damageMultiplicator = 0.75f;
+            // this.BaseDamageCalculation(35, 1.35f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -552,7 +580,7 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0);
+            // this.BaseDamageCalculation(0);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -581,7 +609,9 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.specialAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.specialStdDamageMult);
+            this.damageMultiplicator = this.specialStdDamageMult;
+            // this.damageMultiplicator = this.specialStdDamageMult;
+            // this.BaseDamageCalculation(0, this.specialStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -614,7 +644,10 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(35, 1.4f);
+            this.baseDamageMin = 25;
+            this.baseDamageMax = 25;
+            this.damageMultiplicator = 0.75f;
+            // this.BaseDamageCalculation(35, 1.4f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -651,7 +684,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.heavyStdDamageMult);
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.heavyStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -680,7 +714,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.specialAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.specialStdDamageMult);
+            this.damageMultiplicator = this.specialStdDamageMult;
+            // this.BaseDamageCalculation(0, this.specialStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -712,8 +747,17 @@ public class Maria : Weapon
             this.comboString = "SSH";
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
+
+            this.spentHeatOnHit = true;
+            this.heatSpentOnHit = 5; // NOTE: player gets heat from first 2 parts of the combo
+
+            this.unlockPrice = 300;
+
             this.Player = Player;
-            this.BaseDamageCalculation(25, 1.35f);
+            this.baseDamageMin = 45;
+            this.baseDamageMax = 45;
+            this.damageMultiplicator = 1.0f;
+            // this.BaseDamageCalculation(25, 1.35f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -750,7 +794,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.specialAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.specialStdDamageMult);
+            this.damageMultiplicator = this.specialStdDamageMult;
+            // this.BaseDamageCalculation(0, this.specialStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -779,7 +824,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.heavyStdDamageMult);
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.heavyStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -811,8 +857,14 @@ public class Maria : Weapon
             this.comboString = "LHH";
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
-            this.Player = Player;
-            this.BaseDamageCalculation(25, 1.35f);
+
+            this.unlockPrice = 300;
+
+            this.Player = Player;this.Player = Player;
+            this.baseDamageMin = 25;
+            this.baseDamageMax = 25;
+            this.damageMultiplicator = 0.75f;
+            // this.BaseDamageCalculation(25, 1.35f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -849,7 +901,7 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0);
+            // this.BaseDamageCalculation(0);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -878,7 +930,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.heavyStdDamageMult);
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.heavyStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -910,8 +963,14 @@ public class Maria : Weapon
             this.comboString = "HLL";
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
+
+            this.unlockPrice = 300;
+
             this.Player = Player;
-            this.BaseDamageCalculation(25, 1.1f);
+            this.baseDamageMin = 25;
+            this.baseDamageMax = 25;
+            this.damageMultiplicator = 0.75f;
+            // this.BaseDamageCalculation(25, 1.1f);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -948,7 +1007,7 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.LIGHT;
             this.totalTime = this.lightAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0);
+            // this.BaseDamageCalculation(0);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){
@@ -977,7 +1036,8 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
             this.Player = Player;
-            this.BaseDamageCalculation(0, this.heavyStdDamageMult);
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.heavyStdDamageMult);
         }
 
         public override void QueueAction(PlayerActionHandler AQ){

@@ -54,6 +54,7 @@ public class StandartMenuHandler : MonoBehaviour
         this.GameHandler.PlayerWeapon = PlayerWeapon;
         Armor PlayerArmor = Instantiate(ArmorPrefab).GetComponent<Armor>();
         this.GameHandler.PlayerArmor = PlayerArmor;
+        
         Player.MenuSetup(PlayerWeapon, PlayerArmor);
         
         this.GameHandler.SetPlayer(Player);

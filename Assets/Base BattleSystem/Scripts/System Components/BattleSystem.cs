@@ -152,6 +152,7 @@ public class BattleSystem : MonoBehaviour
 
     protected virtual void PreStartActions(){ // Changed in: NBS
         RunTests();
+        // foreach(Action A in Player.GetAbilityList()) Debug.Log(A.name);
         // this.PauseMenu.ShowPauseMenu(true);
     } // Changed in: BattleSystem_Tutorial.cs
 
@@ -167,7 +168,9 @@ public class BattleSystem : MonoBehaviour
 
     protected virtual void SetupEverything(){ // Changed in: NBS
         if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
-        else this.Player = this.GameHandler.Player;
+        else {
+            this.Player = this.GameHandler.Player;
+        }
 
         if(this.Player != null){
             SetupSystemComponents();
@@ -176,6 +179,7 @@ public class BattleSystem : MonoBehaviour
     } // Changed in: BattleSystem_Tutorial.cs
 
     protected void CreateNewPlayerGameObjects(){
+        // Debug.Log("Hellow");
         this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
         Weapon StandartWeapon = this.TestRunWeaponPrefab.GetComponent<Weapon>();
         Armor StandartArmor = this.TestRunArmorPrefab.GetComponent<Armor>();
