@@ -19,6 +19,12 @@ public class AbilityOptionSelectBar : MonoBehaviour
         this.selectFillerHeight = fillerBoxHeight;
     }
 
+    public void ClearSelectTextList(){
+        this.SelectTextList.Clear();
+
+        foreach(Transform C in this.transform) Destroy(C.gameObject);
+    }
+
     public void AddSelectText(){
         GameObject ST_GO = Instantiate(SelectTextPrefab, this.transform);
         ST_GO.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.selectTextHeight);

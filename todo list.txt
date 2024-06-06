@@ -1,15 +1,12 @@
 ToDo:
-- Scroll in Ability Loadout
-- Attack Rush finisher in Ability Loadout
-- Add heat spent action
-
-- display damage taken *10
-
-
-- add heat reduction on block ?
-- add weapon demon health bar
 - level 0
 - level 1
+
+
+- add weapon demon health bar
+- check Attack Rush func
+ - Add new Attack Rushfinishers
+ - AR breaking block after x hits?
 
 ADDON - BattleSystem:
  > Sounds!

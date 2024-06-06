@@ -341,14 +341,14 @@ public class Enemy : Unit
         while(cAmount < amount){
             timeWaited += this.tickRate;
             if(cText != null){
-                cText.text = cAmount.ToString();
+                cText.text = cAmount.ToString()+"0";
                 if(this.critTaken) cText.text += "!";
             }else break;
             cAmount += this.pointsPerTick;
             await Task.Delay(this.tickRate);
         }
 
-        cText.text = amount.ToString();
+        cText.text = amount.ToString()+"0";
         if(this.critTaken) cText.text += "!";
         this.critTaken = false;
         await Task.Delay((int)Mathf.Clamp(this.depletionTime - timeWaited, 0.0f, this.depletionTime));

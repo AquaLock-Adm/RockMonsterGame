@@ -65,6 +65,8 @@ public class Maria : Weapon
         Actions_l.Add(new Combo_F(this.Player));
         // Level 4
         Actions_l.Add(new Combo_A_2(this.Player));
+        Actions_l.Add(new Combo_B_2(this.Player));
+        Actions_l.Add(new Combo_C_2(this.Player));
         // Level 5
         Actions_l.Add(new Combo_A_3(this.Player));
         // Level 6
@@ -117,8 +119,16 @@ public class Maria : Weapon
                 res = new Combo_B(this.Player);
             break;
 
+            case "LSHS":
+                res = new Combo_B_2(this.Player);
+            break;
+
             case "SHL":
                 res = new Combo_C(this.Player);
+            break;
+
+            case "SHLH":
+                res = new Combo_C_2(this.Player);
             break;
 
             case "SSH":
@@ -256,7 +266,7 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.SPECIAL;
             this.totalTime = this.heavyAttackStdTime+200;
 
-            this.unlockPrice = 1500;
+            this.unlockPrice = 1300;
 
             this.Player = Player;
             this.baseDamageMin = 45;
@@ -570,6 +580,54 @@ public class Maria : Weapon
         }
     } // End of Combo_B Class
 
+    private class Combo_B_2 : Action 
+    {
+        private List<Action> RemovedActionsOnQueue = new List<Action>();
+
+        public Combo_B_2(PlayerCharacter Player){
+            this.name = "Combo B2";
+            this.cover = "Com B2";
+            this.comboLevel = 4;
+            this.comboString = "LSHS";
+            this.AbilityType = AbilityType.SPECIAL;
+            this.totalTime = this.specialAttackStdTime+200;
+
+            this.unlockPrice = 1500;
+
+            this.spentHeatOnHit = true;
+            this.heatSpentOnHit = 10; // NOTE: player gets heat from first 3 parts of the combo
+
+            this.Player = Player;
+            this.baseDamageMin = 85;
+            this.baseDamageMax = 85;
+            this.damageMultiplicator = 1.2f;
+        }
+
+        public override void QueueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I queued! Pos: "+ (AQ.Actions.Count-1).ToString());
+
+            List<Action> ComboActionParts = new List<Action>();
+            ComboActionParts.Add(new Combo_B_L(this.Player));
+            ComboActionParts.Add(new Combo_B_S(this.Player));
+            ComboActionParts.Add(new Combo_B_H(this.Player));
+            ComboActionParts.Add(this);
+
+            this.RemovedActionsOnQueue = FillPlayerActionHandlerWithComboAbilities(AQ, ComboActionParts);
+        }
+
+        public override void DequeueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I dequeued! Queue length: "+ AQ.Actions.Count);
+
+            RefillPlayerActionHandlerWithPreviousActions(AQ, this.RemovedActionsOnQueue);
+        }
+
+        public override Action Copy(){
+            Action A =  new Combo_B_2(this.Player);
+            A.abilityIndex = this.abilityIndex;
+            return A;
+        }
+    } // End of Combo_B_2 Class
+
     private class Combo_B_L : Action
     {
         public Combo_B_L(PlayerCharacter Player){
@@ -630,6 +688,36 @@ public class Maria : Weapon
         }
     } // End of Combo_B_S
 
+    private class Combo_B_H : Action
+    {
+        public Combo_B_H(PlayerCharacter Player){
+            this.name = "Combo B-H";
+            this.cover = "Com B";
+            this.comboLevel = 3;
+            this.comboString = "H";
+            this.AbilityType = AbilityType.HEAVY;
+            this.totalTime = this.heavyAttackStdTime;
+            this.Player = Player;
+            this.damageMultiplicator = this.heavyStdDamageMult;
+            // this.BaseDamageCalculation(0, this.specialStdDamageMult);
+        }
+
+        public override void QueueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I queued! Pos: "+ (AQ.Actions.Count-1).ToString());
+            return;
+        }
+
+        public override void DequeueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I dequeued! Queue length: "+ AQ.Actions.Count);
+            return;
+        }
+
+        public override Action Copy(){
+            Action A =  new Combo_B_H(this.Player);
+            return A;
+        }
+    } // End of Combo_B_H
+
 
 
     private class Combo_C : Action 
@@ -673,6 +761,82 @@ public class Maria : Weapon
             return A;
         }
     } // End of Combo_C Class
+
+    private class Combo_C_2 : Action 
+    {
+        private List<Action> RemovedActionsOnQueue = new List<Action>();
+
+        public Combo_C_2(PlayerCharacter Player){
+            this.name = "Combo C2";
+            this.cover = "Com C2";
+            this.comboLevel = 4;
+            this.comboString = "SHLH";
+            this.AbilityType = AbilityType.HEAVY;
+            this.totalTime = this.heavyAttackStdTime+200;
+
+            this.unlockPrice = 1500;
+
+            this.spentHeatOnHit = true;
+            this.heatSpentOnHit = 10; // NOTE: player gets heat from first 3 parts of the combo
+
+            this.Player = Player;
+            this.baseDamageMin = 85;
+            this.baseDamageMax = 85;
+            this.damageMultiplicator = 1.15f;
+        }
+
+        public override void QueueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I queued! Pos: "+ (AQ.Actions.Count-1).ToString());
+
+            List<Action> ComboActionParts = new List<Action>();
+            ComboActionParts.Add(new Combo_C_S(this.Player));
+            ComboActionParts.Add(new Combo_C_H(this.Player));
+            ComboActionParts.Add(new Combo_C_L(this.Player));
+            ComboActionParts.Add(this);
+
+            this.RemovedActionsOnQueue = FillPlayerActionHandlerWithComboAbilities(AQ, ComboActionParts);
+        }
+
+        public override void DequeueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I dequeued! Queue length: "+ AQ.Actions.Count);
+
+            RefillPlayerActionHandlerWithPreviousActions(AQ, this.RemovedActionsOnQueue);
+        }
+
+        public override Action Copy(){
+            Action A =  new Combo_C_2(this.Player);
+            A.abilityIndex = this.abilityIndex;
+            return A;
+        }
+    } // End of Combo_C_2 Class
+
+    private class Combo_C_L : Action
+    {
+        public Combo_C_L(PlayerCharacter Player){
+            this.name = "Combo C-L";
+            this.cover = "Com C";
+            this.comboLevel = 3;
+            this.comboString = "L";
+            this.AbilityType = AbilityType.LIGHT;
+            this.totalTime = this.lightAttackStdTime;
+            this.Player = Player;
+        }
+
+        public override void QueueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I queued! Pos: "+ (AQ.Actions.Count-1).ToString());
+            return;
+        }
+
+        public override void DequeueAction(PlayerActionHandler AQ){
+            // Debug.Log("Exodus I dequeued! Queue length: "+ AQ.Actions.Count);
+            return;
+        }
+
+        public override Action Copy(){
+            Action A =  new Combo_C_L(this.Player);
+            return A;
+        }
+    } // End of Combo_C_L
 
     private class Combo_C_H : Action
     {
