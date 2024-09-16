@@ -131,6 +131,7 @@ public class PlayerActionHandler : MonoBehaviour
     public void BattleEnd(){
         Destroy(this);
     }
+
 	public void SwitchModes(bool playerIsDefending){
 		if(playerIsDefending){
 			int comboLengthMax = Player.GetCurrentEnemy().GetCurrentAttackSequenceLength();

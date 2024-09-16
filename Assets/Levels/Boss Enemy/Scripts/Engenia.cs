@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class Engenia : Enemy
 {
     [Header("Engenia Stats")]
-    [SerializeField] private int maxBlockStamina = 20;
-    [SerializeField] private int blockStamina = 20;
 
     [SerializeField] private bool freeAttackTurn = false;
 

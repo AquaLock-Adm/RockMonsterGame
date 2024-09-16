@@ -72,6 +72,10 @@ public class Enemy : Unit
 
     [SerializeField] private int itemDropChance;
 
+    public bool blockStaminaBroken = false;
+    [SerializeField] protected int maxBlockStamina = 10;
+    [SerializeField] protected int blockStamina = 10; 
+
     [Header("Defense Mode")]
 
     public List<List<ShieldMode>>[] DefensiveModes = new List<List<ShieldMode>>[2]; // DefensiveModes[0] => CurrentShieldModesList / DefensiveModes[1] => CurrentDiscoveredShieldsList
@@ -121,8 +125,24 @@ public class Enemy : Unit
     }
 
     public virtual void PassRound(){
+
         if(BattleSystem.Player.defendModeActive) this.enemyAttacksExecuted++;
+
+        
     } // changed in: Engenia.cs
+
+    public void NextRound(){
+        if(!this.blockStaminaBroken && this.blockStamina <= 0){
+            this.blockStamina = 0;
+            this.blockStaminaBroken = true;
+            Debug.Log("Broken!");
+        }else if(this.blockStaminaBroken){
+            this.blockStaminaBroken = false;
+            this.blockStamina = this.maxBlockStamina;
+            BattleSystem.ResetBattleSpeed();
+            this.battleSpeed = BattleSystem.Player.battleSpeed +1;
+        }
+    }
 
     // changed in Enemy_Tutorial.cs
     public override async Task Death(){
@@ -188,6 +208,10 @@ public class Enemy : Unit
             damageTextIndex++;
         }
         damageTextIndex = 0;
+
+        this.blockStamina = this.maxBlockStamina;
+        this.blockStaminaBroken = false;
+
         BattleUpdateLoop();
     }
 
@@ -221,7 +245,7 @@ public class Enemy : Unit
             SetShieldVisualizer(false);
         }else{
             SetAttackVisualizer(false);
-            SetShieldVisualizer(true);
+            SetShieldVisualizer(!this.blockStaminaBroken);
         }
     } // changed in Engenia.cs
 
@@ -252,8 +276,11 @@ public class Enemy : Unit
 
         int damageDealt = await A.NormalExecute();
         if(BattleSystem.Player.state == PlayerState.QUEUE){
-            if(this.shieldModeIndex < this.CurrentShieldModes.Count){
+            if(!this.blockStaminaBroken && this.shieldModeIndex < this.CurrentShieldModes.Count){
                 addHeat = CheckShieldMode(A.AbilityType);
+
+                if(this.blockStamina > 0 && addHeat) this.blockStamina--;
+
                 if(this.nextShield == ShieldMode.NONE && this.healthPoints <= 0){
                     this.deathTriggered = true;
                 }

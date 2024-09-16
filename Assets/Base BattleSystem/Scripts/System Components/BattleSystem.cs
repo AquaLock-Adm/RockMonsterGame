@@ -327,6 +327,15 @@ public class BattleSystem : MonoBehaviour
         Player.StartActionQueue();
     }
     public void NextRound(){
+        Enemy.NextRound();
+
+        if(Enemy.blockStaminaBroken){
+            Enemy.SwitchBattleModes(false);
+            Player.SwitchBattleModes(false);
+            Player.UpdateNextRoundModeInfo();
+            return;
+        }
+
         if(this.useBattleSpeed){
             if(Player.battleSpeed >= Enemy.battleSpeed){
                 // Debug.Log("Player Attack Turn.\n"+Player.battleSpeed.ToString()+","+Enemy.battleSpeed.ToString());
@@ -339,13 +348,16 @@ public class BattleSystem : MonoBehaviour
                 Enemy.SwitchBattleModes(true);
                 Player.SwitchBattleModes(true);
             }
-            Player.UpdateNextRoundModeInfo();  
+            Player.UpdateNextRoundModeInfo();
         }else{
             Enemy.SwitchBattleModes(!Player.defendModeActive);
             Player.SwitchBattleModes(!Player.defendModeActive);
         }
-        
         // New Round Starts Now !
+    }
+    public void ResetBattleSpeed(){
+        Player.battleSpeed = Player.baseBattleSpeed;
+        Enemy.battleSpeed = Enemy.baseBattleSpeed;
     }
 #endregion
 
