@@ -593,8 +593,7 @@ public class Maria : Weapon
             this.totalTime = this.specialAttackStdTime+200;
 
             this.unlockPrice = 1500;
-
-            this.spentHeatOnHit = true;
+            
             this.heatSpentOnHit = 10; // NOTE: player gets heat from first 3 parts of the combo
 
             this.Player = Player;
@@ -776,7 +775,6 @@ public class Maria : Weapon
 
             this.unlockPrice = 1500;
 
-            this.spentHeatOnHit = true;
             this.heatSpentOnHit = 10; // NOTE: player gets heat from first 3 parts of the combo
 
             this.Player = Player;
@@ -912,7 +910,6 @@ public class Maria : Weapon
             this.AbilityType = AbilityType.HEAVY;
             this.totalTime = this.heavyAttackStdTime;
 
-            this.spentHeatOnHit = true;
             this.heatSpentOnHit = 5; // NOTE: player gets heat from first 2 parts of the combo
 
             this.unlockPrice = 300;

@@ -66,6 +66,8 @@ public class PlayerCharacter : Unit
         this.ActionHUD = ActionHUD;
         this.state = PlayerState.WAITING;
 
+        this.SetAbilities = GetStandartAbilitiesList();
+
         SetupHUDReferences();
         SetupBattleComponents();
     }

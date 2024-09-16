@@ -319,7 +319,7 @@ public class PlayerActionHandler : MonoBehaviour
 
 			if(attackHitEnemy){
 				perfectCounter++;
-				if(CurrentAction.spentHeatOnHit) LoseHeat(CurrentAction.heatSpentOnHit);
+				if(CurrentAction.heatSpentOnHit > 0) LoseHeat(CurrentAction.heatSpentOnHit);
 				else AddHeat();
 			}
 		}
@@ -419,6 +419,7 @@ public class PlayerActionHandler : MonoBehaviour
 	// }
 
 	private void LoseHeat(int heatLoss = 1){
+            Debug.Log("Heatloss: "+heatLoss.ToString());
 		/*
 		Test: comboLevel = 3, cHeat = 3, heatLoss = 5
 

@@ -44,6 +44,21 @@ public class BattleSystem : MonoBehaviour
     [Header("State")]
     public BattleState state; // bsvg3
 
+    [Header("For Testing")]
+
+    [SerializeField] private int[] log1;  // counts of Elements in ElementsToCombine (see RunTests())
+    //[SerializeField] public List<SpellElement> log2; // empty 
+    //[SerializeField] private List<int> log3; // empty
+    // bsvg16
+
+    [SerializeField] private bool setWeaponStartLevel = false;
+    [SerializeField] private int testWeaponStartLevel = 1;
+
+    [SerializeField] private bool setStartStage = false;
+    [SerializeField] private int testStartStage = 1;
+
+    public bool useSetAbilities = true;
+
     [Header("Unit Variables")]
 
     public int standartTimeBetweenSpawnes = 2000; // ms
@@ -93,23 +108,6 @@ public class BattleSystem : MonoBehaviour
     public GameObject PauseScreen;
 
 
-    [Header("For Testing")]
-
-    [SerializeField] private int[] log1;  // counts of Elements in ElementsToCombine (see RunTests())
-    //[SerializeField] public List<SpellElement> log2; // empty 
-    //[SerializeField] private List<int> log3; // empty
-    // bsvg16
-
-    [SerializeField] private bool setWeaponStartLevel = false;
-    [SerializeField] private int testWeaponStartLevel = 1;
-
-    [SerializeField] private bool setStartStage = false;
-    [SerializeField] private int testStartStage = 1;
-
-    public bool useSetAbilities = true;
-
-
-
 #region Unity Functions
     private void Awake(){
         GameObject GHGO = GameObject.Find("GameHandler");
@@ -132,13 +130,15 @@ public class BattleSystem : MonoBehaviour
 
 
 
-    public void GameStart(GameHandler GH){
+    public virtual void GameStart(GameHandler GH){ // Changed in BS_Tutorial
         this.GameHandler = GH;
         this.state = BattleState.SETUP;
         this.startStage = GH.GetCurrentStartStage();
         CheckEnemyLibraryInit();
         CheckDisplays();
-        SetupEverything();
+        SetupPlayer();
+        SetupSystemComponents();
+        PlayerBattleSetup();
         PreStartActions();
     }
 
@@ -148,6 +148,37 @@ public class BattleSystem : MonoBehaviour
 
         this.MainMenu.SetActive(true);
         this.PauseScreen.SetActive(true);
+    }
+
+    protected virtual void SetupPlayer(){
+        if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
+        else {
+            this.Player = this.GameHandler.Player;
+        }
+
+        if(this.Player == null){
+            Debug.LogError("Something went wrong creating the Player!");
+        }
+    }
+
+    protected void CreateNewPlayerGameObjects(){
+        Debug.Log("Creating new Player!");
+        this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
+
+        Weapon StandartWeapon = Instantiate(this.TestRunWeaponPrefab).GetComponent<Weapon>();
+        Armor StandartArmor = Instantiate(this.TestRunArmorPrefab).GetComponent<Armor>();
+
+        this.Player.SetWeapon(StandartWeapon);
+        this.Player.SetArmor(StandartArmor); 
+
+        StandartWeapon.Init(this.Player);
+        StandartArmor.Init(this.Player);
+    }
+
+    protected void PlayerBattleSetup(){
+        if(this.setWeaponStartLevel) {
+            this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
+        }else this.Player.BattleSetup(this, this.ActionHUD);
     }
 
     protected virtual void PreStartActions(){ // Changed in: NBS
@@ -165,41 +196,6 @@ public class BattleSystem : MonoBehaviour
 
         Debug.Log(res);*/
     }
-
-    protected virtual void SetupEverything(){ // Changed in: NBS
-        if(this.GameHandler.Player == null) CreateNewPlayerGameObjects();
-        else {
-            this.Player = this.GameHandler.Player;
-        }
-
-        if(this.Player != null){
-            SetupSystemComponents();
-            SetupCurrentPlayer();
-        }else Debug.LogError("Player has not been set during Setup.");
-    } // Changed in: BattleSystem_Tutorial.cs
-
-    protected void CreateNewPlayerGameObjects(){
-        // Debug.Log("Hellow");
-        this.Player = Instantiate(this.TestRunPlayerPrefab).GetComponent<PlayerCharacter>();
-        Weapon StandartWeapon = this.TestRunWeaponPrefab.GetComponent<Weapon>();
-        Armor StandartArmor = this.TestRunArmorPrefab.GetComponent<Armor>();
-
-        this.Player.SetWeapon(StandartWeapon);
-        this.Player.SetArmor(StandartArmor); 
-
-        StandartWeapon.Init(this.Player);
-        StandartArmor.Init(this.Player);
-    }
-
-
-
-#region SetCurrentPlayer Functions
-    protected void SetupCurrentPlayer(){
-        if(this.setWeaponStartLevel) {
-            this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
-        }else this.Player.BattleSetup(this, this.ActionHUD);
-    }
-#endregion
 
 
 

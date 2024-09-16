@@ -48,7 +48,7 @@ public abstract class Action
     public int abilityIndex = -1;
     public int totalTime = 1000;
     public int damage = 0;
-    public bool spentHeatOnHit = false;
+    // public bool spentHeatOnHit = false;
     public int heatSpentOnHit = 0;
 
     public int unlockPrice = 0;

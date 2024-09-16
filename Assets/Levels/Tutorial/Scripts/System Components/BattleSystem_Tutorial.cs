@@ -16,13 +16,12 @@ public class BattleSystem_Tutorial : BattleSystem
     }
 
     // Always creates New Player GO
-    protected override void SetupEverything(){ // Changed in: NBS
+    protected override void SetupPlayer(){ // Changed in: NBS
         CreateNewPlayerGameObjects();
 
-        if(this.Player != null){
-            SetupSystemComponents();
-            SetupCurrentPlayer();
-        }else Debug.LogError("Player has not been set during Setup.");
+        if(this.Player == null){
+            Debug.LogError("Something went wrong creating the Player!");
+        }
     }
 
     public void BlockPlayerBattleModeSwitch(bool blockOn){
