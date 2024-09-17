@@ -10,6 +10,7 @@ public class EnemySettings{
 
     public int damage;
     public int battleSpeed;
+    public int maxBlockStamina;
 
     public int baseKillPrice;
     public int maxKillPrice;
@@ -93,6 +94,7 @@ public class EnemySettings{
 
         this.damage = PrefabEnemy.GetDamage();
         this.battleSpeed = PrefabEnemy.GetBattleSpeed();
+        this.maxBlockStamina = PrefabEnemy.GetMaxBlockStamina();
         this.level = PrefabEnemy.GetLevel();
         this.name = PrefabEnemy.unitName;
         this.hp = PrefabEnemy.healthPoints;

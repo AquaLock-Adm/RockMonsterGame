@@ -135,7 +135,6 @@ public class Enemy : Unit
         if(!this.blockStaminaBroken && this.blockStamina <= 0){
             this.blockStamina = 0;
             this.blockStaminaBroken = true;
-            Debug.Log("Broken!");
         }else if(this.blockStaminaBroken){
             this.blockStaminaBroken = false;
             this.blockStamina = this.maxBlockStamina;
@@ -720,6 +719,27 @@ public class Enemy : Unit
         this.itemDropChance = Other.itemDropChance;
     }
 
+    public void CopyFromEnemySettings(EnemySettings Settings){
+        this.level = Settings.level;
+        this.unitName = Settings.name;
+        this.maxHealthPoints = Settings.hp;
+        this.healthPoints = Settings.hp;
+        this.damage = Settings.damage;
+        this.battleSpeed = Settings.battleSpeed;
+        this.maxBlockStamina = Settings.maxBlockStamina;
+
+        this.killPrice = Settings.baseKillPrice;
+        this.maxKillPrice = Settings.maxKillPrice;
+
+        this.DefensiveModes[0] = Settings.DefensiveModes[0];
+        this.DefensiveModes[1] = Settings.DefensiveModes[1];
+        this.defensiveModeIndex = Settings.defensiveModeIndex;
+
+        this.AttackLibrary = Settings.AttackLibrary;
+        this.minAttackSequenceLength = Settings.minAttackSequenceLength;
+        this.maxAttackSequenceLength = Settings.maxAttackSequenceLength;
+    }
+
     public void PrintStatus(){
         Debug.Log("Status Enemy "+ this.unitName+":");
         string s = "\nHUD References:\n"
@@ -761,6 +781,10 @@ public class Enemy : Unit
 
     public int GetBattleSpeed(){
         return this.battleSpeed;
+    }
+
+    public int GetMaxBlockStamina(){
+        return this.maxBlockStamina;
     }
 
     public int GetKillPrice(){
@@ -809,26 +833,6 @@ public class Enemy : Unit
 
     public void SetHeldByCombo(bool on){
         this.heldByCombo = on;
-    }
-
-    public void CopyFromEnemySettings(EnemySettings Settings){
-        this.level = Settings.level;
-        this.unitName = Settings.name;
-        this.maxHealthPoints = Settings.hp;
-        this.healthPoints = Settings.hp;
-        this.damage = Settings.damage;
-        this.battleSpeed = Settings.battleSpeed;
-
-        this.killPrice = Settings.baseKillPrice;
-        this.maxKillPrice = Settings.maxKillPrice;
-
-        this.DefensiveModes[0] = Settings.DefensiveModes[0];
-        this.DefensiveModes[1] = Settings.DefensiveModes[1];
-        this.defensiveModeIndex = Settings.defensiveModeIndex;
-
-        this.AttackLibrary = Settings.AttackLibrary;
-        this.minAttackSequenceLength = Settings.minAttackSequenceLength;
-        this.maxAttackSequenceLength = Settings.maxAttackSequenceLength;
     }
 #endregion
 }

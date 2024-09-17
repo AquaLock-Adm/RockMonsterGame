@@ -220,6 +220,7 @@ public class WaveRandomizer : MonoBehaviour
         bossSettings.level = 1;
         bossSettings.hp = 120;
         bossSettings.battleSpeed = 6;
+        bossSettings.maxBlockStamina = 12;
         bossSettings.baseKillPrice = 1000;
         bossSettings.maxKillPrice = 10000;
 
@@ -264,14 +265,14 @@ public class WaveRandomizer : MonoBehaviour
         Res.level = 1;
         Res.hp = hp;
         Res.battleSpeed = 4;
+        Res.InitAttackLibrary(1, 2, 3);
+        Res.maxBlockStamina = 8;
 
         if(shieldCount >= 3){
-            Res.InitAttackLibrary(1, 2, 3);
             Res.baseKillPrice = 23;
             Res.maxKillPrice = 200;
             Res.damage = 4;
         }else{
-            Res.InitAttackLibrary(1, 2, 3);
             Res.baseKillPrice = 15;
             Res.maxKillPrice = 100;
             Res.damage = 2;
@@ -379,6 +380,7 @@ public class WaveRandomizer : MonoBehaviour
         bossSettings.level = 2;
         bossSettings.hp = 4000;
         bossSettings.battleSpeed = 6;
+        bossSettings.maxBlockStamina = 16;
         bossSettings.baseKillPrice = 4000;
         bossSettings.maxKillPrice = 40000;
 
@@ -449,6 +451,7 @@ public class WaveRandomizer : MonoBehaviour
         Res.level = 2;
         Res.hp = hp;
         Res.battleSpeed = 5;
+        Res.maxBlockStamina = 11;
 
         if(shieldCount > 3){
             Res.baseKillPrice = 70;
