@@ -7504,10 +7504,12 @@ MonoBehaviour:
   TestRunSubWeaponPrefab: {fileID: 7430779103724800017, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
   TestRunSubArmorPrefab: {fileID: 1825134985689378487, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
   Player: {fileID: 0}
+  SubPlayer: {fileID: 0}
   Enemy: {fileID: 0}
   earnedCredits: 0
   PlayerNameText: {fileID: 785446348}
   PlayerHpSlider: {fileID: 1611697035}
+  SubPlayerHpSlider: {fileID: 266897855}
   ActionHUD: {fileID: 96047623}
   ActionBoxPrefab: {fileID: 5191158711230300220, guid: eb3d3fe8988a41345a2153425ef3e1c6, type: 3}
   KillCountText: {fileID: 1535592762}

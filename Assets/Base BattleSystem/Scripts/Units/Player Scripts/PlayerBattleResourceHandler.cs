@@ -11,6 +11,7 @@ public class PlayerBattleResourceHandler : MonoBehaviour
     protected PlayerCharacter Player;
 
     private bool battleActive = true;
+    private bool battleUpdateLoopRunning = false;
 
     [SerializeField] protected TextMeshProUGUI NameText;
     [SerializeField] protected Slider HpSlider;
@@ -23,6 +24,8 @@ public class PlayerBattleResourceHandler : MonoBehaviour
 
     private float currentHCPS = 0.0f;
 
+    private bool healthRegenLoopRunning = false;
+
     private bool enemyDOTLoopRunning = false;
     private float enemyDOTPerTick = 1.0f;
     private float currentEnemyDOT = 0.0f;
@@ -33,21 +36,27 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         this.Player = Player;
 
         this.NameText = NameText;
-        this.NameText.text = Player.unitName;
-
         this.HpSlider = HpSlider;
 
-        StartHealthDepleteLoop();
-        // if(Player.GetWeapon().actionsPerRound > 5) StartEnemyDOTLoop();
-        BattleUpdateLoop();
+        if (Player.playerIsInFront)
+        {
+            this.NameText.text = Player.unitName;
+            StartHealthDepleteLoop();
+        }
+        //else StartPlayerHealthRegenLoop(); 
+        if(!this.battleUpdateLoopRunning) BattleUpdateLoop();
     } // changed in: PlayerResource_Tutorial.cs
 
     protected async void BattleUpdateLoop(){
+        this.battleUpdateLoopRunning = true;
+
         while(!Player.deathTriggered && this.battleActive && Application.isPlaying){
             UpdateHUDElements();
             UpdateArmorStats();
             await Task.Yield();
         }
+
+        this.battleUpdateLoopRunning = false;
     }
 
 
@@ -57,13 +66,14 @@ public class PlayerBattleResourceHandler : MonoBehaviour
         this.HpSlider.maxValue = Player.maxHealthPoints;
     }
 
-    public void BattleEnd(){
-        this.battleActive = false;
-        Destroy(this);
-    }
-
     private void UpdateArmorStats(){
         Player.GetArmor().healthPoints = Player.healthPoints;
+    }
+
+    public void BattleEnd()
+    {
+        this.battleActive = false;
+        Destroy(this);
     }
 
 
@@ -92,7 +102,7 @@ public class PlayerBattleResourceHandler : MonoBehaviour
 
 
 
-#region Health Drain
+#region Health Updates
     public void StartHealthDepleteLoop(){
         if(this.healthDepleteLoopRunning){
             Debug.Log("Health Deplete Loop is already running!");
@@ -164,11 +174,44 @@ public class PlayerBattleResourceHandler : MonoBehaviour
     private void CalcLifeDrainPerTick(){ 
         this.lifeDrainPerTick = (float)( this.currentHCPS / (1000.0f/(float)TICK_TIME_MS)); 
     }
+
+    public void StartPlayerHealthRegenLoop()
+    {
+        if (this.healthRegenLoopRunning) return;
+
+        this.healthRegenLoopRunning = true;
+        HealthRegenLoop();
+    }
+
+    private async void HealthRegenLoop()
+    {
+        float healthRegened = 0.0f;
+        float currentHealthRegen = Player.GetArmor().healthRegen;
+
+        float lastCallTime = 0.0f;
+        float deltaTime = 1.0f;
+
+        while (Player.healthPoints > 0 && Application.isPlaying)
+        {
+            deltaTime = Time.time - lastCallTime;
+            healthRegened += currentHealthRegen * deltaTime;
+
+            if(healthRegened > 1.0f)
+            {
+                int healthGain = (int)healthRegened;
+                healthRegened -= (float)healthGain;
+                Player.healthPoints = (int)Mathf.Min((float)Player.GetArmor().maxHealthPoints, (float)(Player.healthPoints + healthGain));
+            }
+
+            lastCallTime = Time.time;
+            await Task.Yield();
+        }
+    }
 #endregion
 
 
 
-#region Enemy DOT
+    #region Enemy DOT
     public void StartEnemyDOTLoop(){
         if(this.enemyDOTLoopRunning){
             Debug.Log("Enemy DOT Loop is already running!");

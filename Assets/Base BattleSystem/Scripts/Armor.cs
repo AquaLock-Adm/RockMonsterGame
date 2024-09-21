@@ -15,6 +15,7 @@ public class Armor : MonoBehaviour
 
     public int healthPoints;
     public int maxHealthPoints;
+    public float healthRegen;
 
     public int mana = 0;
     public int maxMana = 0;

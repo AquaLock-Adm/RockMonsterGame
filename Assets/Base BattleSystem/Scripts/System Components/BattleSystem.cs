@@ -73,6 +73,7 @@ public class BattleSystem : MonoBehaviour
 
 
     [SerializeField] public PlayerCharacter Player;
+    [SerializeField] public PlayerCharacter SubPlayer;
     [SerializeField] public Enemy Enemy;
 
     [Header("System Counters")]
@@ -86,6 +87,7 @@ public class BattleSystem : MonoBehaviour
     // bsvg9
     [SerializeField] public TextMeshProUGUI PlayerNameText;
     [SerializeField] public Slider PlayerHpSlider;
+    [SerializeField] public Slider SubPlayerHpSlider;
     // bsvg9
 
     [SerializeField] private GameObject ActionHUD;
@@ -177,12 +179,34 @@ public class BattleSystem : MonoBehaviour
 
         StandartWeapon.Init(this.Player);
         StandartArmor.Init(this.Player);
+
+
+        this.SubPlayer = Instantiate(this.TestRunSubPlayerPrefab).GetComponent<PlayerCharacter>();
+
+        Weapon SubWeapon = Instantiate(this.TestRunSubWeaponPrefab).GetComponent<Weapon>();
+        Armor SubArmor = Instantiate(this.TestRunSubArmorPrefab).GetComponent<Armor>();
+
+        this.SubPlayer.SetWeapon(SubWeapon);
+        this.SubPlayer.SetArmor(SubArmor);
+
+        SubWeapon.Init(this.SubPlayer);
+        SubArmor.Init(this.SubPlayer);
     }
 
     protected void PlayerBattleSetup(){
-        if(this.setWeaponStartLevel) {
+        this.Player.playerIsInFront = true;
+        this.SubPlayer.playerIsInFront = false;
+
+        if (this.setWeaponStartLevel)
+        {
             this.Player.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
-        }else this.Player.BattleSetup(this, this.ActionHUD);
+            this.SubPlayer.BattleSetup(this, this.ActionHUD, this.testWeaponStartLevel);
+        }
+        else
+        {
+            this.Player.BattleSetup(this, this.ActionHUD);
+            this.SubPlayer.BattleSetup(this, this.ActionHUD);
+        }
     }
 
     protected virtual void PreStartActions(){ // Changed in: NBS

@@ -51,7 +51,7 @@ MonoBehaviour:
   upgradeCost: 700
   healthPoints: 100
   maxHealthPoints: 100
-  shieldBroken: 0
-  shield: 10
-  shieldRegenRate: 500
-  shieldRegenVal: 1
+  healthRegen: 0.01
+  mana: 0
+  maxMana: 0
+  manaRegen_s: 0

@@ -73,8 +73,12 @@ public class PlayerActionHandler : MonoBehaviour
 		SetupHUDReferences(HUDReferences);
 		SetComboLevel();
 		CheckHeatChargeAvailability();
-		UpdateActionBoxList();
-		UpdateHeatBar();
+
+        if (this.Player.playerIsInFront)
+		{
+			UpdateActionBoxList();
+			UpdateHeatBar();
+		}
 
 		SetupComboAbilityList();
 	}
@@ -112,7 +116,6 @@ public class PlayerActionHandler : MonoBehaviour
 		this.currentMaxAttackLength = this.comboLevel;
 		// this.maxComboLv = Player.GetWeapon().actionsPerRound;
 		this.maxComboLv = 7;
-
 		this.ComboLevelText.text = "Lv."+comboLevel.ToString();
 	}
 

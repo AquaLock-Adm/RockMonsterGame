@@ -26,6 +26,8 @@ public class PlayerCharacter : Unit
     [SerializeField] private Weapon Weapon;
     [SerializeField] private Armor Armor;
 
+    public bool playerIsInFront = false;
+
     public bool deathTriggered = false;
     private bool heatChargeAvailable = false;
 
@@ -133,12 +135,15 @@ public class PlayerCharacter : Unit
 
     protected virtual void SetupBattleComponents()
     {
-        // Reminder: Setup Actionshandler before Player control so the start menu knows that the heatcharge is done on apr < 5
+        // Reminder: Setup Actionshandler before Player control so the start menu knows that the heatcharge is done on apr > 5 <-- outdated 210924
         this.ActionHandler = this.gameObject.AddComponent<PlayerActionHandler>();
         this.ActionHandler.Setup(this, this.ReferencesForActionHandler);
 
         this.ResourceHandler = this.gameObject.AddComponent<PlayerBattleResourceHandler>();
-        this.ResourceHandler.Setup(this, BattleSystem.PlayerNameText, BattleSystem.PlayerHpSlider);
+        if(this.playerIsInFront)
+            this.ResourceHandler.Setup(this, BattleSystem.PlayerNameText, BattleSystem.PlayerHpSlider);
+        else
+            this.ResourceHandler.Setup(this, BattleSystem.PlayerNameText, BattleSystem.SubPlayerHpSlider);
 
         this.Controls = this.gameObject.AddComponent<PlayerControl>();
         this.Controls.Setup(this, BattleSystem.InputDarkFilter, this.MenuTexts);

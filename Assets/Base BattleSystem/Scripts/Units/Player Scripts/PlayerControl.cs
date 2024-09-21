@@ -48,8 +48,11 @@ public class PlayerControl : MonoBehaviour
         this.InputDarkFilter.SetActive(false);
         this.ButtonTexts = ButtonTexts;
 
-        SetupButtonTexts();
-        LoadMainMenu();
+        if (Player.playerIsInFront)
+        {
+            SetupButtonTexts();
+            LoadMainMenu();
+        }
 
         BattleUpdateLoop();
     }
@@ -102,8 +105,11 @@ public class PlayerControl : MonoBehaviour
     {
         while (!Player.deathTriggered && this.battleActive && Application.isPlaying)
         {
-            if (!this.stopInputs) CheckInputs();
-            else this.InputDarkFilter.SetActive(true);
+            if (this.Player.playerIsInFront)
+            {
+                if (!this.stopInputs) CheckInputs();
+                else this.InputDarkFilter.SetActive(true);
+            }
 
             await Task.Yield();
         }
