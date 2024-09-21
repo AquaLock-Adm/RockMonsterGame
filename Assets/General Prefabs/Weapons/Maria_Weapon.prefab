@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2449945219972644136}
   - component: {fileID: 6337374475854073736}
   m_Layer: 0
-  m_Name: Maria
+  m_Name: Maria_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

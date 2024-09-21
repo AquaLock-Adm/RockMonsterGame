@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7581679560644600380}
-  - component: {fileID: 4839259021236632108}
+  - component: {fileID: 1011293115931638919}
   m_Layer: 0
-  m_Name: Maria
+  m_Name: Maria_Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4839259021236632108
+--- !u!114 &1011293115931638919
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3746064411970355313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84a8a4449d7934c499ddca9c515f1b2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e8aac111ead3eb4f86e60856d6bab68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   depletionTime: 500
@@ -51,8 +51,11 @@ MonoBehaviour:
   unitName: Maria
   healthPoints: 0
   maxHealthPoints: 0
-  NameText: {fileID: 0}
-  HpSlider: {fileID: 0}
-  ManaSlider: {fileID: 0}
-  Weapon: {fileID: 6337374475854073736, guid: 3ae23d881d4c22b41bc323948f0d2c3f, type: 3}
-  Armor: {fileID: 8370043599592260842, guid: 548457136f6b6434a9ecefd72621ab86, type: 3}
+  battleSpeed: 1
+  baseBattleSpeed: 5
+  state: 0
+  defendModeActive: 0
+  BattleSystem: {fileID: 0}
+  Weapon: {fileID: 0}
+  Armor: {fileID: 0}
+  deathTriggered: 0

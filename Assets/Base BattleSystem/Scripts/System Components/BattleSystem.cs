@@ -63,9 +63,14 @@ public class BattleSystem : MonoBehaviour
 
     public int standartTimeBetweenSpawnes = 2000; // ms
 
-    public GameObject TestRunPlayerPrefab;
-    public GameObject TestRunWeaponPrefab;
-    public GameObject TestRunArmorPrefab;
+    [SerializeField] private GameObject TestRunPlayerPrefab;
+    [SerializeField] private GameObject TestRunWeaponPrefab;
+    [SerializeField] private GameObject TestRunArmorPrefab;
+
+    [SerializeField] private GameObject TestRunSubPlayerPrefab;
+    [SerializeField] private GameObject TestRunSubWeaponPrefab;
+    [SerializeField] private GameObject TestRunSubArmorPrefab;
+
 
     [SerializeField] public PlayerCharacter Player;
     [SerializeField] public Enemy Enemy;
@@ -81,7 +86,6 @@ public class BattleSystem : MonoBehaviour
     // bsvg9
     [SerializeField] public TextMeshProUGUI PlayerNameText;
     [SerializeField] public Slider PlayerHpSlider;
-    [SerializeField] public Slider PlayerManaSlider;
     // bsvg9
 
     [SerializeField] private GameObject ActionHUD;
